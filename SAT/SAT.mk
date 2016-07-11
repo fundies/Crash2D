@@ -50,7 +50,7 @@ LibPath                := $(LibraryPathSwitch).
 AR       := /usr/bin/ar rcu
 CXX      := /usr/bin/clang++
 CC       := /usr/bin/clang
-CXXFLAGS :=  -g -O0 -Wall $(Preprocessors)
+CXXFLAGS :=  -g -O0 -Wall -std=c++14 $(Preprocessors)
 CFLAGS   :=  -g -O0 -Wall $(Preprocessors)
 ASFLAGS  := 
 AS       := /usr/bin/as
@@ -60,7 +60,7 @@ AS       := /usr/bin/as
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/vector2.cpp$(ObjectSuffix) $(IntermediateDirectory)/projection.cpp$(ObjectSuffix) $(IntermediateDirectory)/polygon.cpp$(ObjectSuffix) $(IntermediateDirectory)/collision.cpp$(ObjectSuffix) 
 
 
 
@@ -98,6 +98,38 @@ $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 
 $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) "main.cpp"
+
+$(IntermediateDirectory)/vector2.cpp$(ObjectSuffix): vector2.cpp $(IntermediateDirectory)/vector2.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/greg/SAT/SAT/vector2.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/vector2.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/vector2.cpp$(DependSuffix): vector2.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/vector2.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/vector2.cpp$(DependSuffix) -MM "vector2.cpp"
+
+$(IntermediateDirectory)/vector2.cpp$(PreprocessSuffix): vector2.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/vector2.cpp$(PreprocessSuffix) "vector2.cpp"
+
+$(IntermediateDirectory)/projection.cpp$(ObjectSuffix): projection.cpp $(IntermediateDirectory)/projection.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/greg/SAT/SAT/projection.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/projection.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/projection.cpp$(DependSuffix): projection.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/projection.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/projection.cpp$(DependSuffix) -MM "projection.cpp"
+
+$(IntermediateDirectory)/projection.cpp$(PreprocessSuffix): projection.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/projection.cpp$(PreprocessSuffix) "projection.cpp"
+
+$(IntermediateDirectory)/polygon.cpp$(ObjectSuffix): polygon.cpp $(IntermediateDirectory)/polygon.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/greg/SAT/SAT/polygon.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/polygon.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/polygon.cpp$(DependSuffix): polygon.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/polygon.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/polygon.cpp$(DependSuffix) -MM "polygon.cpp"
+
+$(IntermediateDirectory)/polygon.cpp$(PreprocessSuffix): polygon.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/polygon.cpp$(PreprocessSuffix) "polygon.cpp"
+
+$(IntermediateDirectory)/collision.cpp$(ObjectSuffix): collision.cpp $(IntermediateDirectory)/collision.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/greg/SAT/SAT/collision.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/collision.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/collision.cpp$(DependSuffix): collision.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/collision.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/collision.cpp$(DependSuffix) -MM "collision.cpp"
+
+$(IntermediateDirectory)/collision.cpp$(PreprocessSuffix): collision.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/collision.cpp$(PreprocessSuffix) "collision.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
