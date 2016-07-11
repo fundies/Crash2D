@@ -12,6 +12,11 @@ Precision_t Vector2::dot(Vector2 v)
 	return (x * v.x) + (y * v.y);
 }
 
+Precision_t Vector2::cross(Vector2 v)
+{
+	return (x * v.y) - (y * v.x);
+}
+
 Precision_t Vector2::magnitude()
 {
 	return std::sqrt(dot(*this));

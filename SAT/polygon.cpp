@@ -157,6 +157,8 @@ Collision Polygon::GetCollision(Polygon p)
 	axes.insert(axes.end(), A.begin(), A.end());
 	axes.insert(axes.end(), B.begin(), B.end());
 
+	bool contained = false;
+
 	// loop over the axes
 	for (auto&& axis : axes)
 	{
@@ -167,12 +169,26 @@ Collision Polygon::GetCollision(Polygon p)
 		if (!pA.overlaps(pB))
 		{
 			// then we can guarantee that the shapes do not overlap
-			return Collision(translation, false);
+			return Collision(translation, false, false);
 		}
 		else
 		{
 			// get the overlap
 			Precision_t o = pA.getOverlap(pB);
+
+			contained = (contains(p) || p.contains(*this));
+			if (contained)
+			{
+				// get the overlap plus the distance from the minimum end points
+				Precision_t mins = std::abs(pA.x - pB.x);
+				Precision_t maxs = std::abs(pA.y - pB.y);
+
+				if (mins < maxs)
+					o += mins;
+				else
+					o += maxs;
+			}
+
 			// check for minimum
 			if (o < Overlap)
 			{
@@ -189,8 +205,57 @@ Collision Polygon::GetCollision(Polygon p)
 	// gurantee the translation is away from other shape
 	translation = smallest * (std::abs(Overlap)+1);
 	Vector2 distance = (getOrigin()) - (p.getOrigin());
-	if (translation.dot(distance) > 0)
+	if (translation.dot(distance) < 0)
 		translation = -translation;
 
-	return Collision(translation, true);
+	return Collision(translation, true, contained);
+}
+
+bool Polygon::triangleContains(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+{
+	// Compute vectors
+	Vector2 v0 = c - a;
+	Vector2 v1 = b - a;
+	Vector2 v2 = p - a;
+
+	// Compute dot products
+	Precision_t dot00 = v0.dot(v0);
+	Precision_t dot01 = v0.dot(v1);
+	Precision_t dot02 = v0.dot(v2);
+	Precision_t dot11 = v1.dot(v1);
+	Precision_t dot12 = v1.dot(v2);
+
+	// Compute barycentric coordinates
+	Precision_t invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+	Precision_t u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+	Precision_t v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+	// Check if point is in triangle
+	return (u >= 0) && (v >= 0) && (u + v < 1);
+}
+
+bool Polygon::contains(Vector2 v)
+{
+	if (getPointCount() == 3)
+		return triangleContains(v, getPoint(0), getPoint(1), getPoint(2));
+	else
+	{
+		for (int i = 0; i < getPointCount(); i++)
+		{
+			if (triangleContains(v, getOrigin(), getPoint(i), getPoint(i + 1 == getPointCount() ? 0 : i + 1)))
+				return true;
+		}
+	}
+
+	return false;
+}
+
+bool Polygon::contains(Polygon p)
+{
+	for (unsigned v=0; v < p.getPointCount(); v++)
+	{
+		if (!contains(p.getPoint(v)))
+			return false;
+	}
+	return true;
 }

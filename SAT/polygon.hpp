@@ -27,8 +27,11 @@ public:
 	void rotate(Precision_t angle);
 	Projection Project(Axis axis);
 	Collision GetCollision(Polygon p);
+	bool contains(Vector2 p);
+	bool contains(Polygon p);
 
 private:
+	bool triangleContains(Vector2 p, Vector2 a, Vector2 b, Vector2 c);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 

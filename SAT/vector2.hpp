@@ -13,6 +13,7 @@ public:
 	Vector2(const sf::Vector2<Precision_t> &v);
 	Vector2 perpendicular();
 	Precision_t dot(Vector2 v);
+	Precision_t cross(Vector2 v);
 	Precision_t magnitude();
 	Vector2 normalize();
 
