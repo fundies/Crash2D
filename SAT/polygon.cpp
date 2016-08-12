@@ -1,16 +1,10 @@
 #include "polygon.hpp"
 
 #include <cmath>
-#include <limits>
-
-Polygon::Polygon()
-{
-	_color = sf::Color::White;
-}
 
 const AxesVec& Polygon::GetAxes() const
 {
-	return axes;
+	return _axes;
 }
 
 const unsigned Polygon::getPointCount() const
@@ -18,15 +12,15 @@ const unsigned Polygon::getPointCount() const
 	return _points.size();
 }
 
-Vector2 Polygon::getPoint(unsigned index)
+const Vector2 Polygon::getPoint(unsigned index) const
 {
-	return _points[index];
+	return _points[index] + _pos;
 }
 
 void Polygon::generateAxes()
 {
-	axes.clear();
-	for (int i = 0; i < getPointCount(); i++)
+	_axes.clear();
+	for (unsigned i = 0; i < getPointCount(); i++)
 	{
 		// get the current vertex
 		Vector2 p1 = getPoint(i);
@@ -37,43 +31,31 @@ void Polygon::generateAxes()
 		// get either perpendicular vector
 		Axis normal = edge.perpendicular().normalize();
 		// the perp method is just (x, y) => (-y, x) or (y, -x)
-		axes.push_back(normal);
+		_axes.push_back(normal);
 	}
 }
 
 void Polygon::move(const Vector2 &offset)
 {
-	for (auto&& p : _points)
-		p += offset;
-
-	generateAxes();
+	_pos += offset;
 }
 
 void Polygon::move(Precision_t x, Precision_t y)
 {
-	for (auto&& p : _points)
-		p += Vector2(x, y);
-
-	generateAxes();
+	_pos += Vector2(x, y);
 }
 
-const Vector2 Polygon::getOrigin() const
+const Vector2 Polygon::getCenter() const
 {
 	Precision_t x = 0;
 	Precision_t y = 0;
-	for(int i = 0; i < getPointCount(); i++)
+	for(unsigned i = 0; i < getPointCount(); i++)
 	{
 		x += _points[i].x;
 		y += _points[i].y;
 	}
 	return Vector2(x / getPointCount(), y / getPointCount());
 }
-
-void Polygon::setFillColor(sf::Color c)
-{
-	_color = c;
-}
-
 void Polygon::setPointCount(unsigned c)
 {
 	_points.resize(c);
@@ -87,7 +69,7 @@ void Polygon::setPoint(unsigned i, Vector2 p)
 void Polygon::rotate(Precision_t angle)
 {
 	Precision_t radians = (angle * M_PI ) / 180;
-	Vector2 o = getOrigin();
+	Vector2 o = getCenter();
 
 	for (auto&& p : _points)
 	{
@@ -109,15 +91,12 @@ void Polygon::rotate(Precision_t angle)
 void Polygon::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	sf::VertexArray a(sf::TrianglesFan, _points.size() + 2);
-	a[0] = (sf::Vertex(sf::Vector2f(getOrigin().x, getOrigin().y), _color));
+	a[0] = sf::Vertex(getPoint(0).asFloat(), _color);
 
-	for(unsigned p = 0; p < _points.size(); ++p)
-	{
-		Vector2 k = _points[p];
-		a[p + 1] = (sf::Vertex(sf::Vector2f(k.x, k.y), _color));
-	}
+	for(unsigned p = 0; p < getPointCount(); ++p)
+		a[p + 1] = sf::Vertex(getPoint(p).asFloat(), _color);
 
-	a[getPointCount()+1] = (sf::Vertex(sf::Vector2f(_points[0].x, _points[0].y), _color));
+	a[getPointCount()+1] = sf::Vertex(getPoint(0).asFloat(), _color);
 
 	target.draw(a);
 }
@@ -126,7 +105,7 @@ Projection Polygon::Project(Axis axis)
 {
 	Precision_t min = axis.dot(getPoint(0));
 	Precision_t max = min;
-	for (int i = 1; i < getPointCount(); i++)
+	for (unsigned i = 1; i < getPointCount(); i++)
 	{
 		Precision_t prj = axis.dot(getPoint(i));
 		if (prj < min)
@@ -139,6 +118,56 @@ Projection Polygon::Project(Axis axis)
 		}
 	}
 	return Projection(min, max);
+}
+
+bool Polygon::triangleContains(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+{
+	// Compute vectors
+	Vector2 v0 = c - a;
+	Vector2 v1 = b - a;
+	Vector2 v2 = p - a;
+
+	// Compute dot products
+	Precision_t dot00 = v0.dot(v0);
+	Precision_t dot01 = v0.dot(v1);
+	Precision_t dot02 = v0.dot(v2);
+	Precision_t dot11 = v1.dot(v1);
+	Precision_t dot12 = v1.dot(v2);
+
+	// Compute barycentric coordinates
+	Precision_t invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+	Precision_t u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+	Precision_t v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+	// Check if point is in triangle
+	return (u >= 0) && (v >= 0) && (u + v < 1);
+}
+
+
+bool Polygon::contains(Vector2 v)
+{
+	if (getPointCount() == 3)
+		return triangleContains(v, getPoint(0), getPoint(1), getPoint(2));
+	else
+	{
+		for (unsigned i = 0; i < getPointCount(); i++)
+		{
+			if (triangleContains(v, getCenter(), getPoint(i), getPoint(i + 1 == getPointCount() ? 0 : i + 1)))
+				return true;
+		}
+	}
+
+	return false;
+}
+
+bool Polygon::contains(Polygon p)
+{
+	for (unsigned v=0; v < p.getPointCount(); v++)
+	{
+		if (!contains(p.getPoint(v)))
+			return false;
+	}
+	return true;
 }
 
 Collision Polygon::GetCollision(Polygon p)
@@ -203,59 +232,85 @@ Collision Polygon::GetCollision(Polygon p)
 	// so we can guarantee an intersection
 
 	// gurantee the translation is away from other shape
-	translation = smallest * (std::abs(Overlap)+1);
-	Vector2 distance = (getOrigin()) - (p.getOrigin());
+	translation = smallest * (Overlap+1);
+	Vector2 distance = (p.getCenter()+ p.GetPos()) - (getCenter() + GetPos());
+	
 	if (translation.dot(distance) < 0)
 		translation = -translation;
 
 	return Collision(translation, true, contained);
 }
 
-bool Polygon::triangleContains(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+Polygon& Polygon::SetPos(const Vector2& _pos) 
 {
-	// Compute vectors
-	Vector2 v0 = c - a;
-	Vector2 v1 = b - a;
-	Vector2 v2 = p - a;
-
-	// Compute dot products
-	Precision_t dot00 = v0.dot(v0);
-	Precision_t dot01 = v0.dot(v1);
-	Precision_t dot02 = v0.dot(v2);
-	Precision_t dot11 = v1.dot(v1);
-	Precision_t dot12 = v1.dot(v2);
-
-	// Compute barycentric coordinates
-	Precision_t invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
-	Precision_t u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-	Precision_t v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-
-	// Check if point is in triangle
-	return (u >= 0) && (v >= 0) && (u + v < 1);
+		this->_pos = _pos;
+		return *this;
 }
 
-bool Polygon::contains(Vector2 v)
+const Vector2& Polygon::GetPos() const
 {
-	if (getPointCount() == 3)
-		return triangleContains(v, getPoint(0), getPoint(1), getPoint(2));
+	return _pos;
+}
+
+Collision Polygon::GetCollision(Circle c)
+{
+	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();// really large value;
+	Axis smallest;
+	
+	Vector2 a = NearestVertex(c.GetPos());
+	Vector2 b = getCenter() + GetPos();
+
+	AxesVec axes = GetAxes();
+	axes.push_back(a-b);
+
+	bool contained = false;
+	Vector2 translation;
+
+	for (auto&& axis : axes)
+	{
+		
+	Projection pA = Project(axis);
+	Projection pB = c.Project(axis);
+	
+	if (!pA.overlaps(pB))
+	{
+		return Collision(translation, false, false);
+	}
 	else
 	{
-		for (int i = 0; i < getPointCount(); i++)
+		Precision_t o = pA.getOverlap(pB);
+		if (o < Overlap)
 		{
-			if (triangleContains(v, getOrigin(), getPoint(i), getPoint(i + 1 == getPointCount() ? 0 : i + 1)))
-				return true;
+			// then set this one as the smallest
+			Overlap = o;
+			smallest = axis;
 		}
 	}
+	}
 
-	return false;
+	return Collision(translation, true, contained);
 }
 
-bool Polygon::contains(Polygon p)
+Vector2 Polygon::NearestVertex(Vector2 point)
 {
-	for (unsigned v=0; v < p.getPointCount(); v++)
+	Precision_t dist = std::numeric_limits<Precision_t>::infinity();
+	Vector2 p;
+	
+	for (unsigned i=0; i < getPointCount(); i++)
 	{
-		if (!contains(p.getPoint(v)))
-			return false;
+		Precision_t temp = GetDistance(point, getPoint(i));
+		if (temp < dist)
+		{
+			dist = temp;
+			p = getPoint(i);
+		}
 	}
-	return true;
+	
+	return p;
+}
+
+Precision_t Polygon::GetDistance(Vector2 a, Vector2 b)
+{
+	Vector2 v = a-b;
+	return v.magnitude();
 }

@@ -32,3 +32,8 @@ Vector2::Vector2(const sf::Vector2<Precision_t> &v)
 	x = v.x;
 	y = v.y;
 }
+
+const sf::Vector2<float> Vector2::asFloat() const
+{
+	return sf::Vector2<float>(static_cast<float>(x), static_cast<float>(y));
+}

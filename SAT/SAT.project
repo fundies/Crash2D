@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Project Name="SAT" InternalType="Console">
+<CodeLite_Project Name="SAT">
+  <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
+    <Plugin Name="CMakePlugin">
+      <![CDATA[[{
+  "name": "Debug",
+  "enabled": false,
+  "buildDirectory": "build",
+  "sourceDirectory": "$(ProjectPath)",
+  "generator": "",
+  "buildType": "",
+  "arguments": [],
+  "parentProject": ""
+ }]]]>
+    </Plugin>
+  </Plugins>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
@@ -12,7 +29,13 @@
     <File Name="polygon.cpp"/>
     <File Name="collision.hpp"/>
     <File Name="collision.cpp"/>
+    <File Name="shape.hpp"/>
+    <File Name="shape.cpp"/>
+    <File Name="circle.hpp"/>
+    <File Name="circle.cpp"/>
   </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">

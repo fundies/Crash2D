@@ -5,18 +5,18 @@
 ## Debug
 ProjectName            :=SAT
 ConfigurationName      :=Debug
-WorkspacePath          := "/home/greg/SAT"
-ProjectPath            := "/home/greg/SAT/SAT"
+WorkspacePath          := "/mnt/arch/home/greg/SAT"
+ProjectPath            := "/mnt/arch/home/greg/SAT/SAT"
 IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=
-Date                   :=07/11/16
+Date                   :=08/12/16
 CodeLitePath           :="/home/greg/.codelite"
-LinkerName             :=/usr/bin/clang++
-SharedObjectLinkerName :=/usr/bin/clang++ -shared -fPIC
+LinkerName             :=/usr/bin/g++
+SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
 PreprocessSuffix       :=.i
@@ -48,8 +48,8 @@ LibPath                := $(LibraryPathSwitch).
 ## AR, CXX, CC, AS, CXXFLAGS and CFLAGS can be overriden using an environment variables
 ##
 AR       := /usr/bin/ar rcu
-CXX      := /usr/bin/clang++
-CC       := /usr/bin/clang
+CXX      := /usr/bin/g++
+CC       := /usr/bin/gcc
 CXXFLAGS :=  -g -O0 -Wall -std=c++14 $(Preprocessors)
 CFLAGS   :=  -g -O0 -Wall $(Preprocessors)
 ASFLAGS  := 
@@ -60,7 +60,7 @@ AS       := /usr/bin/as
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/vector2.cpp$(ObjectSuffix) $(IntermediateDirectory)/projection.cpp$(ObjectSuffix) $(IntermediateDirectory)/polygon.cpp$(ObjectSuffix) $(IntermediateDirectory)/collision.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/vector2.cpp$(ObjectSuffix) $(IntermediateDirectory)/projection.cpp$(ObjectSuffix) $(IntermediateDirectory)/polygon.cpp$(ObjectSuffix) $(IntermediateDirectory)/collision.cpp$(ObjectSuffix) $(IntermediateDirectory)/shape.cpp$(ObjectSuffix) $(IntermediateDirectory)/circle.cpp$(ObjectSuffix) 
 
 
 
@@ -92,7 +92,7 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/greg/SAT/SAT/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/arch/home/greg/SAT/SAT/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM "main.cpp"
 
@@ -100,7 +100,7 @@ $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) "main.cpp"
 
 $(IntermediateDirectory)/vector2.cpp$(ObjectSuffix): vector2.cpp $(IntermediateDirectory)/vector2.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/greg/SAT/SAT/vector2.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/vector2.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/arch/home/greg/SAT/SAT/vector2.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/vector2.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/vector2.cpp$(DependSuffix): vector2.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/vector2.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/vector2.cpp$(DependSuffix) -MM "vector2.cpp"
 
@@ -108,7 +108,7 @@ $(IntermediateDirectory)/vector2.cpp$(PreprocessSuffix): vector2.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/vector2.cpp$(PreprocessSuffix) "vector2.cpp"
 
 $(IntermediateDirectory)/projection.cpp$(ObjectSuffix): projection.cpp $(IntermediateDirectory)/projection.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/greg/SAT/SAT/projection.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/projection.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/arch/home/greg/SAT/SAT/projection.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/projection.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/projection.cpp$(DependSuffix): projection.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/projection.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/projection.cpp$(DependSuffix) -MM "projection.cpp"
 
@@ -116,7 +116,7 @@ $(IntermediateDirectory)/projection.cpp$(PreprocessSuffix): projection.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/projection.cpp$(PreprocessSuffix) "projection.cpp"
 
 $(IntermediateDirectory)/polygon.cpp$(ObjectSuffix): polygon.cpp $(IntermediateDirectory)/polygon.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/greg/SAT/SAT/polygon.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/polygon.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/arch/home/greg/SAT/SAT/polygon.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/polygon.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/polygon.cpp$(DependSuffix): polygon.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/polygon.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/polygon.cpp$(DependSuffix) -MM "polygon.cpp"
 
@@ -124,12 +124,28 @@ $(IntermediateDirectory)/polygon.cpp$(PreprocessSuffix): polygon.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/polygon.cpp$(PreprocessSuffix) "polygon.cpp"
 
 $(IntermediateDirectory)/collision.cpp$(ObjectSuffix): collision.cpp $(IntermediateDirectory)/collision.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/greg/SAT/SAT/collision.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/collision.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/arch/home/greg/SAT/SAT/collision.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/collision.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/collision.cpp$(DependSuffix): collision.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/collision.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/collision.cpp$(DependSuffix) -MM "collision.cpp"
 
 $(IntermediateDirectory)/collision.cpp$(PreprocessSuffix): collision.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/collision.cpp$(PreprocessSuffix) "collision.cpp"
+
+$(IntermediateDirectory)/shape.cpp$(ObjectSuffix): shape.cpp $(IntermediateDirectory)/shape.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/arch/home/greg/SAT/SAT/shape.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/shape.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/shape.cpp$(DependSuffix): shape.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/shape.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/shape.cpp$(DependSuffix) -MM "shape.cpp"
+
+$(IntermediateDirectory)/shape.cpp$(PreprocessSuffix): shape.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/shape.cpp$(PreprocessSuffix) "shape.cpp"
+
+$(IntermediateDirectory)/circle.cpp$(ObjectSuffix): circle.cpp $(IntermediateDirectory)/circle.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/mnt/arch/home/greg/SAT/SAT/circle.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/circle.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/circle.cpp$(DependSuffix): circle.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/circle.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/circle.cpp$(DependSuffix) -MM "circle.cpp"
+
+$(IntermediateDirectory)/circle.cpp$(PreprocessSuffix): circle.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/circle.cpp$(PreprocessSuffix) "circle.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

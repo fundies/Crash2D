@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-using Precision_t = float;
+using Precision_t = double;
 
 class Vector2 : public sf::Vector2<Precision_t>
 {
@@ -16,6 +16,9 @@ public:
 	Precision_t cross(Vector2 v);
 	Precision_t magnitude();
 	Vector2 normalize();
+	
+	// sfml only draws floats >:|
+	const sf::Vector2<float> asFloat() const;
 
 };
 
