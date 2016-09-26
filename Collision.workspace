@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="Collision" Database="">
+  <Project Name="library" Path="library/library.project" Active="No"/>
+  <Project Name="tests" Path="tests/tests.project" Active="Yes"/>
+  <Project Name="demo" Path="demo/demo.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Environment/>
+      <Project Name="library" ConfigName="Debug"/>
+      <Project Name="tests" ConfigName="Debug"/>
+      <Project Name="demo" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Environment/>
+      <Project Name="library" ConfigName="Release"/>
+      <Project Name="tests" ConfigName="Release"/>
+      <Project Name="demo" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>
