@@ -5,7 +5,7 @@
 #include <cmath>
 #include <algorithm>
 
-Line::Line() : Shape(), _slope(0), _axis(Vector2()), _length(0)
+Line::Line() : Shape(), _slope(0), _length(0), _axis(Vector2())
 {
 	SetPointCount(2);
 	_points[0] = Vector2(0, 0);

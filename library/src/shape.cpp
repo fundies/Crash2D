@@ -3,6 +3,10 @@
 #include <cmath>
 #include <limits>
 
+#ifndef M_PI
+	#define M_PI 3.14159265359
+#endif
+
 Shape::Shape() : _rotation(0)
 {
 	//_color = sf::Color::White;
