@@ -1,4 +1,4 @@
-# SAT
+# Crash2D
 
 ## About
 This library was created for simple collision detection without having to use a full blown physics engine. Future plans include a physics library on top of this collision library so that each can be used separately or in concert with each other.
