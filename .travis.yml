@@ -1,8 +1,6 @@
 language:
   - cpp
   
-install:
-- if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
 addons:
   apt:
     sources:
@@ -15,6 +13,7 @@ addons:
 
 install:
   - sudo pip install cpp-coveralls
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
 
 script:
   - make
