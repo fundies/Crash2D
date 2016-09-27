@@ -13,12 +13,17 @@ addons:
     packages:
     - gcc-4.9
     - g++-4.9
-    - libgtest-dev
     - libsfml-dev
 
 install:
   - sudo pip install cpp-coveralls
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+  - export CXX="g++-4.9" CC="gcc-4.9"; fi
+  - git clone https://github.com/google/googletest.git
+  - mkdir gtest
+  - cd gtest
+  - cmake -DCMAKE_INSTALL_PREFIX=/usr ../gtest/
+  - sudo make install
+  - cd ..
 
 script:
   - make
