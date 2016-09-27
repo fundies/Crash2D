@@ -1,5 +1,10 @@
+dist: trusty
+
 language:
   - cpp
+  
+compiler:
+  - gcc
   
 addons:
   apt:
