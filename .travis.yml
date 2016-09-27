@@ -21,7 +21,7 @@ install:
   - git clone https://github.com/google/googletest.git
   - mkdir gtest
   - cd gtest
-  - cmake -DCMAKE_INSTALL_PREFIX=/usr ../gtest/
+  - cmake -DCMAKE_INSTALL_PREFIX=/usr ../googletest/
   - sudo make install
   - cd ..
 
