@@ -31,7 +31,6 @@ public:
 	const Axis& GetAxis() const;
 
 private:
-
 	void Recalc();
 
 	Precision_t _slope;

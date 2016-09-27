@@ -6,7 +6,6 @@
 class Collision
 {
 public:
-
 	Collision(const Vector2 &t, const bool &v, const bool c);
 	bool IsTouching() const;
 	bool IsContained() const;
