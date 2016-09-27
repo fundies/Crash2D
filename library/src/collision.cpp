@@ -18,7 +18,6 @@ bool Collision::IsContained() const
 	return _contained;
 }
 
-
 const Vector2& Collision::GetTranslation() const
 {
 	return _translation;

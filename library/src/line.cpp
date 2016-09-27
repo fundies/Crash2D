@@ -105,7 +105,6 @@ const bool Line::IsPerpendicular(const Line &l) const
 
 	if ((AreEqual(s1, 0) && s2 == max) || (s1 == max && AreEqual(s2, 0)))
 		return true;
-
 	else
 	{
 		return AreEqual(l.GetSlope() * GetSlope(), -1);
@@ -138,7 +137,6 @@ const bool Line::Intersects(const Line &l) const
 {
 	if (IsParallel(l))
 		return (ContainsPoint(l.GetTransformedPoint(0)) || ContainsPoint(l.GetTransformedPoint(1)));
-
 	else
 	{
 		const Vector2 i = GetIntersect(l);
@@ -191,7 +189,6 @@ const Vector2 Line::GetTranslation(const Line &l) const
 
 	Precision_t min = *it;
 	const unsigned pos = std::distance(std::begin(dist), it);
-
 
 	Vector2 axis;
 
