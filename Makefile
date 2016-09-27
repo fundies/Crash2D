@@ -3,10 +3,6 @@
 all: lib
 	make -j3 -C tests
 	make -j3 -C demo
-	./Collision_Test &
-	sleep 1
-	lcov --directory . --capture --output-file app.info --no-external
-	genhtml --output-directory cov_html app.info
 	
 lib:
 	make -j 3 -C library
@@ -18,7 +14,7 @@ demo: lib
 	make -j3 -C demo
 	
 coverage: lib tests
-	./Collision_Test &
+	./Crash2D_Test &
 	sleep 1
 	lcov --directory . --capture --output-file app.info --no-external
 	genhtml --output-directory cov_html app.info

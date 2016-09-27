@@ -1,4 +1,4 @@
-BASE = Collision
+BASE = Crash2D
 OS := $(shell uname -s)
 TARGET := ../$(BASE)_Demo
 
