@@ -5,7 +5,7 @@ TARGET := ../$(BASE)_Test
 CXX := g++
 CXXFLAGS := -std=c++11 -Wall -g -O0 --coverage -I../library/include/
 LDFLAGS := -L../ 
-LDLIBS := -lCollision -lgtest -lgcov
+LDLIBS := -lCrash2D -lgtest -lgcov
 
 SOURCES := $(shell find src/ -name "*.cpp")
 OBJECTS := $(addprefix build/,$(SOURCES:.cpp=.o))
