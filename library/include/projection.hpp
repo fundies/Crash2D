@@ -3,6 +3,7 @@
 
 #include "vector2.hpp"
 
+//!  A class representing a 2D projection. */
 class Projection : public Vector2
 {
 public:

@@ -5,6 +5,7 @@
 #include "collision.hpp"
 #include "projection.hpp"
 
+//!  A class representing an abstract geometric shape. */
 class Shape
 {
 public:
@@ -32,10 +33,10 @@ public:
 	const std::vector<Vector2>& GetPoints() const;
 
 protected:
-	std::vector<Vector2> _points;
-	Precision_t _rotation;
-	Vector2 _pos;
-	Vector2 _center;
+	std::vector<Vector2> _points; /*!< The points this shape is composed of. */
+	Precision_t _rotation; /*!< The rotation of this shape. */
+	Vector2 _pos; /*!< The position of this shape. */
+	Vector2 _center; /*!< The center of this shape. */
 };
 
 class Circle;

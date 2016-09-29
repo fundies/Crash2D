@@ -7,11 +7,12 @@ using Precision_t = double;
 
 bool AreEqual(Precision_t a, Precision_t b);
 
+//!  A class representing a two dimensional vector. */
 class Vector2
 {
 public:
-	Precision_t x;
-	Precision_t y;
+	Precision_t x; /*!< The x coordinate of this vector. */
+	Precision_t y; /*!< The y coordinate of this vector. */
 
 	Vector2() : x(0), y(0) {}
 	Vector2(const Precision_t x, const Precision_t y) : x(x), y(y) {}
