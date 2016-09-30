@@ -7,10 +7,9 @@ TEST(Shape, DefaultConstructor)
 {
 	Shape s;
 
-	EXPECT_EQ(0	, s.GetPos().x);
+	EXPECT_EQ(0, s.GetPos().x);
 	EXPECT_EQ(0, s.GetPos().y);
 }
-
 
 TEST(Shape, SetPos)
 {
@@ -46,12 +45,11 @@ TEST(Shape, SetPoint)
 	p.SetPoint(0, Vector2(9, 7));
 	p.SetPoint(1, Vector2(8, -4));
 
-	EXPECT_EQ(9	, p.GetPoint(0).x);
-	EXPECT_EQ(7	, p.GetPoint(0).y);
-	EXPECT_EQ(8	, p.GetPoint(1).x);
+	EXPECT_EQ(9, p.GetPoint(0).x);
+	EXPECT_EQ(7, p.GetPoint(0).y);
+	EXPECT_EQ(8, p.GetPoint(1).x);
 	EXPECT_EQ(-4, p.GetPoint(1).y);
 }
-
 
 TEST(Shape, Rotate)
 {
