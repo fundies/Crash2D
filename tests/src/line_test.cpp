@@ -7,7 +7,7 @@ TEST(Line, DefaultConstructor)
 {
 	Line l;
 
-	EXPECT_EQ(0	, l.GetPoint(0).x);
+	EXPECT_EQ(0, l.GetPoint(0).x);
 	EXPECT_EQ(0, l.GetPoint(0).y);
 
 	EXPECT_EQ(0, l.GetPoint(1).x);

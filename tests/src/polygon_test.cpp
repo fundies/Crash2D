@@ -9,9 +9,9 @@ TEST(Polygon, DefaultConstructor)
 {
 	Polygon p;
 
-	EXPECT_EQ(0	, p.GetPos().x);
+	EXPECT_EQ(0, p.GetPos().x);
 	EXPECT_EQ(0, p.GetPos().y);
-	EXPECT_EQ(0	, p.GetPointCount());
+	EXPECT_EQ(0, p.GetPointCount());
 	EXPECT_EQ(0, p.GetRotation());
 }
 
@@ -49,7 +49,6 @@ TEST(Polygon, GetCenter)
 	EXPECT_EQ(2, p.GetCenter().x);
 	EXPECT_EQ(2, p.GetCenter().y);
 }
-
 
 TEST(Polygon, Project)
 {
