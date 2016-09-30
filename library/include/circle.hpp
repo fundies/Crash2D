@@ -20,46 +20,45 @@ public:
 	*/
 	const Projection Project(const Axis &a) const;
 
-	//! Checks if this circle collides with the given circle and returns the result.
+	//! Gets the collision of this circle with the given circle and returns the result.
 	/*!
 		Unlike the Contains() function, this function will also check if the given circle contains this circle.
-		\param c The circle to check for collisions with.
+		\param c The circle to check for collision with this circle.
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
 	const Collision GetCollision(const Circle &c) const;
 
-	//! Checks if this circle collides with the given polygon and returns the result.
+	//! Gets the collision of this circle with the given polygon and returns the result.
 	/*!
 		Unlike the Contains() function, this function will also check if the given polygon contains this circle.
-		\param p The polygon to check for collisions with.
+		\param p The polygon to check for collision with this circle.
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
 	const Collision GetCollision(const Polygon &p) const;
 
-	//! Gets the radius of the circle.
+	//! Checks if this circle contains the given vector and returns the result.
 	/*!
-		\return The circle of the radius.
+		\param v The vector to check for containment in this circle.
+		\return Whether this circle contains the given vector.
 	*/
-	const Precision_t& GetRadius() const;
+	const bool Contains(const Vector2 &v) const;
 
-	//! Checks if the circles contains the given vector and returns the result.
+	//! Checks if this circle contains the given polygon and returns the result.
 	/*!
-		\param p The vector to check for containment in this circle.
-		\return The function returns true if the circle contains the vector, otherwise the function returns false.
-	*/
-	const bool Contains(const Vector2 &p) const;
-
-	//! Checks if the circles contains the given polygon and returns the result.
-	/*!
-		This function does not check if the given polygon contains this circle, however. For that you should use the
-		GetCollision() function.
+		This function will not check if the given polygon contains this circle, GetCollision() can be used for that.
 		\param p The polygon to check for containment in this circle.
-		\return The function returns true if the circle contains the polygon, otherwise the function returns false.
+		\return Whether this circle contains the given polygon.
 		\sa GetCollision()
 	*/
 	const bool Contains(const Polygon &p) const;
+
+	//! Gets the radius of this circle.
+	/*!
+		\return The radius of this circle.
+	*/
+	const Precision_t& GetRadius() const;
 
 private:
 	Precision_t _radius; /*!< The radius of this circle. */

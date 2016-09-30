@@ -9,6 +9,8 @@ class Line : public Shape
 public:
 	//! Constructs a default line.
 	/*!
+		This line's points should be added through the base Shape class's interface.
+		\sa Shape
 	*/
 	Line();
 
@@ -93,10 +95,10 @@ public:
 	*/
 	const Vector2 GetIntersect(const Line &l) const;
 
-	//! Gets
+	//! Gets the minimum translation vector between this line and the given line and returns the result.
 	/*!
-		\param l
-		\return
+		\param l The line to get the minimum translation vector of this line.
+		\return The minimum translation vector of this line with the given line.
 	*/
 	const Vector2 GetTranslation(const Line &l) const;
 
@@ -106,7 +108,7 @@ public:
 	*/
 	void Rotate(const Precision_t &a);
 
-	//! Gets the axis of this line and returns the result.
+	//! Gets the axis of this line.
 	/*!
 		The axis of the line is precalculated as the normal perpendicular to this line's normal.
 		\return The axis of this line.
