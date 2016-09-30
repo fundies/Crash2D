@@ -17,13 +17,13 @@ public:
 
 	//! Gets whether this collision is touching.
 	/*!
-		\return This function returns true if this collision is touching and false otherwise.
+		\return Whether this collision is touching.
 	*/
 	bool IsTouching() const;
 
 	//! Gets whether this collision is contained.
 	/*!
-		\return This function returns true if this collision is contained and false otherwise.
+		\return Whether this collision is contained.
 	*/
 	bool IsContained() const;
 

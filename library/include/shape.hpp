@@ -21,15 +21,49 @@ public:
 	*/
 	virtual const Vector2& GetCenter() const;
 
+	//! Sets the number of points in this shape.
+	/*!
+		\param c The number of points in this shape.
+	*/
 	virtual void SetPointCount(const unsigned &c);
+
+	//! Sets the point of this shape at the given index to the new point.
+	/*!
+		\param i The index of the point.
+		\param p The new point to replace the old point with.
+	*/
 	virtual void SetPoint(const unsigned &i, const Vector2 &p);
 
+	//! Gets the number of points in this shape.
+	/*!
+		\return The number of points in this shape.
+	*/
 	virtual const unsigned GetPointCount() const;
+
+	//! Gets the point of this shape at the given index.
+	/*!
+		\param i The index of the point.
+		\return The point of this shape at the given index.
+	*/
 	virtual const Vector2& GetPoint(const unsigned &i) const;
+
+	//! Gets the point of this shape at the given index using this shape's transformation.
+	/*!
+		\param i The index of the point.
+		\return The point of this shape at the given index using this shape's transformation.
+	*/
 	virtual const Vector2 GetTransformedPoint(const unsigned &i) const;
 
-	virtual void SetPos(const Vector2& _pos);
+	//! Sets the absolute position of this shape.
+	/*!
+		\param p The absolute position of this shape.
+	*/
+	virtual void SetPos(const Vector2& p);
 
+	//! Gets the absolute position of this shape.
+	/*!
+		\return The absolute position of this shape.
+	*/
 	virtual const Vector2& GetPos() const;
 
 	//! Moves this shape by the given offset relative to its current position.
@@ -52,7 +86,7 @@ public:
 
 	//! Gets the absolute angle of rotation of this shape around its center.
 	/*!
-		\return The absolute ngle of rotation of this shape around its center.
+		\return The absolute angle of rotation of this shape around its center.
 	*/
 	virtual const Precision_t& GetRotation() const;
 
