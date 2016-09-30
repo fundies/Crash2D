@@ -108,7 +108,7 @@ public:
 
 	//! Gets the axis of this line and returns the result.
 	/*!
-		This function calculates the axis of the line as the normal perpendicular to this line's normal.
+		The axis of the line is precalculated as the normal perpendicular to this line's normal.
 		\return The axis of this line.
 	*/
 	const Axis& GetAxis() const;
