@@ -7,7 +7,7 @@ TEST(Line, DefaultConstructor)
 {
 	Line l;
 
-	EXPECT_EQ(0	, l.GetPoint(0).x);
+	EXPECT_EQ(0, l.GetPoint(0).x);
 	EXPECT_EQ(0, l.GetPoint(0).y);
 
 	EXPECT_EQ(0, l.GetPoint(1).x);
@@ -23,7 +23,7 @@ TEST(Line, Constructor2Points)
 {
 	Line l(Vector2(0, 0), Vector2(10, 10));
 
-	EXPECT_EQ(0	, l.GetPoint(0).x);
+	EXPECT_EQ(0, l.GetPoint(0).x);
 	EXPECT_EQ(0, l.GetPoint(0).y);
 
 	EXPECT_EQ(10, l.GetPoint(1).x);
@@ -42,7 +42,7 @@ TEST(Line, SetPoint)
 	l.SetPoint(0, Vector2(9, 6));
 	l.SetPoint(1, Vector2(-3, 4));
 
-	EXPECT_EQ(9	, l.GetPoint(0).x);
+	EXPECT_EQ(9, l.GetPoint(0).x);
 	EXPECT_EQ(6, l.GetPoint(0).y);
 
 	EXPECT_EQ(-3, l.GetPoint(1).x);
