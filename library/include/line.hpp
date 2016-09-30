@@ -102,9 +102,9 @@ public:
 	*/
 	const Vector2 GetTranslation(const Line &l) const;
 
-	//! Rotates this line by the given amount.
+	//! Rotates this line by the given angle.
 	/*!
-		\param a The angle in radians.
+		\param a The angle to rotate this line.
 	*/
 	void Rotate(const Precision_t &a);
 

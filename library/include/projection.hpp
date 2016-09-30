@@ -3,11 +3,15 @@
 
 #include "vector2.hpp"
 
-//!  A class representing a 2D projection. */
+//!  A class representing a two-dimensional projection. */
 class Projection : public Vector2
 {
 public:
+	//! Constructs a default projection.
+	/*!
+	*/
 	Projection() : Vector2(0 , 0) {}
+
 	Projection(const Precision_t &min, const Precision_t &max) : Vector2(min, max) {}
 	Projection(const Vector2 &v);
 	const bool IsOverlap(const Projection &p) const;

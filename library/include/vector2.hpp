@@ -7,21 +7,58 @@ using Precision_t = double;
 
 bool AreEqual(Precision_t a, Precision_t b);
 
-//!  A class representing a two dimensional vector. */
+//!  A class representing a two-dimensional vector. */
 class Vector2
 {
 public:
 	Precision_t x; /*!< The x coordinate of this vector. */
 	Precision_t y; /*!< The y coordinate of this vector. */
 
+	//! Constructs a default two-dimensional vector whose coordinates are initialized to zero.
+	/*!
+	*/
 	Vector2() : x(0), y(0) {}
+
+	//! Constructs a two-dimensional vector.
+	/*!
+		\param x The x coordinate of the vector.
+		\param y The y coordinate of the vector.
+	*/
 	Vector2(const Precision_t x, const Precision_t y) : x(x), y(y) {}
 
 	const Vector2 Perpendicular() const;
+
+	//! Calculates the dot product of this vector with the given vector and returns the result.
+	/*!
+		\param v The vector to compute the dot product of this vector.
+		\return The dot product of this vector with the given vector.
+	*/
 	const Precision_t Dot(const Vector2 &v) const;
+
+	//! Calculates the cross product of this vector with the given vector and returns the result.
+	/*!
+		\param v The vector to compute the cross product of this vector.
+		\return The cross product of this vector with the given vector.
+	*/
 	const Precision_t Cross(const Vector2 &v) const;
+
+	//! Calculates the magnitude of this vector and returns the result.
+	/*!
+		\return The magnitude of this vector.
+	*/
 	const Precision_t Magnitude() const;
+
+	//! Calculates the distance between this vector and the given vector and returns the result.
+	/*!
+		\param v The vector to compute the distance of this vector.
+		\return The distance between this vector and the given vector.
+	*/
 	const Precision_t GetDistance(const Vector2 &v) const;
+
+	//! Calculates the normal of this vector and returns the result.
+	/*!
+		\return The normal of this vector.
+	*/
 	const Vector2 Normal() const;
 
 	inline Vector2 & operator = (const Vector2 & v)
@@ -140,7 +177,7 @@ public:
 	}
 };
 
-using Axis = Vector2;
-using AxesVec = std::vector<Axis>;
+using Axis = Vector2; /**< An alias representing the axis of a line. */
+using AxesVec = std::vector<Axis>; /**< An alias representing a structure that can hold a shape's axes. */
 
 #endif
