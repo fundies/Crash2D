@@ -19,24 +19,24 @@ public:
 	*/
 	Line(const Vector2 &a, const Vector2 &b);
 
-	//! Sets
+	//! Sets the point at the given index to the new point.
 	/*!
-		\param i
-		\param p
+		\param i The index of the point. This should be 0 or 1 because a line only has two points.
+		\param p The new point to replace the old point with.
 	*/
 	void SetPoint(const unsigned &i, const Vector2 &p);
 
-	//! Gets
+	//! Gets the distance from this line to the given point and returns the result.
 	/*!
-		\param p
-		\return
+		\param p The point to get the distance of this line to.
+		\return The distance of this line to the given point.
 	*/
 	const Precision_t DistancePoint(const Vector2 &p) const;
 
-	//! Gets
+	//! Gets the signed distance from this line to the given point and returns the result.
 	/*!
-		\param p
-		\return
+		\param p The point to get the signed distance of this line to.
+		\return The signed distance of this line to the given point.
 	*/
 	const Precision_t SignedDistancePoint(const Vector2 &p) const;
 
@@ -48,7 +48,8 @@ public:
 
 	//! Gets the slope of the line and returns the result.
 	/*!
-		The slope is calculated as a ratio of rise over run.
+		The slope is calculated as a ratio of rise over run. The function will return infinity or negative infinity for
+		vertical lines because division by 0 is undefined.
 		\return The slope of the line as a ratio.
 	*/
 	const Precision_t& GetSlope() const;
@@ -85,10 +86,10 @@ public:
 	*/
 	const bool Intersects(const Line &l) const;
 
-	//! Gets
+	//! Gets the point of intersection between this line and the given line and returns the result.
 	/*!
-		\param l
-		\return
+		\param l The line to find the intersection of this line.
+		\return The point of intersection between this line and the given line.
 	*/
 	const Vector2 GetIntersect(const Line &l) const;
 
@@ -105,9 +106,10 @@ public:
 	*/
 	void Rotate(const Precision_t &a);
 
-	//! Gets
+	//! Gets the axis of this line and returns the result.
 	/*!
-		\return
+		This function calculates the axis of the line as the normal perpendicular to this line's normal.
+		\return The axis of this line.
 	*/
 	const Axis& GetAxis() const;
 
