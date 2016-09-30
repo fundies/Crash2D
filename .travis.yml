@@ -30,4 +30,4 @@ script:
   - ./Crash2D_Test
 
 after_success:
-- coveralls --root . --exclude demo
+- coveralls --root .
