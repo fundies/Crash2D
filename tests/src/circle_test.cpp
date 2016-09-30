@@ -32,7 +32,7 @@ TEST(Circle, CollisionCircle)
 
 	// Move
 	cir2.SetPos(Vector2(30, 20));
-	c = cir1.GetCollision(cir);
+	c = cir1.GetCollision(cir2);
 	EXPECT_TRUE(c.IsTouching());
 	EXPECT_FALSE(c.IsContained());
 }
