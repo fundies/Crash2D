@@ -7,7 +7,7 @@ TEST(Circle, Constructor1Radius)
 {
 	Circle c(0);
 
-	EXPECT_EQ(0, c.getRadius());
+	EXPECT_EQ(0, c.GetRadius());
 }
 
 TEST(Circle, Project)
