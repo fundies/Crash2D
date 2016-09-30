@@ -11,11 +11,6 @@ Polygon::Polygon() : Shape(), _side(0)
 {
 }
 
-const AxesVec& Polygon::GetAxes() const
-{
-	return _axes;
-}
-
 void Polygon::ReCalc()
 {
 	Precision_t x = 0;
@@ -286,6 +281,11 @@ const Collision Polygon::GetCollision(const Circle &c) const
 		translation = -translation;
 
 	return Collision(translation, true, contained);
+}
+
+const AxesVec& Polygon::GetAxes() const
+{
+	return _axes;
 }
 
 const Vector2 Polygon::NearestVertex(const Vector2 &p) const

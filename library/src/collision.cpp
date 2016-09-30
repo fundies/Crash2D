@@ -3,8 +3,8 @@
 
 Collision::Collision(const Vector2 &t, const bool &v, const bool c)
 {
-	_touching = v;
 	_translation = t;
+	_touching = v;
 	_contained = c;
 }
 

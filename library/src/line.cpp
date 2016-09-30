@@ -74,7 +74,6 @@ const Precision_t Line::SignedDistancePoint(const Vector2 &p) const
 	return p.GetDistance(projection);*/
 }
 
-
 const Precision_t& Line::GetSlope() const
 {
 	return _slope;
