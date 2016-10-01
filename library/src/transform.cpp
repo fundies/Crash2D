@@ -1,6 +1,6 @@
 #include "transform.hpp"
 
-#include <math.h> //std::fmod
+#include <cmath> //std::fmod
 
 Transform::Transform()
 	: _scale(1), _rotation(0), _translation(Vector2(0,0))
