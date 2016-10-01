@@ -16,7 +16,7 @@ demo: lib
 coverage: lib tests
 	./Crash2D_Test &
 	sleep 1
-	lcov --directory . --capture --output-file app.info --no-external
+	lcov --directory library/ --capture --output-file app.info --no-external -l
 	genhtml --output-directory cov_html app.info
 	
 clean:

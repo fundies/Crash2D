@@ -30,4 +30,4 @@ script:
   - ./Crash2D_Test
 
 after_success:
-- coveralls --root library/
+- coveralls --root library/ --gcov-options '\-lp'
