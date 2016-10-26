@@ -22,23 +22,25 @@
   <VirtualDirectory Name="src">
     <File Name="src/circle.cpp"/>
     <File Name="src/collision.cpp"/>
-    <File Name="src/line.cpp"/>
     <File Name="src/polygon.cpp"/>
     <File Name="src/projection.cpp"/>
     <File Name="src/shape.cpp"/>
     <File Name="src/vector2.cpp"/>
     <File Name="src/transform.cpp"/>
+    <File Name="src/segment.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
     <File Name="include/circle.hpp"/>
     <File Name="include/collision.hpp"/>
-    <File Name="include/line.hpp"/>
     <File Name="include/polygon.hpp"/>
     <File Name="include/projection.hpp"/>
     <File Name="include/shape.hpp"/>
     <File Name="include/vector2.hpp"/>
     <File Name="include/transform.hpp"/>
+    <File Name="include/segment.hpp"/>
   </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -74,7 +76,7 @@
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName>None</ThirdPartyToolName>
-        <WorkingDirectory>/home/greg/CollisionLib/library</WorkingDirectory>
+        <WorkingDirectory>/home/greg/Crash2D/library</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>
@@ -127,6 +129,4 @@
       </Completion>
     </Configuration>
   </Settings>
-  <Dependencies Name="Debug"/>
-  <Dependencies Name="Release"/>
 </CodeLite_Project>

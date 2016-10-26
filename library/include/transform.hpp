@@ -1,5 +1,5 @@
-#ifndef PROJECTION_HPP
-#define PROJECTION_HPP
+#ifndef TRANSFORM_HPP
+#define TRANSFORM_HPP
 
 #include "vector2.hpp"
 

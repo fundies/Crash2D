@@ -15,7 +15,7 @@ TEST(Transform, DefaultConstructor)
 
 TEST(Transform, ConstructFromValues)
 {
-	Transform t(2, 45, Vector2(8,3));
+	Transform t(2, 45, Vector2(8, 3));
 
 	EXPECT_EQ(2, t.GetScale());
 	EXPECT_EQ(45, t.GetRotation());
@@ -46,6 +46,9 @@ TEST(Transform, SetRotation)
 	t.SetRotation(-700);
 
 	EXPECT_EQ(20, t.GetRotation());
+
+	t.SetRotation(30);
+	EXPECT_EQ(30, t.GetRotation());
 }
 
 TEST(Transform, Rotate)
@@ -59,7 +62,7 @@ TEST(Transform, Rotate)
 TEST(Transform, SetTranslation)
 {
 	Transform t;
-	t.SetTranslation(Vector2(-7,9));
+	t.SetTranslation(Vector2(-7, 9));
 
 	EXPECT_EQ(-7, t.GetTranslation().x);
 	EXPECT_EQ(9, t.GetTranslation().y);
@@ -68,7 +71,7 @@ TEST(Transform, SetTranslation)
 TEST(Transform, Translate)
 {
 	Transform t;
-	t.Translate(Vector2(6,-9));
+	t.Translate(Vector2(6, -9));
 
 	EXPECT_EQ(6, t.GetTranslation().x);
 	EXPECT_EQ(-9, t.GetTranslation().y);

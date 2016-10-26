@@ -1,5 +1,6 @@
 #include "circle.hpp"
 #include "polygon.hpp"
+#include "projection.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -10,16 +11,16 @@ Circle::Circle(const Precision_t &r) : Shape(), _radius(r)
 	_center = Vector2(r, r);
 }
 
-const Projection Circle::Project(const Axis &a) const
+const Projection Circle::Project(const Axis &a, const Transform &t) const
 {
-	Precision_t v = a.Dot(GetPos());
+	Precision_t v = a.Dot(GetTransformedCenter(t));
 	return Vector2(v - GetRadius(), v + GetRadius());
 }
 
-const Collision Circle::GetCollision(const Circle &c) const
+const Collision Circle::GetCollision(const Circle &c, const Transform &t1, const Transform &t2) const
 {
 
-	Vector2 v = c.GetPos() - GetPos();
+	Vector2 v = c.GetTransformedCenter(t2) - GetTransformedCenter(t2);
 
 	Precision_t radiiSum = GetRadius() + c.GetRadius();
 	Precision_t dist = v.Magnitude();
@@ -42,13 +43,13 @@ const Collision Circle::GetCollision(const Circle &c) const
 	return Collision(translation, overlap, contained);
 }
 
-const Collision Circle::GetCollision(const Polygon &p) const
+const Collision Circle::GetCollision(const Polygon &p, const Transform &t1, const Transform &t2) const
 {
 	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();// really large value;
 	Axis smallest;
 
-	Vector2 a = p.NearestVertex(GetPos());
-	Vector2 b = p.GetCenter() + p.GetPos();
+	Vector2 a = p.NearestVertex(GetTransformedCenter(t1), t2);
+	Vector2 b = p.GetTransformedCenter(t2);
 	Axis ax = a - b;
 	ax = ax.Perpendicular().Normal();
 
@@ -61,8 +62,8 @@ const Collision Circle::GetCollision(const Polygon &p) const
 
 	for (auto && axis : axes)
 	{
-		const Projection pA = p.Project(axis);
-		const Projection pB = Project(axis);
+		const Projection pA = p.Project(axis, t2);
+		const Projection pB = Project(axis, t1);
 
 		if (!pA.IsOverlap(pB))
 		{
@@ -73,7 +74,7 @@ const Collision Circle::GetCollision(const Polygon &p) const
 		{
 			Precision_t o = pA.GetOverlap(pB);
 
-			contained = Contains(p);
+			contained = Contains(p, t1, t2);
 
 			if (contained)
 			{
@@ -95,9 +96,9 @@ const Collision Circle::GetCollision(const Polygon &p) const
 		}
 	}
 
-	Precision_t dist = a.GetDistance(GetCenter());
+	Precision_t dist = a.GetDistance(GetTransformedCenter(t1));
 
-	contained = (Contains(GetCenter()) && GetRadius() < dist);
+	//contained = (Contains(GetTransformedCenter(t1), t2) && GetRadius() < dist);
 
 	translation = smallest * (Overlap + 1);
 	Vector2 distance = a - b;
@@ -113,19 +114,19 @@ const Precision_t& Circle::GetRadius() const
 	return _radius;
 }
 
-const bool Circle::Contains(const Vector2 &p) const
+const bool Circle::Contains(const Vector2 &p, const Transform &t) const
 {
-	const Vector2 v = GetPos() - p;
+	const Vector2 v = GetTransformedCenter(t) - p;
 	const Precision_t dist = v.Magnitude();
 
 	return (dist < GetRadius());
 }
 
-const bool Circle::Contains(const Polygon &p) const
+const bool Circle::Contains(const Polygon &p, const Transform &t1, const Transform &t2) const
 {
-	for (auto && pt : p.GetPoints())
+	for (unsigned i = 0; i < p.GetPointCount(); ++i)
 	{
-		if (!Contains(pt + p.GetPos()))
+		if (!Contains(GetTransformedPoint(i, t2), t1))
 			return false;
 	}
 

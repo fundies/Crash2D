@@ -20,7 +20,6 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
-    <File Name="src/line_test.cpp"/>
     <File Name="src/main.cpp"/>
     <File Name="src/polygon_test.cpp"/>
     <File Name="src/projection_test.cpp"/>
@@ -28,6 +27,7 @@
     <File Name="src/vector2_test.cpp"/>
     <File Name="src/circle_test.cpp"/>
     <File Name="src/transform_test.cpp"/>
+    <File Name="src/segment_test.cpp"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>

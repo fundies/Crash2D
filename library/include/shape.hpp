@@ -3,7 +3,14 @@
 
 #include "vector2.hpp"
 #include "collision.hpp"
-#include "projection.hpp"
+//#include "projection.hpp"
+//#include "transform.hpp"
+
+class Circle;
+class Polygon;
+class Segment;
+class Projection;
+class Transform;
 
 //!  A class representing an abstract geometric shape. */
 class Shape
@@ -49,46 +56,18 @@ public:
 
 	//! Gets the point of this shape at the given index using this shape's transformation.
 	/*!
+		\param t The trasformation applied.
 		\param i The index of the point.
 		\return The point of this shape at the given index using this shape's transformation.
 	*/
-	virtual const Vector2 GetTransformedPoint(const unsigned &i) const;
+	virtual const Vector2 GetTransformedPoint(const unsigned &i, const Transform &t) const;
 
-	//! Sets the absolute position of this shape.
+	//! Gets the center of this shape at the given index using this shape's transformation.
 	/*!
-		\param p The absolute position of this shape.
+		\param t The trasformation applied.
+		\return The point of this shape at the given index using this shape's transformation.
 	*/
-	virtual void SetPos(const Vector2& p);
-
-	//! Gets the absolute position of this shape.
-	/*!
-		\return The absolute position of this shape.
-	*/
-	virtual const Vector2& GetPos() const;
-
-	//! Moves this shape by the given offset relative to its current position.
-	/*!
-		\param o The offset to move this shape.
-	*/
-	virtual void Move(const Vector2 &o);
-
-	//! Rotates this shape by the given angle relative to its current rotation.
-	/*!
-		\param a The relative angle to rotate this shape.
-	*/
-	virtual void Rotate(const Precision_t &a);
-
-	//! Sets the absolute angle of rotation of this shape around its center.
-	/*!
-		\param a The absolute angle of rotation of this shape around its center.
-	*/
-	virtual void SetRotation(const Precision_t &a);
-
-	//! Gets the absolute angle of rotation of this shape around its center.
-	/*!
-		\return The absolute angle of rotation of this shape around its center.
-	*/
-	virtual const Precision_t& GetRotation() const;
+	virtual const Vector2 GetTransformedCenter(const Transform &t) const;
 
 	//! Gets the points this shape is composed of.
 	/*!
@@ -98,13 +77,7 @@ public:
 
 protected:
 	std::vector<Vector2> _points; /*!< The points this shape is composed of. */
-	Precision_t _rotation; /*!< The rotation of this shape. */
-	Vector2 _pos; /*!< The position of this shape. */
 	Vector2 _center; /*!< The center of this shape. */
 };
-
-class Circle;
-class Polygon;
-class Line;
 
 #endif
