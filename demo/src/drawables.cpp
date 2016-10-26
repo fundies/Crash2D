@@ -1,20 +1,20 @@
 #include "drawables.hpp"
 
 /// Line ///
-void line::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void segment::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	sf::VertexArray line(sf::Lines, 2);
+	sf::VertexArray segment(sf::Lines, 2);
 
 	sf::Vector2f a(GetTransformedPoint(0).x, GetTransformedPoint(0).y);
 	sf::Vector2f b(GetTransformedPoint(1).x, GetTransformedPoint(1).y);
 
-	line[0] = sf::Vertex(a, _color);
-	line[1] = sf::Vertex(b, _color);
+	segment[0] = sf::Vertex(a, _color);
+	segment[1] = sf::Vertex(b, _color);
 
-	target.draw(line);
+	target.draw(segment);
 }
 
-void line::SetColor(const sf::Color &c)
+void segment::SetColor(const sf::Color &c)
 {
 	_color = c;
 }

@@ -1,4 +1,5 @@
 #include "shape.hpp"
+#include "transform.hpp"
 
 #include <gtest/gtest.h>
 #include <cmath>
@@ -7,28 +8,7 @@ TEST(Shape, DefaultConstructor)
 {
 	Shape s;
 
-	EXPECT_EQ(0	, s.GetPos().x);
-	EXPECT_EQ(0, s.GetPos().y);
-}
-
-
-TEST(Shape, SetPos)
-{
-	Shape s;
-	s.SetPos(Vector2(2, 17));
-
-	EXPECT_EQ(2, s.GetPos().x);
-	EXPECT_EQ(17, s.GetPos().y);
-}
-
-TEST(Shape, Move)
-{
-	Shape s;
-	s.SetPos(Vector2(8, -8));
-	s.Move(Vector2(8, 8));
-
-	EXPECT_EQ(16, s.GetPos().x);
-	EXPECT_EQ(0, s.GetPos().y);
+	EXPECT_EQ(0, s.GetPointCount());
 }
 
 TEST(Shape, SetPointCount)
@@ -36,7 +16,7 @@ TEST(Shape, SetPointCount)
 	Shape p;
 	p.SetPointCount(3);
 
-	EXPECT_EQ(3	, p.GetPointCount());
+	EXPECT_EQ(3, p.GetPointCount());
 }
 
 TEST(Shape, SetPoint)
@@ -52,24 +32,31 @@ TEST(Shape, SetPoint)
 	EXPECT_EQ(-4, p.GetPoint(1).y);
 }
 
-
-TEST(Shape, Rotate)
+TEST(Shape, GetTransformedPoint)
 {
 	Shape s;
+	s.SetPointCount(2);
+	s.SetPoint(0, Vector2(4, 4));
+	s.SetPoint(1, Vector2(-4, -4));
 
-	s.Rotate(45);
-	EXPECT_EQ(45, s.GetRotation());
-}
+	Transform t;
 
-TEST(Shape, SetRotation)
-{
-	Shape s;
+	EXPECT_EQ(0, s.GetTransformedCenter(t).x);
+	EXPECT_EQ(0, s.GetTransformedCenter(t).y);
+	EXPECT_EQ(4, s.GetTransformedPoint(0, t).x);
+	EXPECT_EQ(4, s.GetTransformedPoint(0, t).y);
+	EXPECT_EQ(-4, s.GetTransformedPoint(1, t).x);
+	EXPECT_EQ(-4, s.GetTransformedPoint(1, t).y);
 
-	s.SetRotation(45);
-	EXPECT_EQ(45, s.GetRotation());
+	// Rotate
+	t.SetRotation(30);
 
-	s.SetRotation(-45);
-	EXPECT_EQ(315, s.GetRotation());
+	EXPECT_EQ(0, s.GetTransformedCenter(t).x);
+	EXPECT_EQ(0, s.GetTransformedCenter(t).y);
+	EXPECT_FLOAT_EQ(2 + 2 * sqrt(3), s.GetTransformedPoint(0, t).x);
+	EXPECT_FLOAT_EQ(-2 + 2 * sqrt(3), s.GetTransformedPoint(0, t).y);
+	EXPECT_FLOAT_EQ(-2 - 2 * sqrt(3), s.GetTransformedPoint(1, t).x);
+	EXPECT_FLOAT_EQ(2 - 2 * sqrt(3), s.GetTransformedPoint(1, t).y);
 }
 
 TEST(Shape, GetPoints)

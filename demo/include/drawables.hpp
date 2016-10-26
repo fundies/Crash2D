@@ -1,14 +1,14 @@
-#include "line.hpp"
+#include "segment.hpp"
 #include "circle.hpp"
 #include "polygon.hpp"
 
 #include <SFML/Graphics.hpp>
 
 /// Segment ///
-class line : public Line, public sf::Drawable
+class segment : public Segment, public sf::Drawable
 {
 public:
-	line(const Vector2 &a, const Vector2 &b) : Line(a, b), _color(sf::Color::White) {}
+	segment(const Vector2 &a, const Vector2 &b) : Segment(a, b), _color(sf::Color::White) {}
 	void SetColor(const sf::Color &c);
 
 private:

@@ -3,6 +3,14 @@
 #include <cmath>
 #include <iostream>
 
+Vector2::Vector2() : x(0), y(0)
+{
+}
+
+Vector2::Vector2(const Precision_t x, const Precision_t y) : x(x), y(y)
+{
+}
+
 const Vector2 Vector2::Perpendicular() const
 {
 	return Vector2(y, -x);

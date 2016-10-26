@@ -18,7 +18,7 @@ public:
 		\param a The axis to project the circle onto.
 		\return The projection of the circle onto the axis.
 	*/
-	const Projection Project(const Axis &a) const;
+	const Projection Project(const Axis &a, const Transform &t) const;
 
 	//! Gets the collision of this circle with the given circle and returns the result.
 	/*!
@@ -27,7 +27,7 @@ public:
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
-	const Collision GetCollision(const Circle &c) const;
+	const Collision GetCollision(const Circle &c, const Transform &t1, const Transform &t2) const;
 
 	//! Gets the collision of this circle with the given polygon and returns the result.
 	/*!
@@ -36,14 +36,14 @@ public:
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
-	const Collision GetCollision(const Polygon &p) const;
+	const Collision GetCollision(const Polygon &p, const Transform &t1, const Transform &t2) const;
 
 	//! Checks if this circle contains the given vector and returns the result.
 	/*!
 		\param v The vector to check for containment in this circle.
 		\return Whether this circle contains the given vector.
 	*/
-	const bool Contains(const Vector2 &v) const;
+	const bool Contains(const Vector2 &v, const Transform &t) const;
 
 	//! Checks if this circle contains the given polygon and returns the result.
 	/*!
@@ -52,7 +52,7 @@ public:
 		\return Whether this circle contains the given polygon.
 		\sa GetCollision()
 	*/
-	const bool Contains(const Polygon &p) const;
+	const bool Contains(const Polygon &p, const Transform &t1, const Transform &t2) const;
 
 	//! Gets the radius of this circle.
 	/*!

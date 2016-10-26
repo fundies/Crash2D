@@ -17,14 +17,13 @@ public:
 	//! Constructs a default two-dimensional vector whose coordinates are initialized to zero.
 	/*!
 	*/
-	Vector2() : x(0), y(0) {}
-
+	Vector2();
 	//! Constructs a two-dimensional vector.
 	/*!
 		\param x The x coordinate of the vector.
 		\param y The y coordinate of the vector.
 	*/
-	Vector2(const Precision_t x, const Precision_t y) : x(x), y(y) {}
+	Vector2(const Precision_t x, const Precision_t y);
 
 	const Vector2 Perpendicular() const;
 

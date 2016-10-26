@@ -1,5 +1,13 @@
 #include "projection.hpp"
 
+Projection::Projection() : Vector2(0 , 0)
+{
+}
+
+Projection::Projection(const Precision_t &min, const Precision_t &max) : Vector2(min, max)
+{
+}
+
 Projection::Projection(const Vector2 &v)
 {
 	x = v.x;
