@@ -78,7 +78,7 @@ public:
 		The number of sides of a polygon will always be one less than the number of points.
 		\return The sides this polygon is composed of.
 	*/
-	const std::vector<Line>& GetSides() const;
+	const std::vector<Segment>& GetSides() const;
 
 	//! Gets the neareset vertex of this polygon to the given point and returns the result.
 	/*!
@@ -91,7 +91,7 @@ private:
 	const bool TriangleContains(const Vector2 &p, const Vector2 &a, const Vector2 &b, const Vector2 &c) const;
 
 	AxesVec _axes; /*!< The axes of this polygon. */
-	std::vector<Line> _side; /*!< The side of this polygon. */
+	std::vector<Segment> _side; /*!< The side of this polygon. */
 };
 
 #endif

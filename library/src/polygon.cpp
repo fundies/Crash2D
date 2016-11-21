@@ -1,5 +1,5 @@
 #include "polygon.hpp"
-#include "line.hpp"
+#include "segment.hpp"
 #include "circle.hpp"
 
 #include <cmath>
@@ -27,7 +27,7 @@ void Polygon::ReCalc()
 		const Vector2 p1 = GetPoint(i);
 		const Vector2 p2 =  GetPoint(i + 1 == GetPointCount() ? 0 : i + 1);
 
-		const Line l(p1, p2);
+		const Segment l(p1, p2);
 
 		bool parallel = false;
 
@@ -147,7 +147,7 @@ const bool Polygon::Contains(const Circle &c) const
 
 	for(auto && s : GetSides())
 	{
-		const Line l(s.GetPoint(0) + GetPos(), s.GetPoint(1) + GetPos());
+		const Segment l(s.GetPoint(0) + GetPos(), s.GetPoint(1) + GetPos());
 		const Precision_t dist = l.DistancePoint(center);
 
 		if (dist <= c.GetRadius())
@@ -307,7 +307,7 @@ const Vector2 Polygon::NearestVertex(const Vector2 &p) const
 	return v;
 }
 
-const std::vector<Line>& Polygon::GetSides() const
+const std::vector<Segment>& Polygon::GetSides() const
 {
 	return _side;
 }

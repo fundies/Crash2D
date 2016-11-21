@@ -1,11 +1,11 @@
-#include "line.hpp"
+#include "segment.hpp"
 
 #include <gtest/gtest.h>
 #include <cmath>
 
-TEST(Line, DefaultConstructor)
+TEST(Segment, DefaultConstructor)
 {
-	Line l;
+	Segment l;
 
 	EXPECT_EQ(0	, l.GetPoint(0).x);
 	EXPECT_EQ(0, l.GetPoint(0).y);
@@ -19,9 +19,9 @@ TEST(Line, DefaultConstructor)
 	EXPECT_FLOAT_EQ(0, l.GetCenter().y);
 }
 
-TEST(Line, Constructor2Points)
+TEST(Segment, Constructor2Points)
 {
-	Line l(Vector2(0, 0), Vector2(10, 10));
+	Segment l(Vector2(0, 0), Vector2(10, 10));
 
 	EXPECT_EQ(0	, l.GetPoint(0).x);
 	EXPECT_EQ(0, l.GetPoint(0).y);
@@ -35,9 +35,9 @@ TEST(Line, Constructor2Points)
 	EXPECT_EQ(5, l.GetCenter().y);
 }
 
-TEST(Line, SetPoint)
+TEST(Segment, SetPoint)
 {
-	Line l;
+	Segment l;
 
 	l.SetPoint(0, Vector2(9, 6));
 	l.SetPoint(1, Vector2(-3, 4));
@@ -54,9 +54,9 @@ TEST(Line, SetPoint)
 	EXPECT_EQ(5, l.GetCenter().y);
 }
 
-TEST(Line, DistancePoint)
+TEST(Segment, DistancePoint)
 {
-	Line l(Vector2(2, 2), Vector2(10, 5));
+	Segment l(Vector2(2, 2), Vector2(10, 5));
 	Vector2 v(0, 0);
 
 	// Outside
@@ -72,9 +72,9 @@ TEST(Line, DistancePoint)
 
 }
 
-TEST(Line, SignedDistancePoint)
+TEST(Segment, SignedDistancePoint)
 {
-	Line l(Vector2(2, 2), Vector2(10, 5));
+	Segment l(Vector2(2, 2), Vector2(10, 5));
 	Vector2 v(0, 0);
 
 	// Outside
@@ -97,53 +97,53 @@ TEST(Line, SignedDistancePoint)
 
 }
 
-TEST(Line, GetLength)
+TEST(Segment, GetLength)
 {
 	Vector2 a(0, 0);
 	Vector2 b(10, 10);
 
-	Line l(a, b);
+	Segment l(a, b);
 
 	EXPECT_FLOAT_EQ(10 * std::sqrt(2), l.GetLength());
 }
 
-TEST(Line, IsPerpendicular)
+TEST(Segment, IsPerpendicular)
 {
-	Line l1(Vector2(0, 0), Vector2(10, 0));
-	Line l2(Vector2(4, 4), Vector2(4, -4));
+	Segment l1(Vector2(0, 0), Vector2(10, 0));
+	Segment l2(Vector2(4, 4), Vector2(4, -4));
 
 	EXPECT_TRUE(l1.IsPerpendicular(l2));
 
-	l1 = Line(Vector2(0, 0), Vector2(4, 4));
-	l2 = Line(Vector2(0, 0), Vector2(4, -4));
+	l1 = Segment(Vector2(0, 0), Vector2(4, 4));
+	l2 = Segment(Vector2(0, 0), Vector2(4, -4));
 
 	EXPECT_TRUE(l1.IsPerpendicular(l2));
 
-	l2 = Line(Vector2(0, 0), Vector2(-4, -4));
+	l2 = Segment(Vector2(0, 0), Vector2(-4, -4));
 
 	EXPECT_FALSE(l1.IsPerpendicular(l2));
 }
 
-TEST(Line, IsParallel)
+TEST(Segment, IsParallel)
 {
-	Line l1(Vector2(5, 5), Vector2(5, -5));
-	Line l2(Vector2(4, 4), Vector2(4, -4));
+	Segment l1(Vector2(5, 5), Vector2(5, -5));
+	Segment l2(Vector2(4, 4), Vector2(4, -4));
 
 	EXPECT_TRUE(l1.IsParallel(l2));
 
-	l1 = Line(Vector2(0, 0), Vector2(4, 4));
-	l2 = Line(Vector2(0, 0), Vector2(-4, -4));
+	l1 = Segment(Vector2(0, 0), Vector2(4, 4));
+	l2 = Segment(Vector2(0, 0), Vector2(-4, -4));
 
 	EXPECT_TRUE(l1.IsParallel(l2));
 
-	l2 = Line(Vector2(0, 0), Vector2(-4, 4));
+	l2 = Segment(Vector2(0, 0), Vector2(-4, 4));
 
 	EXPECT_FALSE(l1.IsParallel(l2));
 }
 
-TEST(Line, ContainsPoint)
+TEST(Segment, ContainsPoint)
 {
-	Line l(Vector2(0, 0), Vector2(10, 10));
+	Segment l(Vector2(0, 0), Vector2(10, 10));
 
 	EXPECT_TRUE(l.ContainsPoint(Vector2(5, 5)));
 	EXPECT_FALSE(l.ContainsPoint(Vector2(-1, -1)));
@@ -155,14 +155,14 @@ TEST(Line, ContainsPoint)
 	l.Rotate(30);
 	EXPECT_FALSE(l.ContainsPoint(Vector2(300, 400)));
 
-	Line l2(Vector2(3.43, 7.87), Vector2(88.3, 66.22));
+	Segment l2(Vector2(3.43, 7.87), Vector2(88.3, 66.22));
 	EXPECT_TRUE(l2.ContainsPoint(Vector2(45.865, 37.045)));
 }
 
-TEST(Line, GetIntersect)
+TEST(Segment, GetIntersect)
 {
-	Line l1(Vector2(5, 5), Vector2(5, -5));
-	Line l2(Vector2(4, 4), Vector2(-4, -4));
+	Segment l1(Vector2(5, 5), Vector2(5, -5));
+	Segment l2(Vector2(4, 4), Vector2(-4, -4));
 
 	Vector2 i = l1.GetIntersect(l2);
 	EXPECT_EQ(5, i.x);
@@ -172,24 +172,24 @@ TEST(Line, GetIntersect)
 	i = l1.GetIntersect(l2);
 }
 
-TEST(Line, Intersects)
+TEST(Segment, Intersects)
 {
-	Line l1(Vector2(0, 0), Vector2(5, 5));
-	Line l2(Vector2(4, 4), Vector2(4, -4));
+	Segment l1(Vector2(0, 0), Vector2(5, 5));
+	Segment l2(Vector2(4, 4), Vector2(4, -4));
 
 	EXPECT_TRUE(l1.Intersects(l2));
 	EXPECT_TRUE(l2.Intersects(l1));
 
-	Line l3(Vector2(0, 0), Vector2(5, 5));
-	Line l4(Vector2(5, 5), Vector2(10, 10));
+	Segment l3(Vector2(0, 0), Vector2(5, 5));
+	Segment l4(Vector2(5, 5), Vector2(10, 10));
 
 	EXPECT_TRUE(l3.Intersects(l4));
 	EXPECT_TRUE(l4.Intersects(l3));
 }
 
-TEST(Line, GetAxis)
+TEST(Segment, GetAxis)
 {
-	Line l1(Vector2(0, 0), Vector2(5, 5));
+	Segment l1(Vector2(0, 0), Vector2(5, 5));
 
 	Vector2 a = l1.GetAxis();
 
@@ -197,10 +197,10 @@ TEST(Line, GetAxis)
 	EXPECT_EQ(1 / std::sqrt(2), a.y);
 }
 
-TEST(Line, GetTranslation)
+TEST(Segment, GetTranslation)
 {
-	Line l1(Vector2(0, 0), Vector2(5, 5));
-	Line l2(Vector2(4, 4), Vector2(4, -4));
+	Segment l1(Vector2(0, 0), Vector2(5, 5));
+	Segment l2(Vector2(4, 4), Vector2(4, -4));
 
 	EXPECT_TRUE(l1.Intersects(l2));
 

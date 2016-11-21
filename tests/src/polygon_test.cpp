@@ -1,6 +1,6 @@
 #include "polygon.hpp"
 #include "circle.hpp"
-#include "line.hpp"
+#include "segment.hpp"
 
 #include <gtest/gtest.h>
 #include <cmath>

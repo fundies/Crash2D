@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="library" InternalType="Console">
   <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
     <Plugin Name="CMakePlugin">
       <![CDATA[[{
   "name": "Debug",
@@ -13,29 +16,26 @@
   "parentProject": ""
  }]]]>
     </Plugin>
-    <Plugin Name="qmake">
-      <![CDATA[00010001N0005Debug000000000000]]>
-    </Plugin>
   </Plugins>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
     <File Name="src/circle.cpp"/>
     <File Name="src/collision.cpp"/>
-    <File Name="src/line.cpp"/>
     <File Name="src/polygon.cpp"/>
     <File Name="src/projection.cpp"/>
     <File Name="src/shape.cpp"/>
     <File Name="src/vector2.cpp"/>
+    <File Name="src/segment.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
     <File Name="include/circle.hpp"/>
     <File Name="include/collision.hpp"/>
-    <File Name="include/line.hpp"/>
     <File Name="include/polygon.hpp"/>
     <File Name="include/projection.hpp"/>
     <File Name="include/shape.hpp"/>
     <File Name="include/vector2.hpp"/>
+    <File Name="include/segment.hpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

@@ -105,6 +105,6 @@ protected:
 
 class Circle;
 class Polygon;
-class Line;
+class Segment;
 
 #endif
