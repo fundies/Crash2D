@@ -131,3 +131,19 @@ const bool Circle::Contains(const Polygon &p) const
 
 	return true;
 }
+
+const bool Circle::Contains(const Circle &c) const
+{
+	if (c.GetRadius() > GetRadius())
+		return false;
+
+	else
+	{
+		Vector2 v = c.GetPos() - GetPos();
+
+		Precision_t dist = v.Magnitude();
+		Precision_t radiiDif = std::abs(GetRadius() - c.GetRadius());
+
+		return (dist <= radiiDif);
+	}
+}

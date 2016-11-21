@@ -54,6 +54,15 @@ public:
 	*/
 	const bool Contains(const Polygon &p) const;
 
+	//! Checks if this circle contains the given circle and returns the result.
+	/*!
+		This function will not check if the given circle contains this circle, GetCollision() can be used for that.
+		\param c The circle to check for containment in this circle.
+		\return Whether this circle contains the given circle.
+		\sa GetCollision()
+	*/
+	const bool Contains(const Circle &c) const;
+
 	//! Gets the radius of this circle.
 	/*!
 		\return The radius of this circle.

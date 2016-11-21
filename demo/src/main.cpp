@@ -19,7 +19,7 @@ int rand(int min, int max)
 		return rand(min, max);
 }
 
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
 	std::vector<polygon*> polygons;
 	std::vector<circle*> circles;
@@ -51,28 +51,6 @@ int main(int argc, char **argv)
 
 		circles.push_back(c);
 	}
-
-	/*polygon pA;
-	pA.SetPointCount(3);
-	pA.SetPoint(0, Vector2(60, 0));
-	pA.SetPoint(1, Vector2(90, 30));
-	pA.SetPoint(2, Vector2(0, 30));
-	pA.ReCalc();
-
-	pA.Move(Vector2(100, 100));
-
-	polygon pB;
-	pB.SetPointCount(4);
-	pB.SetPoint(0, Vector2(0, 0));
-	pB.SetPoint(1, Vector2(25, 0));
-	pB.SetPoint(2, Vector2(25, 25));
-	pB.SetPoint(3, Vector2(0, 25));
-	pB.ReCalc();
-
-	circle pB = circle(5);
-	pB.SetPos(Vector2(60, 24));*/
-
-	//Collision c = pA.GetCollision(pB);
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Collision Test");
 	window.setFramerateLimit(60);
@@ -161,4 +139,53 @@ int main(int argc, char **argv)
 	}
 
 	return 0;
+}*/
+
+int main(int argc, char **argv)
+{
+	circle A(100);
+	A.SetPos(Vector2(300, 300));
+	A.SetColor(sf::Color::Green);
+
+	circle B(50);
+	B.SetColor(sf::Color::Red);
+
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Collision Test");
+	window.setFramerateLimit(60);
+
+	while (window.isOpen())
+	{
+		// check all the window's events that were triggered since the last iteration of the loop
+		sf::Event event;
+
+		while (window.pollEvent(event))
+		{
+			// "close requested" event: we close the window
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
+		// clear the window with black color
+		window.clear(sf::Color::Black);
+
+		// Move
+		int hdir = sf::Keyboard::isKeyPressed(sf::Keyboard::Right) - sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+		int vdir = sf::Keyboard::isKeyPressed(sf::Keyboard::Down) - sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
+
+		B.Move(Vector2(hdir * 4, vdir * 4));
+
+		if (A.Contains(B))
+		{
+			B.SetColor(sf::Color::Blue);
+		}
+
+		else
+			B.SetColor(sf::Color::Red);
+
+		// draw everything here...)
+		window.draw(A);
+		window.draw(B);
+
+		window.display();
+	}
 }
