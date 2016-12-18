@@ -1,10 +1,12 @@
 #include "shape.hpp"
+#include "projection.hpp"
+#include "collision.hpp"
 
 #include <cmath>
 #include <limits>
 
 #ifndef M_PI
-	#define M_PI 3.14159265359
+#define M_PI 3.14159265359
 #endif
 
 Shape::Shape() : _rotation(0)
@@ -104,4 +106,89 @@ Vector2 const Shape::GetTransformedPoint(const unsigned &i) const
 const std::vector<Vector2>& Shape::GetPoints() const
 {
 	return _points;
+}
+
+const Projection Shape::Project(const Axis &a) const
+{
+	return Projection(0, 0);
+}
+
+const bool Shape::Contains(const Vector2 &v) const
+{
+	return false;
+}
+
+const bool Shape::Contains(const Segment &s) const
+{
+	return false;
+}
+
+const bool Shape::Contains(const Circle &c) const
+{
+	return false;
+}
+
+const bool Shape::Contains(const Polygon &p) const
+{
+	return false;
+}
+
+const bool Shape::Intersects(const Segment &s) const
+{
+	return false;
+}
+
+const bool Shape::Intersects(const Circle &c) const
+{
+	return false;
+}
+
+const bool Shape::Intersects(const Polygon &p) const
+{
+	return false;
+}
+
+const std::vector<Vector2> Shape::GetIntersections(const Segment &s) const
+{
+	return std::vector<Vector2>(0);
+}
+
+const std::vector<Vector2> Shape::GetIntersections(const Circle &c) const
+{
+	return std::vector<Vector2>(0);
+}
+
+const std::vector<Vector2> Shape::GetIntersections(const Polygon &p) const
+{
+	return std::vector<Vector2>(0);
+}
+
+const Vector2 Shape::GetTranslation(const Segment &s) const
+{
+	return Vector2(0, 0);
+}
+
+const Vector2 Shape::GetTranslation(const Circle &c) const
+{
+	return Vector2(0, 0);
+}
+
+const Vector2 Shape::GetTranslation(const Polygon &p) const
+{
+	return Vector2(0, 0);
+}
+
+const Collision Shape::GetCollision(const Segment &s) const
+{
+	return Collision(false, std::vector<Vector2>(0), false, false, Vector2(0, 0));
+}
+
+const Collision Shape::GetCollision(const Circle &c) const
+{
+	return Collision(false, std::vector<Vector2>(0), false, false, Vector2(0, 0));
+}
+
+const Collision Shape::GetCollision(const Polygon &p) const
+{
+	return Collision(false, std::vector<Vector2>(0), false, false, Vector2(0, 0));
 }

@@ -21,13 +21,6 @@ public:
 	*/
 	Segment(const Vector2 &a, const Vector2 &b);
 
-	//! Sets the point at the given index to the new point.
-	/*!
-		\param i The index of the point. This should be 0 or 1 because a segment only has two points.
-		\param p The new point to replace the old point with.
-	*/
-	void SetPoint(const unsigned &i, const Vector2 &p);
-
 	//! Gets the distance from this segment to the given point and returns the result.
 	/*!
 		\param p The point to get the distance of this segment to.
@@ -74,46 +67,150 @@ public:
 	*/
 	const bool IsParallel(const Segment &l) const;
 
-	//! Gets whether this segment contains the given point and returns the result.
-	/*!
-		\param p The point to check if this segment contains.
-		\return Whether this segment contains the given point.
-	*/
-	const bool ContainsPoint(const Vector2 &p) const;
-
-	//! Gets whether this segment intersects the given segment and returns the result.
-	/*!
-		\param l THe segment to check if this segment intersects.
-		\return Whether this segment intersects the given segment.
-	*/
-	const bool Intersects(const Segment &l) const;
-
-	//! Gets the point of intersection between this segment and the given segment and returns the result.
-	/*!
-		\param l The segment to find the intersection of this segment.
-		\return The point of intersection between this segment and the given segment.
-	*/
-	const Vector2 GetIntersect(const Segment &l) const;
-
-	//! Gets the minimum translation vector between this segment and the given segment and returns the result.
-	/*!
-		\param l The segment to get the minimum translation vector of this segment.
-		\return The minimum translation vector of this segment with the given segment.
-	*/
-	const Vector2 GetTranslation(const Segment &l) const;
-
-	//! Rotates this segment by the given angle.
-	/*!
-		\param a The angle to rotate this segment.
-	*/
-	void Rotate(const Precision_t &a);
-
 	//! Gets the axis of this segment.
 	/*!
 		The axis of the segment is precalculated as the normal perpendicular to this segment's normal.
 		\return The axis of this segment.
 	*/
 	const Axis& GetAxis() const;
+
+	const Vector2 GetNearestPoint(const Vector2 &p) const;
+	const Vector2 NearestVertex(const Vector2 &p) const;
+	const Projection Project(const Axis &a) const;
+
+	//! Checks if this segment contains the given vector and returns the result.
+	/*!
+		\param v The vector to check for containment in this segment.
+		\return Whether this segment contains the given vector.
+	*/
+	const bool Contains(const Vector2 &v) const;
+
+	//! Checks if this segment contains the given segment and returns the result.
+	/*!
+		This function will not check if the given circle contains this segment, GetCollision() can be used for that.
+		\param c The circle to check for containment in this segment.
+		\return Whether this segment contains the given circle.
+		\sa GetCollision()
+	*/
+	const bool Contains(const Segment &s) const;
+
+	//! Checks if this segment contains the given circle and returns the result.
+	/*!
+		\param s The segment to check for containment in this segment.
+		\return Whether this segment contains the given segment.
+		\sa GetCollision()
+	*/
+	//const bool Contains(const Circle &c) const;
+
+	//! Checks if this segment contains the given polygon and returns the result.
+	/*!
+		This function will not check if the given polygon contains this segment, GetCollision() can be used for that.
+		\param p The polygon to check for containment in this segment.
+		\return Whether this segment contains the given polygon.
+		\sa GetCollision()
+	*/
+	//const bool Contains(const Polygon &p) const;
+
+	//! Checks if this segment intersects the given segment and returns the result.
+	/*!
+		\param s The segment to check for intersection with this segment.
+		\return Whether this segment intersects the given segment.
+		\sa GetCollision()
+	*/
+	const bool Intersects(const Segment &s) const;
+
+	//! Checks if this segment intersects the given circle and returns the result.
+	/*!
+		\param c The circle to check for intersection with this segment.
+		\return Whether this segment intersects the given circle.
+		\sa GetCollision()
+	*/
+	const bool Intersects(const Circle &c) const;
+
+	//! Checks if this segment intersects the given polygon and returns the result.
+	/*!
+		\param p The polygon to check for intersection with this segment.
+		\return Whether this segment intersects the given polygon.
+		\sa GetCollision()
+	*/
+	const bool Intersects(const Polygon &p) const;
+
+	//! Gets the intersection points of this segment and the given segment.
+	/*!
+		\param s A segment intersecting this segment.
+		\return list of intersections between this segment and the given segment.
+		\sa GetCollision()
+	*/
+	const std::vector<Vector2> GetIntersections(const Segment &s) const;
+
+	//! Gets the intersection points of this segment and the given circle.
+	/*!
+		\param c A circle intersecting this segment.
+		\return list of intersections between this segment and the given circle.
+		\sa GetCollision()
+	*/
+	const std::vector<Vector2> GetIntersections(const Circle &c) const;
+
+	//! Gets the intersection points of this segment and the given polygon.
+	/*!
+		\param p A polygon intersecting this segment.
+		\return list of intersections between this segment and the given polygon.
+		\sa GetCollision()
+	*/
+	const std::vector<Vector2> GetIntersections(const Polygon &p) const;
+
+	//! Gets the minimum vector to be applied to the given segment's position
+	//! in order to seperate it from this segment.
+	/*!
+		\param c A segment intersecting this segment.
+		\return the minimum translation vector.
+		\sa GetCollision()
+	*/
+	const Vector2 GetTranslation(const Segment &s) const;
+
+	//! Gets the minimum vector to be applied to the given circle's position
+	//! in order to seperate it from this segment.
+	/*!
+		\param c A circle intersecting this segment.
+		\return the minimum translation vector.
+		\sa GetCollision()
+	*/
+	const Vector2 GetTranslation(const Circle &c) const;
+
+	//! Gets the minimum vector to be applied to the given polygon's position
+	//! in order to seperate it from this segment.
+	/*!
+		\param p A polygon intersecting this segment.
+		\return the minimum translation vector.
+		\sa GetCollision()
+	*/
+	const Vector2 GetTranslation(const Polygon &p) const;
+
+	//! Gets the collision of this segment with the given segment and returns the result.
+	/*!
+		\param s The segment to check for collision with this segment.
+		\return The collision result including the minimum translation vector.
+		\sa Contains()
+	*/
+	const Collision GetCollision(const Segment &s) const;
+
+	//! Gets the collision of this segment with the given circle and returns the result.
+	//! Unlike the Contains() function, this function will also check if the given circle contains this segment.
+	/*!
+		\param c The circle to check for collision with this segment.
+		\return The collision result including the minimum translation vector.
+		\sa Contains()
+	*/
+	const Collision GetCollision(const Circle &c) const;
+
+	//! Gets the collision of this segment with the given polygon and returns the result.
+	/*!
+		Unlike the Contains() function, this function will also check if the given polygon contains this segment.
+		\param p The polygon to check for collision with this segment.
+		\return The collision result including the minimum translation vector.
+		\sa Contains()
+	*/
+	const Collision GetCollision(const Polygon &p) const;
 
 private:
 	void Recalc();

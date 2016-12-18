@@ -14,58 +14,6 @@ public:
 	*/
 	Polygon();
 
-	void ReCalc();
-
-	//! Projects this polygon onto the given axis and returns the result.
-	/*!
-		\param a The axis to project this polygon onto.
-		\return The projection of this polygon onto the given axis.
-	*/
-	const Projection Project(const Axis &a) const;
-
-	//! Gets the collision of this polygon with the given polygon and returns the result.
-	/*!
-		Unlike the Contains() function, this function will also check if the given polygon contains this polygon.
-		\param p The polygon to check for collision with this polygon.
-		\return The collision result including the minimum translation vector.
-		\sa Contains()
-	*/
-	const Collision GetCollision(const Polygon &p) const;
-
-	//! Gets the collision of this polygon with the given circle and returns the result.
-	/*!
-		Unlike the Contains() function, this function will also check if the given circle contains this polygon.
-		\param c The circle to check for collision with this polygon.
-		\return The collision result including the minimum translation vector.
-		\sa Contains()
-	*/
-	const Collision GetCollision(const Circle &c) const;
-
-	//! Checks if this polygon contains the given vector and returns the result.
-	/*!
-		\param v The vector to check for containment in this polygon.
-		\return Whether this polygon contains the given vector.
-	*/
-	const bool Contains(const Vector2 &v) const;
-
-	//! Checks if this polygon contains the given polygon and returns the result.
-	/*!
-		This function will not check if the given polygon contains this polygon, GetCollision() can be used for that.
-		\param p The polygon to check for containment in this polygon.
-		\return Whether this polygon contains the given polygon.
-		\sa GetCollision()
-	*/
-	const bool Contains(const Polygon &p) const;
-
-	//! Checks if this polygon contains the given circle and returns the result.
-	/*!
-		This function will not check if the given circle contains this polygon, GetCollision() can be used for that.
-		\param c The circle to check for containment in this polygon.
-		\return Whether this polygon contains the given circle.
-		\sa GetCollision()
-	*/
-	const bool Contains(const Circle &c) const;
-
 	//! Gets the axes of this polygon's sides.
 	/*!
 		The axes of the sides is precalculated as the normal perpendicular to each side's normal.
@@ -85,9 +33,159 @@ public:
 		\param p The point to get the nearest vertex of this polygon.
 		\return The nearest vertex of this polygon to the given point.
 	*/
-	const Vector2 NearestVertex(const Vector2 &point) const;
+	const Vector2 NearestVertex(const Vector2 &p) const;
+
+	void ReCalc();
+
+	//! Projects this polygon onto the given axis and returns the result.
+	/*!
+		\param a The axis to project this polygon onto.
+		\return The projection of this polygon onto the given axis.
+	*/
+	const Projection Project(const Axis &a) const;
+
+	//! Checks if this polygon contains the given vector and returns the result.
+	/*!
+		\param v The vector to check for containment in this polygon.
+		\return Whether this polygon contains the given vector.
+	*/
+	const bool Contains(const Vector2 &v) const;
+
+	//! Checks if this polygon contains the given segment and returns the result.
+	/*!
+		This function will not check if the given circle contains this polygon, GetCollision() can be used for that.
+		\param c The circle to check for containment in this polygon.
+		\return Whether this polygon contains the given circle.
+		\sa GetCollision()
+	*/
+	const bool Contains(const Segment &s) const;
+
+	//! Checks if this polygon contains the given circle and returns the result.
+	/*!
+		\param s The segment to check for containment in this polygon.
+		\return Whether this polygon contains the given segment.
+		\sa GetCollision()
+	*/
+	const bool Contains(const Circle &c) const;
+
+	//! Checks if this polygon contains the given polygon and returns the result.
+	/*!
+		This function will not check if the given polygon contains this polygon, GetCollision() can be used for that.
+		\param p The polygon to check for containment in this polygon.
+		\return Whether this polygon contains the given polygon.
+		\sa GetCollision()
+	*/
+	const bool Contains(const Polygon &p) const;
+
+	//! Checks if this polygon intersects the given segment and returns the result.
+	/*!
+		\param s The segment to check for intersection with this polygon.
+		\return Whether this polygon intersects the given segment.
+		\sa GetCollision()
+	*/
+	const bool Intersects(const Segment &s) const;
+
+	//! Checks if this polygon intersects the given circle and returns the result.
+	/*!
+		\param c The circle to check for intersection with this polygon.
+		\return Whether this polygon intersects the given circle.
+		\sa GetCollision()
+	*/
+	const bool Intersects(const Circle &c) const;
+
+	//! Checks if this polygon intersects the given polygon and returns the result.
+	/*!
+		\param p The polygon to check for intersection with this polygon.
+		\return Whether this polygon intersects the given polygon.
+		\sa GetCollision()
+	*/
+	const bool Intersects(const Polygon &p) const;
+
+	//! Gets the intersection points of this polygon and the given segment.
+	/*!
+		\param s A segment intersecting this polygon.
+		\return list of intersections between this polygon and the given segment.
+		\sa GetCollision()
+	*/
+	const std::vector<Vector2> GetIntersections(const Segment &s) const;
+
+	//! Gets the intersection points of this polygon and the given circle.
+	/*!
+		\param c A circle intersecting this polygon.
+		\return list of intersections between this polygon and the given circle.
+		\sa GetCollision()
+	*/
+	const std::vector<Vector2> GetIntersections(const Circle &c) const;
+
+	//! Gets the intersection points of this polygon and the given polygon.
+	/*!
+		\param p A polygon intersecting this polygon.
+		\return list of intersections between this polygon and the given polygon.
+		\sa GetCollision()
+	*/
+	const std::vector<Vector2> GetIntersections(const Polygon &p) const;
+
+	//! Gets the minimum vector to be applied to the given segment's position
+	//! in order to seperate it from this polygon.
+	/*!
+		\param c A segment intersecting this polygon.
+		\return the minimum translation vector.
+		\sa GetCollision()
+	*/
+	const Vector2 GetTranslation(const Segment &s) const;
+
+	//! Gets the minimum vector to be applied to the given circle's position
+	//! in order to seperate it from this polygon.
+	/*!
+		\param c A circle intersecting this polygon.
+		\return the minimum translation vector.
+		\sa GetCollision()
+	*/
+	const Vector2 GetTranslation(const Circle &c) const;
+
+	//! Gets the minimum vector to be applied to the given polygon's position
+	//! in order to seperate it from this polygon.
+	/*!
+		\param p A polygon intersecting this polygon.
+		\return the minimum translation vector.
+		\sa GetCollision()
+	*/
+	const Vector2 GetTranslation(const Polygon &p) const;
+
+	//! Gets the collision of this polygon with the given segment and returns the result.
+	/*!
+		\param s The segment to check for collision with this polygon.
+		\return The collision result including the minimum translation vector.
+		\sa Contains()
+	*/
+	const Collision GetCollision(const Segment &s) const;
+
+	//! Gets the collision of this polygon with the given circle and returns the result.
+	//! Unlike the Contains() function, this function will also check if the given circle contains this polygon.
+	/*!
+		\param c The circle to check for collision with this polygon.
+		\return The collision result including the minimum translation vector.
+		\sa Contains()
+	*/
+	const Collision GetCollision(const Circle &c) const;
+
+	//! Gets the collision of this polygon with the given polygon and returns the result.
+	/*!
+		Unlike the Contains() function, this function will also check if the given polygon contains this polygon.
+		\param p The polygon to check for collision with this polygon.
+		\return The collision result including the minimum translation vector.
+		\sa Contains()
+	*/
+	const Collision GetCollision(const Polygon &p) const;
 
 private:
+	//! Checks if triangle "abc" contains the point "p".
+	/*!
+		\param p The point to check for containment within the triangle.
+		\param a The first point on the triangle.
+		\param b The second point on the triangle.
+		\param c The third point on the triangle.
+	*/
 	const bool TriangleContains(const Vector2 &p, const Vector2 &a, const Vector2 &b, const Vector2 &c) const;
 
 	AxesVec _axes; /*!< The axes of this polygon. */

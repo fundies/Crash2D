@@ -4,6 +4,7 @@
 #include <vector>
 
 using Precision_t = double;
+const Precision_t EPS = 1e-12;
 
 bool AreEqual(Precision_t a, Precision_t b);
 
@@ -73,11 +74,9 @@ public:
 		y = f;
 		return *this;
 	}
-	inline Vector2 & operator - (void)
+	inline const Vector2 operator - (void) const
 	{
-		x = -x;
-		y = -y;
-		return *this;
+		return Vector2(-x, -y);
 	}
 	inline bool operator == (const Vector2 & v) const
 	{

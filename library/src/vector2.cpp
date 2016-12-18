@@ -36,5 +36,6 @@ const Precision_t Vector2::GetDistance(const Vector2 &v) const
 
 bool AreEqual(Precision_t a, Precision_t b)
 {
-	return (a == b || std::fabs(a - b) <= 1e-12);
+	//change 0.1 to real precision
+	return (a == b || std::fabs(a - b) <= 0.1);
 }

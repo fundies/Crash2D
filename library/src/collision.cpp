@@ -1,21 +1,29 @@
 #include "collision.hpp"
 #include "vector2.hpp"
 
-Collision::Collision(const Vector2 &t, const bool &v, const bool c)
+Collision::Collision(bool dI, const std::vector<Vector2> i, bool aCb, bool bCa, const Vector2 t)
+	: _doesIntersect(dI), _intersects(i), _aContainsb(aCb), _bContainsa(bCa), _translation(t)
 {
-	_translation = t;
-	_touching = v;
-	_contained = c;
 }
 
-bool Collision::IsTouching() const
+const bool Collision::Intersects() const
 {
-	return _touching;
+	return _doesIntersect;
 }
 
-bool Collision::IsContained() const
+const std::vector<Vector2>& Collision::GetIntersects() const
 {
-	return _contained;
+	return _intersects;
+}
+
+const bool Collision::AcontainsB() const
+{
+	return _aContainsb;
+}
+
+const bool Collision::BcontainsA() const
+{
+	return _bContainsa;
 }
 
 const Vector2& Collision::GetTranslation() const

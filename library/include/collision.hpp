@@ -9,23 +9,37 @@ class Collision
 public:
 	//! Constructs a collision with the given translation.
 	/*!
-		\param t The minimum translation vector, should be 0 if there is no collision.
-		\param v Whether this collision is touching.
-		\param c Whether this collision is contained.
+		\param dI Whether the two shapes intersect.
+		\param i Intersection points of the two shapes.
+		\param aCb Whether shape A contains shape B.
+		\param bCa Whether shape B contains shape A.
+		\param t The minimum translation vector, returns 0,0 if there is no collision.
 	*/
-	Collision(const Vector2 &t, const bool &v, const bool c);
+	Collision(bool dI, const std::vector<Vector2> i, bool aCb, bool bCa, const Vector2 t);
 
-	//! Gets whether this collision is touching.
+	//! Gets whether the two shapes intersect.
 	/*!
-		\return Whether this collision is touching.
+		\return Whether the two shapes intersect.
 	*/
-	bool IsTouching() const;
+	const bool Intersects() const;
 
-	//! Gets whether this collision is contained.
+	//! Gets the intersection points of the two shapes.
 	/*!
-		\return Whether this collision is contained.
+		\return intersection points of the two shapes.
 	*/
-	bool IsContained() const;
+	const std::vector<Vector2>& GetIntersects() const;
+
+	//! Gets whether shape A contains shape B.
+	/*!
+		\return Whether shape A contains shape B.
+	*/
+	const bool AcontainsB() const;
+
+	//! Gets whether shape B contains shape A.
+	/*!
+		\return Whether shape B contains shape A.
+	*/
+	const bool BcontainsA() const;
 
 	//! Gets the translation of this collision.
 	/*!
@@ -34,9 +48,11 @@ public:
 	const Vector2& GetTranslation() const;
 
 private:
-	Vector2 _translation; /*!< The minimum translation vector of this collision. */
-	bool _touching; /*!< Whether this collision is touching. */
-	bool _contained; /*!< Whether this collision is contained. */
+	bool _doesIntersect; /*!< Whether the two shapes intersect. */
+	const std::vector<Vector2> _intersects; /*!< Intersection points of the two shapes. */
+	bool _aContainsb; /*!< Whether shape A contains shape B */
+	bool _bContainsa; /*!< Whether shape B contains shape A */
+	const Vector2 _translation; /*!< The minimum translation vector of this collision. */
 
 };
 

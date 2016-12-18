@@ -34,8 +34,8 @@
     <File Name="include/polygon.hpp"/>
     <File Name="include/projection.hpp"/>
     <File Name="include/shape.hpp"/>
-    <File Name="include/vector2.hpp"/>
     <File Name="include/segment.hpp"/>
+    <File Name="include/vector2.hpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
