@@ -1,10 +1,10 @@
 #ifndef LINE_HPP
 #define LINE_HPP
 
-#include "shape.hpp"
+#include "shape_impl.hpp"
 
 //!  A class representing a segment shape. */
-class Segment : public Shape
+class Segment : public ShapeImpl
 {
 public:
 	//! Constructs a default segment.
@@ -26,20 +26,20 @@ public:
 		\param p The point to get the distance of this segment to.
 		\return The distance of this segment to the given point.
 	*/
-	const Precision_t DistancePoint(const Vector2 &p) const;
+	virtual const Precision_t DistancePoint(const Vector2 &p) const;
 
 	//! Gets the signed distance from this segment to the given point and returns the result.
 	/*!
 		\param p The point to get the signed distance of this segment to.
 		\return The signed distance of this segment to the given point.
 	*/
-	const Precision_t SignedDistancePoint(const Vector2 &p) const;
+	virtual const Precision_t SignedDistancePoint(const Vector2 &p) const;
 
 	//! Gets the length of the segment and returns the result.
 	/*!
 		\return The length of the segment.
 	*/
-	const Precision_t& GetLength() const;
+	virtual const Precision_t& GetLength() const;
 
 	//! Gets the slope of the segment and returns the result.
 	/*!
@@ -47,43 +47,60 @@ public:
 		vertical lines because division by 0 is undefined.
 		\return The slope of the segment as a ratio.
 	*/
-	const Precision_t& GetSlope() const;
+	virtual const Precision_t& GetSlope() const;
 
 	//! Gets whether this segment is perpendicular to the given segment and returns the result.
 	/*!
 		Two lines are perpendicular if the opposite reciprocal of one segment's slope is equal to the other segment's slope. That
 		is, if the negative of this segment's run over rise ratio is equal to the given segment's slope, then the lines are
 		perpendicular and the function will return true. The function will otherwise return false.
-		\param l The segment to check if this segment is perpendicular to.
+		\param s The segment to check if this segment is perpendicular to.
 		\return Whether this segment is perpendicular to the given segment.
 	*/
-	const bool IsPerpendicular(const Segment &l) const;
+	virtual const bool IsPerpendicular(const Segment &s) const;
 
 	//! Gets whether this segment is parallel to the given segment and returns the result.
 	/*!
 		This function will return true if the slope of this segment is equal to the given segment's slope.
-		\param l The segment to check if this segment is parallel to.
+		\param s The segment to check if this segment is parallel to.
 		\return Whether this segment is parallel to the given segment.
 	*/
-	const bool IsParallel(const Segment &l) const;
+	virtual const bool IsParallel(const Segment &s) const;
 
 	//! Gets the axis of this segment.
 	/*!
 		The axis of the segment is precalculated as the normal perpendicular to this segment's normal.
 		\return The axis of this segment.
 	*/
-	const Axis& GetAxis() const;
+	virtual const Axis& GetAxis() const;
 
-	const Vector2 GetNearestPoint(const Vector2 &p) const;
-	const Vector2 NearestVertex(const Vector2 &p) const;
-	const Projection Project(const Axis &a) const;
+	//! Calculates the nearest point on the line segment to the given point.
+	/*!
+		\param p The point given to be used in the calculation.
+		\return The calculated point.
+	*/
+	virtual const Vector2 GetNearestPoint(const Vector2 &p) const;
+
+	//! Calculates the nearest end point on the line segment to the given point.
+	/*!
+		\param p The point given to be used in the calculation.
+		\return The calculated point.
+	*/
+	virtual const Vector2 NearestVertex(const Vector2 &p) const;
+
+	//! Projects the line segment on the given axis.
+	/*!
+		\param a The axis to project the segment upon.
+		\return The calculated projection.
+	*/
+	virtual const Projection Project(const Axis &a) const;
 
 	//! Checks if this segment contains the given vector and returns the result.
 	/*!
 		\param v The vector to check for containment in this segment.
 		\return Whether this segment contains the given vector.
 	*/
-	const bool Contains(const Vector2 &v) const;
+	virtual const bool Contains(const Vector2 &v) const;
 
 	//! Checks if this segment contains the given segment and returns the result.
 	/*!
@@ -92,7 +109,7 @@ public:
 		\return Whether this segment contains the given circle.
 		\sa GetCollision()
 	*/
-	const bool Contains(const Segment &s) const;
+	virtual const bool Contains(const Segment &s) const override;
 
 	//! Checks if this segment contains the given circle and returns the result.
 	/*!
@@ -100,7 +117,7 @@ public:
 		\return Whether this segment contains the given segment.
 		\sa GetCollision()
 	*/
-	//const bool Contains(const Circle &c) const;
+	virtual const bool Contains(const Circle &c) const override;
 
 	//! Checks if this segment contains the given polygon and returns the result.
 	/*!
@@ -109,7 +126,7 @@ public:
 		\return Whether this segment contains the given polygon.
 		\sa GetCollision()
 	*/
-	//const bool Contains(const Polygon &p) const;
+	virtual const bool Contains(const Polygon &p) const override;
 
 	//! Checks if this segment intersects the given segment and returns the result.
 	/*!
@@ -117,7 +134,7 @@ public:
 		\return Whether this segment intersects the given segment.
 		\sa GetCollision()
 	*/
-	const bool Intersects(const Segment &s) const;
+	virtual const bool Intersects(const Segment &s) const override;
 
 	//! Checks if this segment intersects the given circle and returns the result.
 	/*!
@@ -125,7 +142,7 @@ public:
 		\return Whether this segment intersects the given circle.
 		\sa GetCollision()
 	*/
-	const bool Intersects(const Circle &c) const;
+	virtual const bool Intersects(const Circle &c) const override;
 
 	//! Checks if this segment intersects the given polygon and returns the result.
 	/*!
@@ -133,7 +150,7 @@ public:
 		\return Whether this segment intersects the given polygon.
 		\sa GetCollision()
 	*/
-	const bool Intersects(const Polygon &p) const;
+	virtual const bool Intersects(const Polygon &p) const override;
 
 	//! Gets the intersection points of this segment and the given segment.
 	/*!
@@ -141,7 +158,7 @@ public:
 		\return list of intersections between this segment and the given segment.
 		\sa GetCollision()
 	*/
-	const std::vector<Vector2> GetIntersections(const Segment &s) const;
+	virtual const std::vector<Vector2> GetIntersections(const Segment &s) const override;
 
 	//! Gets the intersection points of this segment and the given circle.
 	/*!
@@ -149,7 +166,7 @@ public:
 		\return list of intersections between this segment and the given circle.
 		\sa GetCollision()
 	*/
-	const std::vector<Vector2> GetIntersections(const Circle &c) const;
+	virtual const std::vector<Vector2> GetIntersections(const Circle &c) const override;
 
 	//! Gets the intersection points of this segment and the given polygon.
 	/*!
@@ -157,7 +174,7 @@ public:
 		\return list of intersections between this segment and the given polygon.
 		\sa GetCollision()
 	*/
-	const std::vector<Vector2> GetIntersections(const Polygon &p) const;
+	virtual const std::vector<Vector2> GetIntersections(const Polygon &p) const override;
 
 	//! Gets the minimum vector to be applied to the given segment's position
 	//! in order to seperate it from this segment.
@@ -166,7 +183,7 @@ public:
 		\return the minimum translation vector.
 		\sa GetCollision()
 	*/
-	const Vector2 GetTranslation(const Segment &s) const;
+	virtual const Vector2 GetTranslation(const Segment &s) const override;
 
 	//! Gets the minimum vector to be applied to the given circle's position
 	//! in order to seperate it from this segment.
@@ -175,7 +192,7 @@ public:
 		\return the minimum translation vector.
 		\sa GetCollision()
 	*/
-	const Vector2 GetTranslation(const Circle &c) const;
+	virtual const Vector2 GetTranslation(const Circle &c) const override;
 
 	//! Gets the minimum vector to be applied to the given polygon's position
 	//! in order to seperate it from this segment.
@@ -184,7 +201,15 @@ public:
 		\return the minimum translation vector.
 		\sa GetCollision()
 	*/
-	const Vector2 GetTranslation(const Polygon &p) const;
+	virtual const Vector2 GetTranslation(const Polygon &p) const override;
+
+	//! Gets the collision of this segment with the given shape and returns the result.
+	/*!
+		\param s The shape to check for collision with this segment.
+		\return The collision result including the minimum translation vector.
+		\sa Contains()
+	*/
+	virtual const Collision GetCollision(const Shape &s) const override;
 
 	//! Gets the collision of this segment with the given segment and returns the result.
 	/*!
@@ -192,7 +217,7 @@ public:
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
-	const Collision GetCollision(const Segment &s) const;
+	virtual const Collision GetCollision(const Segment &s) const override;
 
 	//! Gets the collision of this segment with the given circle and returns the result.
 	//! Unlike the Contains() function, this function will also check if the given circle contains this segment.
@@ -201,7 +226,7 @@ public:
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
-	const Collision GetCollision(const Circle &c) const;
+	virtual const Collision GetCollision(const Circle &c) const override;
 
 	//! Gets the collision of this segment with the given polygon and returns the result.
 	/*!
@@ -210,14 +235,17 @@ public:
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
-	const Collision GetCollision(const Polygon &p) const;
+	virtual const Collision GetCollision(const Polygon &p) const override;
 
-private:
-	void Recalc();
+	//! Method required to be called after updating the geometry of a shape.
+	/*!
+	*/
+	virtual void ReCalc() override;
+
+protected:
 
 	Precision_t _slope; /*!< The slope of this segment, that is, its rise over run. */
 	Precision_t _length; /*!< The length of this segment. */
-
 	Axis _axis; /*!< The axis of this circle. */
 };
 

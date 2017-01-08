@@ -9,7 +9,7 @@
 #include <limits>
 #include <algorithm>
 
-Polygon::Polygon() : Shape(), _side(0)
+Polygon::Polygon() : ShapeImpl(), _side(0)
 {
 }
 
@@ -73,12 +73,12 @@ void Polygon::ReCalc()
 
 		_side.push_back(l);
 
-		if (!parallel)
-		{
-			const Vector2 edge = p1 - p2;
-			const Axis normal = edge.Perpendicular().Normal();
-			_axes.push_back(normal);
-		}
+		//if (!parallel)
+		//{
+		const Vector2 edge = p1 - p2;
+		const Axis normal = edge.Perpendicular().Normal();
+		_axes.push_back(normal);
+		//}
 	}
 
 	// FIXME: HAX FiX this //
@@ -161,7 +161,7 @@ const bool Polygon::Contains(const Segment &s) const
 
 const bool Polygon::Contains(const Circle &c) const
 {
-	const Vector2 center = c.GetPos();
+	const Vector2 center = c.GetCenter() + c.GetPos();
 
 	if (!Contains(center))
 		return false;
@@ -396,9 +396,9 @@ const Vector2 Polygon::GetTranslation(const Circle &c) const
 
 	translation = smallest * (Overlap + 1);
 
-	Vector2 distance = (c.GetPos()) - (GetCenter() + GetPos());
+	Vector2 distance = GetCenter() + GetPos() - (c.GetCenter() + c.GetPos());
 
-	if ((translation.Dot(distance) < 0) || Contains(c))
+	if (translation.Dot(distance) > 0 || Contains(c))
 		translation = -translation;
 
 	return translation;
@@ -446,13 +446,18 @@ const Vector2 Polygon::GetTranslation(const Polygon &p) const
 	return translation;
 }
 
+const Collision Polygon::GetCollision(const Shape &s) const
+{
+	return -s.GetCollision(*this);
+}
+
 const Collision Polygon::GetCollision(const Segment &s) const
 {
 	bool doesIntersect = false;
 
 	// Determine if this polygon contains
 	// the segment "s"
-	bool contains = false;//Contains(s);
+	bool contains = false;
 
 	// The segment "s" cannot
 	// contain this polygon
@@ -493,24 +498,14 @@ const Collision Polygon::GetCollision(const Segment &s) const
 
 	translation = smallest * (Overlap + 1);
 
-	/** FIXME: This doesn't work
-	 *
 	Vector2 distance = (s.GetCenter() + s.GetPos()) - (GetCenter() + GetPos());
 
 	if (translation.Dot(distance) < 0)
 		translation = -translation;
-	*
-	*/
-
-	// This does work but is hacks
-	Segment test(s.GetTransformedPoint(0), s.GetTransformedPoint(1));
-	test.Move(translation);
-
-	if (Intersects(test))
-		translation = -translation;
 
 	doesIntersect = true;
 	contains = Contains(s);
+	intersects = GetIntersections(s);
 
 	return Collision(doesIntersect, intersects, contains, contained, translation);
 }
@@ -536,7 +531,7 @@ const Collision Polygon::GetCollision(const Circle &c) const
 	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
 	Axis smallest;
 
-	const Axis ax = (NearestVertex(c.GetPos()) - c.GetPos()).Normal();
+	const Axis ax = (NearestVertex(c.GetCenter() + c.GetPos()) - (c.GetCenter() + c.GetPos())).Normal();
 
 	AxesVec axes = GetAxes();
 	axes.push_back(ax);
@@ -565,13 +560,17 @@ const Collision Polygon::GetCollision(const Circle &c) const
 	doesIntersect = true;
 	contains = Contains(c);
 	contained = c.Contains(*this);
+	intersects = GetIntersections(c);
 
 	translation = smallest * (Overlap + 1);
 
-	Vector2 distance = (GetCenter() + GetPos()) - c.GetPos();
+	Vector2 distance = (GetCenter() + GetPos()) - (c.GetCenter() + c.GetPos());
 
-	if (translation.Dot(distance) < 0)
+	if ((translation.Dot(distance) > 0) || contains)
+	{
+		std::cout << "wut" << std::endl;
 		translation = -translation;
+	}
 
 	return Collision(doesIntersect, intersects, contains, contained, translation);
 }
@@ -629,12 +628,16 @@ const Collision Polygon::GetCollision(const Polygon &p) const
 	doesIntersect = true;
 	contains = Contains(p);
 	contained = p.Contains(*this);
+	intersects = GetIntersections(p);
 
 	translation = smallest * (Overlap + 1);
 
 	Vector2 distance = (p.GetCenter() + p.GetPos()) - (GetCenter() + GetPos());
 
-	if ((translation.Dot(distance) < 0) || contains)
+	if (translation.Dot(distance) < 0)
+		translation = -translation;
+
+	if (contains)
 		translation = -translation;
 
 	return Collision(doesIntersect, intersects, contains, contained, translation);

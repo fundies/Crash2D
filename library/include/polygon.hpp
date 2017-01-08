@@ -1,10 +1,10 @@
 #ifndef POLYGON_HPP
 #define POLYGON_HPP
 
-#include "shape.hpp"
+#include "shape_impl.hpp"
 
 //!  A class representing an n-sided polygon shape. */
-class Polygon : public Shape
+class Polygon : public ShapeImpl
 {
 public:
 	//! Constructs a default polygon.
@@ -19,37 +19,35 @@ public:
 		The axes of the sides is precalculated as the normal perpendicular to each side's normal.
 		\return The axes of this polygon's sides.
 	*/
-	const AxesVec& GetAxes() const;
+	virtual const AxesVec& GetAxes() const;
 
 	//! Gets the sides this polygon is composed of.
 	/*!
 		The number of sides of a polygon will always be one less than the number of points.
 		\return The sides this polygon is composed of.
 	*/
-	const std::vector<Segment>& GetSides() const;
+	virtual const std::vector<Segment>& GetSides() const;
 
 	//! Gets the neareset vertex of this polygon to the given point and returns the result.
 	/*!
 		\param p The point to get the nearest vertex of this polygon.
 		\return The nearest vertex of this polygon to the given point.
 	*/
-	const Vector2 NearestVertex(const Vector2 &p) const;
-
-	void ReCalc();
+	virtual const Vector2 NearestVertex(const Vector2 &p) const;
 
 	//! Projects this polygon onto the given axis and returns the result.
 	/*!
 		\param a The axis to project this polygon onto.
 		\return The projection of this polygon onto the given axis.
 	*/
-	const Projection Project(const Axis &a) const;
+	virtual const Projection Project(const Axis &a) const override;
 
 	//! Checks if this polygon contains the given vector and returns the result.
 	/*!
 		\param v The vector to check for containment in this polygon.
 		\return Whether this polygon contains the given vector.
 	*/
-	const bool Contains(const Vector2 &v) const;
+	virtual const bool Contains(const Vector2 &v) const override;
 
 	//! Checks if this polygon contains the given segment and returns the result.
 	/*!
@@ -58,7 +56,7 @@ public:
 		\return Whether this polygon contains the given circle.
 		\sa GetCollision()
 	*/
-	const bool Contains(const Segment &s) const;
+	virtual const bool Contains(const Segment &s) const override;
 
 	//! Checks if this polygon contains the given circle and returns the result.
 	/*!
@@ -66,7 +64,7 @@ public:
 		\return Whether this polygon contains the given segment.
 		\sa GetCollision()
 	*/
-	const bool Contains(const Circle &c) const;
+	virtual const bool Contains(const Circle &c) const override;
 
 	//! Checks if this polygon contains the given polygon and returns the result.
 	/*!
@@ -75,7 +73,7 @@ public:
 		\return Whether this polygon contains the given polygon.
 		\sa GetCollision()
 	*/
-	const bool Contains(const Polygon &p) const;
+	virtual const bool Contains(const Polygon &p) const override;
 
 	//! Checks if this polygon intersects the given segment and returns the result.
 	/*!
@@ -83,7 +81,7 @@ public:
 		\return Whether this polygon intersects the given segment.
 		\sa GetCollision()
 	*/
-	const bool Intersects(const Segment &s) const;
+	virtual const bool Intersects(const Segment &s) const override;
 
 	//! Checks if this polygon intersects the given circle and returns the result.
 	/*!
@@ -91,7 +89,7 @@ public:
 		\return Whether this polygon intersects the given circle.
 		\sa GetCollision()
 	*/
-	const bool Intersects(const Circle &c) const;
+	virtual const bool Intersects(const Circle &c) const override;
 
 	//! Checks if this polygon intersects the given polygon and returns the result.
 	/*!
@@ -99,7 +97,7 @@ public:
 		\return Whether this polygon intersects the given polygon.
 		\sa GetCollision()
 	*/
-	const bool Intersects(const Polygon &p) const;
+	virtual const bool Intersects(const Polygon &p) const override;
 
 	//! Gets the intersection points of this polygon and the given segment.
 	/*!
@@ -107,7 +105,7 @@ public:
 		\return list of intersections between this polygon and the given segment.
 		\sa GetCollision()
 	*/
-	const std::vector<Vector2> GetIntersections(const Segment &s) const;
+	virtual const std::vector<Vector2> GetIntersections(const Segment &s) const override;
 
 	//! Gets the intersection points of this polygon and the given circle.
 	/*!
@@ -115,7 +113,7 @@ public:
 		\return list of intersections between this polygon and the given circle.
 		\sa GetCollision()
 	*/
-	const std::vector<Vector2> GetIntersections(const Circle &c) const;
+	virtual const std::vector<Vector2> GetIntersections(const Circle &c) const override;
 
 	//! Gets the intersection points of this polygon and the given polygon.
 	/*!
@@ -123,7 +121,7 @@ public:
 		\return list of intersections between this polygon and the given polygon.
 		\sa GetCollision()
 	*/
-	const std::vector<Vector2> GetIntersections(const Polygon &p) const;
+	virtual const std::vector<Vector2> GetIntersections(const Polygon &p) const override;
 
 	//! Gets the minimum vector to be applied to the given segment's position
 	//! in order to seperate it from this polygon.
@@ -132,7 +130,7 @@ public:
 		\return the minimum translation vector.
 		\sa GetCollision()
 	*/
-	const Vector2 GetTranslation(const Segment &s) const;
+	virtual const Vector2 GetTranslation(const Segment &s) const override;
 
 	//! Gets the minimum vector to be applied to the given circle's position
 	//! in order to seperate it from this polygon.
@@ -141,7 +139,7 @@ public:
 		\return the minimum translation vector.
 		\sa GetCollision()
 	*/
-	const Vector2 GetTranslation(const Circle &c) const;
+	virtual const Vector2 GetTranslation(const Circle &c) const override;
 
 	//! Gets the minimum vector to be applied to the given polygon's position
 	//! in order to seperate it from this polygon.
@@ -150,7 +148,15 @@ public:
 		\return the minimum translation vector.
 		\sa GetCollision()
 	*/
-	const Vector2 GetTranslation(const Polygon &p) const;
+	virtual const Vector2 GetTranslation(const Polygon &p) const override;
+
+	//! Gets the collision of this circle with the given shape and returns the result.
+	/*!
+		\param s The shape to check for collision with this segment.
+		\return The collision result including the minimum translation vector.
+		\sa Contains()
+	*/
+	virtual const Collision GetCollision(const Shape &s) const override;
 
 	//! Gets the collision of this polygon with the given segment and returns the result.
 	/*!
@@ -158,7 +164,7 @@ public:
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
-	const Collision GetCollision(const Segment &s) const;
+	virtual const Collision GetCollision(const Segment &s) const override;
 
 	//! Gets the collision of this polygon with the given circle and returns the result.
 	//! Unlike the Contains() function, this function will also check if the given circle contains this polygon.
@@ -167,7 +173,7 @@ public:
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
-	const Collision GetCollision(const Circle &c) const;
+	virtual const Collision GetCollision(const Circle &c) const override;
 
 	//! Gets the collision of this polygon with the given polygon and returns the result.
 	/*!
@@ -176,9 +182,14 @@ public:
 		\return The collision result including the minimum translation vector.
 		\sa Contains()
 	*/
-	const Collision GetCollision(const Polygon &p) const;
+	virtual const Collision GetCollision(const Polygon &p) const override;
 
-private:
+	//! Method required to be called after updating the geometry of a shape.
+	/*!
+	*/
+	virtual void ReCalc() override;
+
+protected:
 	//! Checks if triangle "abc" contains the point "p".
 	/*!
 		\param p The point to check for containment within the triangle.
@@ -189,7 +200,7 @@ private:
 	const bool TriangleContains(const Vector2 &p, const Vector2 &a, const Vector2 &b, const Vector2 &c) const;
 
 	AxesVec _axes; /*!< The axes of this polygon. */
-	std::vector<Segment> _side; /*!< The side of this polygon. */
+	std::vector<Segment> _side; /*!< The sides of this polygon. */
 };
 
 #endif

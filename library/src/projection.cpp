@@ -18,6 +18,5 @@ const bool Projection::IsOverlap(const Projection &p) const
 const Precision_t Projection::GetOverlap(const Projection &p) const
 {
 	// x = min & y = max
-	//return std::min(y, p.y) - std::max(x, p.x);
 	return std::min(y - p.x, p.y - x);
 }

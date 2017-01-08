@@ -16,29 +16,29 @@ TEST(Projection, ConstructFromXY)
 	EXPECT_EQ(87, p.y);
 }
 
-TEST(Projection, ConstructFromVector)
+/*TEST(Projection, ConstructFromVector)
 {
 	Projection p(Vector2(9, 87));
 	EXPECT_EQ(9, p.x);
 	EXPECT_EQ(87, p.y);
-} 
+}*/
 
 TEST(Projection, IsOverlap)
 {
-	Projection pA(3,4);
-	Projection pB(-3,4);
-	
+	Projection pA(3, 4);
+	Projection pB(-3, 4);
+
 	EXPECT_TRUE(pA.IsOverlap(pB));
-	
-	pB = Projection(-3,-4);
-	
+
+	pB = Projection(-3, -4);
+
 	EXPECT_FALSE(pA.IsOverlap(pB));
 }
 
 TEST(Projection, GetOverlap)
 {
-	Projection pA(3,4);
-	Projection pB(-3,4);
-	
+	Projection pA(3, 4);
+	Projection pB(-3, 4);
+
 	EXPECT_EQ(1, pA.GetOverlap(pB));
 }

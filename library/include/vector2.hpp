@@ -43,11 +43,17 @@ public:
 	*/
 	const Precision_t Cross(const Vector2 &v) const;
 
-	//! Calculates the magnitude of this vector and returns the result.
+	//! Calculates the squared length of this vector and returns the result.
 	/*!
-		\return The magnitude of this vector.
+		\return The squared length of this vector.
 	*/
-	const Precision_t Magnitude() const;
+	const Precision_t LengthSq() const;
+
+	//! Calculates the length or magnitude of this vector and returns the result.
+	/*!
+		\return The length of this vector.
+	*/
+	const Precision_t Length() const;
 
 	//! Calculates the distance between this vector and the given vector and returns the result.
 	/*!

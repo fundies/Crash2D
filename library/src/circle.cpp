@@ -8,9 +8,23 @@
 #include <iostream>
 #include <limits>
 
-Circle::Circle(const Precision_t &r) : Shape(), _radius(r)
+/** Begin Constructor **/
+
+Circle::Circle() : ShapeImpl(Vector2(0, 0)), _radius(0)
 {
-	_center = Vector2(r, r);
+}
+
+Circle::Circle(const Vector2 c, const Precision_t r) : ShapeImpl(c), _radius(r)
+{
+}
+
+/** End Constructor **/
+
+/** Circle Specific **/
+
+void Circle::SetRadius(const Precision_t r)
+{
+	_radius = r;
 }
 
 const Precision_t& Circle::GetRadius() const
@@ -18,16 +32,21 @@ const Precision_t& Circle::GetRadius() const
 	return _radius;
 }
 
+/** End Circle Specific **/
+
 const Projection Circle::Project(const Axis &a) const
 {
-	const Precision_t v = a.Dot(GetPos());
+	const Precision_t v = a.Dot(GetCenter() + GetPos());
 	return Projection(v - GetRadius(), v + GetRadius());
 }
 
+
+/** Begin Contains **/
+
 const bool Circle::Contains(const Vector2 &p) const
 {
-	const Vector2 v = GetPos() - p;
-	const Precision_t dist = v.Magnitude();
+	const Vector2 v = GetCenter() + GetPos() - p;
+	const Precision_t dist = v.Length();
 
 	return (dist < GetRadius());
 }
@@ -50,9 +69,9 @@ const bool Circle::Contains(const Circle &c) const
 
 	else
 	{
-		Vector2 v = c.GetPos() - GetPos();
+		Vector2 v = c.GetCenter() + c.GetPos() - GetCenter() + GetPos();
 
-		Precision_t dist = v.Magnitude();
+		Precision_t dist = v.Length();
 		Precision_t radiiDif = std::abs(GetRadius() - c.GetRadius());
 
 		return (dist <= radiiDif);
@@ -64,12 +83,15 @@ const bool Circle::Contains(const Segment &s) const
 	return (Contains(s.GetTransformedPoint(0)) && Contains(s.GetTransformedPoint(1)));
 }
 
+/** End Contains **/
+
+/** Begin Intersects **/
 
 const bool Circle::Intersects(const Segment &s) const
 {
 	AxesVec axes(2);
 	axes[0] = s.GetAxis();
-	axes[1] = (s.NearestVertex(GetPos()) - GetPos()).Normal();
+	axes[1] = (s.NearestVertex(GetCenter() + GetPos()) - GetCenter() + GetPos()).Normal();
 
 	for (auto && axis : axes)
 	{
@@ -85,10 +107,10 @@ const bool Circle::Intersects(const Segment &s) const
 
 const bool Circle::Intersects(const Circle &c) const
 {
-	const Vector2 v = c.GetPos() - GetPos();
+	const Vector2 v = c.GetCenter() + c.GetPos() - GetCenter() + GetPos();
 
 	const Precision_t radiiSum = GetRadius() + c.GetRadius();
-	const Precision_t dist = v.Magnitude();
+	const Precision_t dist = v.Length();
 
 	return (dist < radiiSum);
 }
@@ -112,51 +134,57 @@ const bool Circle::Intersects(const Polygon &p) const
 	return true;
 }
 
-const std::vector<Vector2> Circle::GetIntersections(const Segment &s) const
+/** End Intersects **/
+
+/** Begin GetIntersections **/
+
+const std::vector<Vector2> Circle::GetIntersections(const Segment & s) const
 {
 	std::vector<Vector2> intersections(0);
 
-	// compute the euclidean distance between A and B
-	const Precision_t LAB = s.GetLength();
+	Vector2 circlePosition = GetCenter() + GetPos();
+	Precision_t r2 = GetRadius() * GetRadius();
 
-	// compute the direction vector D from A to B
-	const Vector2 ba = s.GetTransformedPoint(1) - s.GetTransformedPoint(0);
-	const Vector2 dir = ba / LAB;
+	Vector2 ba = s.GetTransformedPoint(1) - s.GetTransformedPoint(0);
+	Vector2 ca = (circlePosition) - s.GetTransformedPoint(0);
 
-	// compute the value t of the closest point to the circle center (Cx, Cy)
-	const Precision_t t = dir.x * (GetPos().x - s.GetTransformedPoint(0).x)
-	                      + dir.y * (GetPos().y - s.GetTransformedPoint(0).y);
+	Precision_t dot = ba.Dot(ca);
+	Vector2 proj1 = ba * (dot / ba.LengthSq());
 
-	// compute the coordinates of the point E on line and closest to C
-	const Vector2 e = (dir * t) + s.GetTransformedPoint(0);
+	Vector2 midpt = s.GetTransformedPoint(0) + proj1;
+	Vector2 cm = midpt - circlePosition;
 
-	// compute the euclidean distance from E to C
-	const Precision_t LEC = e.GetDistance(GetPos());
+	Precision_t distCenterSq = cm.LengthSq();
 
-	// test if the line intersects the circle
-	if (LEC < GetRadius())
+	if (distCenterSq > r2)
+		return intersections;
+
+	if (distCenterSq == r2)
 	{
-		// compute distance from t to circle intersection point
-		const Precision_t dt = std::sqrt(GetRadius() * GetRadius() - LEC * LEC);
+		if (Contains(midpt))
+			intersections.push_back(midpt);
 
-		// compute first intersection point
-		const Vector2 i1 = dir * (t - dt) + s.GetTransformedPoint(0);
-
-		// compute second intersection point
-		const Vector2 i2 = dir * (t + dt) + s.GetTransformedPoint(0);
-
-		if (s.Contains(i1))
-			intersections.push_back(i1);
-
-		if (s.Contains(i2))
-			intersections.push_back(i2);
+		return intersections;
 	}
 
-	// else test if the line is tangent to circle
-	else if (LEC == GetRadius())
-	{
-		intersections.push_back(s.GetNearestPoint(GetPos()));
-	}
+	Precision_t disIntercept;
+
+	if (distCenterSq == 0)
+		disIntercept = GetRadius();
+
+	else
+		disIntercept = std::sqrt(r2 - distCenterSq);
+
+	ba = ba.Normal() * disIntercept;
+
+	Vector2 sol1 = midpt + ba;
+	Vector2 sol2 = midpt - ba;
+
+	if (s.Contains(sol1))
+		intersections.push_back(sol1);
+
+	if (s.Contains(sol2))
+		intersections.push_back(sol2);
 
 	return intersections;
 }
@@ -165,28 +193,28 @@ const std::vector<Vector2> Circle::GetIntersections(const Circle & c) const
 {
 	std::vector<Vector2> intersections(0);
 
-	if (Contains(c) || c.Contains(*this) || !Intersects(c))
-		return intersections;
+	const Vector2 c1Pos = GetCenter() + GetPos();
+	const Vector2 c2Pos = c.GetCenter() + c.GetPos();
 
-	else
-	{
-		const Precision_t dist = GetPos().GetDistance(c.GetPos());
+	const Precision_t c1r2 = GetRadius() * GetRadius();
+	const Precision_t c2r2 = c.GetRadius() * c.GetRadius();
 
-		const Precision_t a = (GetRadius() * GetRadius() - c.GetRadius() * c.GetRadius() + dist * dist) / (2.0 * dist);
-		const Precision_t h = std::sqrt(GetRadius() * GetRadius() - a * a);
+	const Vector2 c2c1 = c2Pos - c1Pos;
+	const Precision_t dist2 = c2c1.LengthSq();
+	const Precision_t dist = std::sqrt(dist2);
 
-		const Vector2 p(GetPos().x + (a * (c.GetPos().x - GetPos().x)) / dist,
-		                GetPos().y + (a * (c.GetPos().y - GetPos().y)) / dist);
+	const Precision_t a = ((c1r2 - c2r2) + dist2) / (2.0 * dist);
+	const Precision_t h = std::sqrt(c1r2 - a * a);
 
-		const Vector2 i1(p.x + (h * (c.GetPos().y - GetPos().y) / dist),
-		                 p.y - (h * (c.GetPos().x - GetPos().x) / dist));
+	const Vector2 p = c1Pos + (c2c1 * a) / dist;
 
-		const Vector2 i2(p.x - (h * (c.GetPos().y - GetPos().y) / dist),
-		                 p.y + (h * (c.GetPos().x - GetPos().x) / dist));
+	const Vector2 d = (c2c1 * h  / dist);
 
-		intersections.push_back(i1);
-		intersections.push_back(i2);
-	}
+	const Vector2 i1(p.x + d.y, p.y - d.x);
+	const Vector2 i2(p.x - d.y, p.y + d.x);
+
+	intersections.push_back(i1);
+	intersections.push_back(i2);
 
 	return intersections;
 }
@@ -220,7 +248,11 @@ const std::vector<Vector2> Circle::GetIntersections(const Polygon & p) const
 	return intersections;
 }
 
-const Vector2 Circle::GetTranslation(const Segment &s) const
+/** End GetIntersections **/
+
+/** Begin GetTranslation **/
+
+const Vector2 Circle::GetTranslation(const Segment & s) const
 {
 	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
 	Axis smallest;
@@ -228,7 +260,7 @@ const Vector2 Circle::GetTranslation(const Segment &s) const
 
 	AxesVec axes(2);
 	axes[0] = s.GetAxis();
-	axes[1] = (s.NearestVertex(GetPos()) - GetPos()).Normal();
+	axes[1] = (s.NearestVertex(GetCenter() + GetPos()) - GetCenter() + GetPos()).Normal();
 
 	for (auto && axis : axes)
 	{
@@ -249,7 +281,7 @@ const Vector2 Circle::GetTranslation(const Segment &s) const
 
 	translation = smallest * (Overlap + 1);
 
-	const Vector2 distance = s.NearestVertex(GetPos()) - GetPos();
+	const Vector2 distance = s.NearestVertex(GetCenter() + GetPos()) - GetCenter() + GetPos();
 
 	if (translation.Dot(distance) < 0)
 		translation = -translation;
@@ -257,14 +289,14 @@ const Vector2 Circle::GetTranslation(const Segment &s) const
 	return translation;
 }
 
-const Vector2 Circle::GetTranslation(const Circle &c) const
+const Vector2 Circle::GetTranslation(const Circle & c) const
 {
-	const Vector2 v = c.GetPos() - GetPos();
+	const Vector2 v = c.GetCenter() + c.GetPos() - GetCenter() + GetPos();
 
 	const Precision_t theta = atan2(v.y, v.x);
 
 	const Precision_t radiiSum = GetRadius() + c.GetRadius();
-	const Precision_t dist = v.Magnitude();
+	const Precision_t dist = v.Length();
 	const Precision_t tDist = radiiSum - dist;
 
 	const Precision_t x = tDist * std::cos(theta);
@@ -278,13 +310,13 @@ const Vector2 Circle::GetTranslation(const Circle &c) const
 	return translation;
 }
 
-const Vector2 Circle::GetTranslation(const Polygon &p) const
+const Vector2 Circle::GetTranslation(const Polygon & p) const
 {
 	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
 	Axis smallest;
 	Vector2 translation;
 
-	const Axis ax = (p.NearestVertex(GetPos()) - GetPos()).Normal();
+	const Axis ax = (p.NearestVertex(GetCenter() + GetPos()) - GetCenter() + GetPos()).Normal();
 
 	AxesVec axes(p.GetAxes());
 	axes.push_back(ax);
@@ -308,12 +340,17 @@ const Vector2 Circle::GetTranslation(const Polygon &p) const
 
 	translation = smallest * (Overlap + 1);
 
-	Vector2 distance = GetPos() - (p.GetCenter() + p.GetPos());
+	Vector2 distance = GetCenter() + GetPos() - (p.GetCenter() + p.GetPos());
 
-	if (translation.Dot(distance) < 0)
+	if (translation.Dot(distance) > 0)
 		translation = -translation;
 
 	return translation;
+}
+
+const Collision Circle::GetCollision(const Shape &s) const
+{
+	return -s.GetCollision(*this);
 }
 
 const Collision Circle::GetCollision(const Segment &s) const
@@ -364,10 +401,11 @@ const Collision Circle::GetCollision(const Segment &s) const
 
 	doesIntersect = true;
 	contains = Contains(s);
+	intersects = GetIntersections(s);
 
 	translation = smallest * (Overlap + 1);
 
-	const Vector2 distance = s.NearestVertex(GetPos()) - GetPos();
+	const Vector2 distance = s.NearestVertex(GetCenter() + GetPos()) - (GetCenter() + GetPos());
 
 	if (translation.Dot(distance) < 0)
 		translation = -translation;
@@ -380,25 +418,24 @@ const Collision Circle::GetCollision(const Segment &s) const
 
 const Collision Circle::GetCollision(const Circle &c) const
 {
-	const Vector2 v = c.GetPos() - GetPos();
+	const Vector2 v = (c.GetCenter() + c.GetPos()) - (GetCenter() + GetPos());
 
 	const Precision_t theta = atan2(v.y, v.x);
 
 	const Precision_t radiiSum = GetRadius() + c.GetRadius();
 	const Precision_t radiiDif = std::abs(GetRadius() - c.GetRadius());
-	const Precision_t dist = v.Magnitude();
+	const Precision_t dist = v.Length();
 	const Precision_t tDist = radiiSum - dist;
 
 	bool doesIntersect = (dist < radiiSum);
 
 	// Determine if this circle contains
 	// the circle "c"
-	bool contains = (dist <= radiiDif);
+	bool contains = Contains(c);//(dist <= radiiDif);
 
-	// FIXME: implement this //
 	// Determine if the circle "c"
 	// contains this circle
-	bool contained = false;
+	bool contained = c.Contains(*this);
 
 	// Intersection points
 	std::vector<Vector2> intersects(0);
@@ -414,10 +451,12 @@ const Collision Circle::GetCollision(const Circle &c) const
 		const Precision_t x = tDist * std::cos(theta);
 		const Precision_t y = tDist * std::sin(theta);
 
-		Vector2 translation(x, y);
+		translation = Vector2(x, y);
 
 		if (translation.Dot(v) < 0)
 			translation = -translation;
+
+		intersects = GetIntersections(c);
 	}
 
 	return Collision(doesIntersect, intersects, contains, contained, translation);
@@ -444,7 +483,7 @@ const Collision Circle::GetCollision(const Polygon &p) const
 	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
 	Axis smallest;
 
-	const Axis ax = (p.NearestVertex(GetPos()) - GetPos()).Normal();
+	const Axis ax = (p.NearestVertex(GetCenter() + GetPos()) - (GetCenter() + GetPos())).Normal();
 
 	AxesVec axes = p.GetAxes();
 	axes.push_back(ax);
@@ -476,9 +515,9 @@ const Collision Circle::GetCollision(const Polygon &p) const
 
 	translation = smallest * (Overlap + 1);
 
-	Vector2 distance = GetPos() - (p.GetCenter() + p.GetPos());
+	Vector2 distance = (GetCenter() + GetPos()) - (p.GetCenter() + p.GetPos());
 
-	if (translation.Dot(distance) < 0)
+	if ((translation.Dot(distance) > 0) && !contained)
 		translation = -translation;
 
 	if (!contains)

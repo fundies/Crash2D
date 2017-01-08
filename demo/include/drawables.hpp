@@ -4,43 +4,53 @@
 
 #include <SFML/Graphics.hpp>
 
-/// Segment ///
-class segment : public Segment, public sf::Drawable
+class drawable : public sf::Drawable
 {
 public:
-	segment(const Vector2 &a, const Vector2 &b) : Segment(a, b), _color(sf::Color::White) {}
+	drawable(sf::Color c) : _color(c) {}
 	void SetColor(const sf::Color &c);
 
-private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+protected:
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const {}
 	sf::Color _color;
 };
 
-/// Circle ///
-class circle : public Circle, public sf::Drawable
+/// Shape ///
+
+class shape : virtual public Shape, public drawable
 {
 public:
-	circle(const Precision_t &r) : Circle(r), _color(sf::Color::White) {}
-	void SetColor(const sf::Color &c);
+	shape() : drawable(sf::Color::White) {};
+};
+
+/// Segment ///
+class segment : public shape, public Segment
+{
+public:
+	segment(const Vector2 &a, const Vector2 &b) : shape(), Segment(a, b) {}
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	sf::Color _color;
+};
+
+/// Circle ///
+class circle : public shape, public Circle
+{
+public:
+	circle(const Vector2 c, const Precision_t &r) : shape(), Circle(c, r) {}
+
+private:
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 };
 
 /// Polygon ///
-class polygon : public Polygon, public sf::Drawable
+class polygon : public shape, public Polygon
 {
 public:
-	polygon() : Polygon(), _color(sf::Color::White) {}
-	void SetColor(const sf::Color &c);
-
-	int hspeed;
-	int vspeed;
+	polygon() : shape(), Polygon() {}
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	sf::Color _color;
 
 };

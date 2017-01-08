@@ -1,6 +1,8 @@
 #include "polygon.hpp"
 #include "circle.hpp"
 #include "segment.hpp"
+#include "projection.hpp"
+#include "collision.hpp"
 
 #include <gtest/gtest.h>
 #include <cmath>
@@ -92,31 +94,31 @@ TEST(Polygon, CollisionPolygon)
 	pB.ReCalc();
 
 	Collision c = pA.GetCollision(pB);
-	EXPECT_TRUE(c.IsTouching());
+	EXPECT_TRUE(c.Intersects());
 	EXPECT_FLOAT_EQ(0.707107, c.GetTranslation().x);
 	EXPECT_FLOAT_EQ(-0.707107, c.GetTranslation().y);
 
 	// MOVE
 	pB.Move(Vector2(1, 0));
 	c = pA.GetCollision(pB);
-	EXPECT_FALSE(c.IsTouching());
+	EXPECT_FALSE(c.Intersects());
 
 	// ROTATE
 	pB.Move(Vector2(-1, 0));
 	pB.Rotate(180);
 	c = pA.GetCollision(pB);
-	EXPECT_FALSE(c.IsTouching());
+	EXPECT_FALSE(c.Intersects());
 
 	pB.Move(Vector2(-10, 0));
 	c = pA.GetCollision(pB);
-	EXPECT_TRUE(c.IsTouching());
+	EXPECT_TRUE(c.Intersects());
 	EXPECT_FLOAT_EQ(0.707107, c.GetTranslation().x);
 	EXPECT_FLOAT_EQ(-0.707107, c.GetTranslation().y);
 
 	// Move Translation
 	pB.Move(c.GetTranslation());
 	c = pA.GetCollision(pB);
-	EXPECT_FALSE(c.IsTouching());
+	EXPECT_FALSE(c.Intersects());
 
 	//Contains
 	Polygon pC;
@@ -136,14 +138,14 @@ TEST(Polygon, CollisionPolygon)
 	pD.ReCalc();
 
 	c = pD.GetCollision(pC);
-	EXPECT_FALSE(c.IsContained());
+	EXPECT_FALSE(c.AcontainsB());
 
 	c = pC.GetCollision(pD);
-	EXPECT_TRUE(c.IsContained());
+	EXPECT_TRUE(c.AcontainsB());
 
 	pD.Move(c.GetTranslation());
 	c = pD.GetCollision(pC);
-	EXPECT_FALSE(c.IsTouching());
+	EXPECT_FALSE(c.Intersects());
 }
 
 TEST(Polygon, CollisionCircle)
@@ -158,30 +160,30 @@ TEST(Polygon, CollisionCircle)
 	Circle cir(5);
 
 	Collision c = pA.GetCollision(cir);
-	EXPECT_FALSE(c.IsTouching());
+	EXPECT_FALSE(c.Intersects());
 
 	// Move
 	cir.SetPos(Vector2(30, 20));
 	c = pA.GetCollision(cir);
-	EXPECT_TRUE(c.IsTouching());
+	EXPECT_TRUE(c.Intersects());
 
 	// Move Translation
-	cir.Move(c.GetTranslation());
+	cir.Move(-c.GetTranslation());
 	c = pA.GetCollision(cir);
 
-	EXPECT_FALSE(c.IsTouching());
-	EXPECT_FALSE(c.IsContained());
+	EXPECT_FALSE(c.Intersects());
+	EXPECT_FALSE(c.AcontainsB());
 
 	// Contains
 	cir.SetPos(Vector2(60, 24));
 	c = pA.GetCollision(cir);
 
-	EXPECT_TRUE(c.IsContained());
+	EXPECT_TRUE(c.AcontainsB());
 
-	cir.Move(c.GetTranslation());
+	cir.Move(-c.GetTranslation());
 	c = pA.GetCollision(cir);
 
-	EXPECT_FALSE(c.IsTouching());
+	EXPECT_FALSE(c.Intersects());
 
 	// Need further testing here. Seems to take two translations sometimes?
 }

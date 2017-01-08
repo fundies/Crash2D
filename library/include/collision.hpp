@@ -7,6 +7,11 @@
 class Collision
 {
 public:
+	//! Constructs an empty collision.
+	/*!
+	*/
+	Collision();
+
 	//! Constructs a collision with the given translation.
 	/*!
 		\param dI Whether the two shapes intersect.
@@ -47,12 +52,17 @@ public:
 	*/
 	const Vector2& GetTranslation() const;
 
+	inline const Collision operator - (void) const
+	{
+		return Collision(_doesIntersect, _intersects, _bContainsa, _aContainsb, -_translation);
+	}
+
 private:
 	bool _doesIntersect; /*!< Whether the two shapes intersect. */
-	const std::vector<Vector2> _intersects; /*!< Intersection points of the two shapes. */
+	std::vector<Vector2> _intersects; /*!< Intersection points of the two shapes. */
 	bool _aContainsb; /*!< Whether shape A contains shape B */
 	bool _bContainsa; /*!< Whether shape B contains shape A */
-	const Vector2 _translation; /*!< The minimum translation vector of this collision. */
+	Vector2 _translation; /*!< The minimum translation vector of this collision. */
 
 };
 

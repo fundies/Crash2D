@@ -18,20 +18,25 @@ const Precision_t Vector2::Cross(const Vector2 &v) const
 	return (x * v.y) - (y * v.x);
 }
 
-const Precision_t Vector2::Magnitude() const
+const Precision_t Vector2::LengthSq() const
 {
-	return std::sqrt(Dot(*this));
+	return Dot(*this);
+}
+
+const Precision_t Vector2::Length() const
+{
+	return std::sqrt(LengthSq());
 }
 
 const Vector2 Vector2::Normal() const
 {
-	return *this / Magnitude();
+	return *this / Length();
 }
 
 const Precision_t Vector2::GetDistance(const Vector2 &v) const
 {
 	const Vector2 d = *this - v;
-	return d.Magnitude();
+	return d.Length();
 }
 
 bool AreEqual(Precision_t a, Precision_t b)
