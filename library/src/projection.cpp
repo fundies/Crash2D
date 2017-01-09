@@ -1,22 +1,27 @@
 #include "projection.hpp"
 
-Projection::Projection() : Vector2(0 , 0)
+#include <iostream>
+
+Projection::Projection() : min(0), max(0)
 {
 }
 
-Projection::Projection(const Precision_t &min, const Precision_t &max)
-	: Vector2(min, max)
+Projection::Projection(const Precision_t min, const Precision_t max)
+	: min(min), max(max)
 {
 }
 
 const bool Projection::IsOverlap(const Projection &p) const
 {
-	// x = min & y = max
-	return !(x > p.y || p.x > y);
+	return !(min > p.max || p.min > max);
 }
 
 const Precision_t Projection::GetOverlap(const Projection &p) const
 {
-	// x = min & y = max
-	return std::min(y - p.x, p.y - x);
+	int sign = -1;
+
+	if ((max - p.min) > (p.max - min))
+		sign = 1;
+
+	return sign * std::min(max - p.min, p.max - min);
 }

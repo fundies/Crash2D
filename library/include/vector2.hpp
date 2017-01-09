@@ -66,7 +66,7 @@ public:
 	/*!
 		\return The normal of this vector.
 	*/
-	const Vector2 Normal() const;
+	const Vector2 Normalize() const;
 
 	inline Vector2 & operator = (const Vector2 & v)
 	{

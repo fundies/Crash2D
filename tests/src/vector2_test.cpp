@@ -72,10 +72,10 @@ TEST(Vector2, Magnitude)
 	EXPECT_EQ(10, v.Magnitude());
 }
 
-TEST(Vector2, Normal)
+TEST(Vector2, Normalize)
 {
 	Vector2 v(10, -5);
-	v = v.Normal();
+	v = v.Normalize();
 
 	EXPECT_FLOAT_EQ(2 / std::sqrt(5), v.x);
 	EXPECT_FLOAT_EQ(-1 / std::sqrt(5), v.y);

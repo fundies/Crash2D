@@ -28,7 +28,7 @@ const Precision_t Vector2::Length() const
 	return std::sqrt(LengthSq());
 }
 
-const Vector2 Vector2::Normal() const
+const Vector2 Vector2::Normalize() const
 {
 	return *this / Length();
 }

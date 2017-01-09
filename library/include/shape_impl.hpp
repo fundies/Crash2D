@@ -105,6 +105,8 @@ public:
 	*/
 	virtual void ReCalc() override {}
 
+	virtual const Vector2 CalcDisplacement(const AxesVec &axes, const Shape &a, const Shape &b) const;
+
 protected:
 
 	std::vector<Vector2> _points; /*!< The points this shape is composed of. */

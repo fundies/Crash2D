@@ -42,8 +42,8 @@ int main(int argc, char **argv)
 	vecB[1] = Shape_ptr(new polygon());
 	vecB[1]->SetPointCount(3);
 	vecB[1]->SetPoint(0, Vector2(0, 0));
-	vecB[1]->SetPoint(1, Vector2(180, 0));
-	vecB[1]->SetPoint(2, Vector2(150, 150));
+	vecB[1]->SetPoint(1, Vector2(80, 0));
+	vecB[1]->SetPoint(2, Vector2(50, 50));
 	vecB[1]->ReCalc();
 
 	vecB[2] = Shape_ptr(new segment(Vector2(0, 0), Vector2(100, 30)));
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 			vecB[ShapeB]->SetColor(sf::Color::Blue);
 		}
 
-		else if (collision.Intersects())
+		else if (collision.Overlaps())
 		{
 			vecB[ShapeB]->SetColor(sf::Color(255, 255, 0, 200));
 		}
@@ -114,21 +114,14 @@ int main(int argc, char **argv)
 		}
 
 
-		if (collision.Intersects() || collision.AcontainsB())
+		if (collision.Overlaps() || collision.AcontainsB())
 		{
-			vecB[ShapeB]->Move(collision.GetTranslation());
+			vecB[ShapeB]->Move(collision.GetDisplacement());
 			vecB[ShapeB]->SetColor(sf::Color(255, 0, 255, 50));
 
 			window.draw(*vecB[ShapeB]);
 
-			vecB[ShapeB]->Move(-collision.GetTranslation());
-
-			vecB[ShapeB]->Move(-collision.GetTranslation());
-			vecB[ShapeB]->SetColor(sf::Color::Red);
-
-			window.draw(*vecB[ShapeB]);
-
-			vecB[ShapeB]->Move(collision.GetTranslation());
+			vecB[ShapeB]->Move(-collision.GetDisplacement());
 		}
 
 		circle c1(Vector2(0, 0), 3);

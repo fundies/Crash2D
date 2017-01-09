@@ -160,17 +160,17 @@ TEST(Segment, ContainsPoint)
 	EXPECT_TRUE(l2.Contains(Vector2(45.865, 37.045)));
 }
 
-TEST(Segment, GetIntersections)
+TEST(Segment, GetIntersects)
 {
 	Segment l1(Vector2(5, 5), Vector2(5, -5));
 	Segment l2(Vector2(4, 4), Vector2(-4, -4));
 
-	std::vector<Vector2> i = l1.GetIntersections(l2);
+	std::vector<Vector2> i = l1.GetIntersects(l2);
 	EXPECT_EQ(0, i.size());
 
 	l2.SetPoint(0, Vector2(5, 4));
 
-	i = l1.GetIntersections(l2);
+	i = l1.GetIntersects(l2);
 	EXPECT_EQ(1, i.size());
 
 	if (i.size() > 0)
@@ -180,22 +180,22 @@ TEST(Segment, GetIntersections)
 	}
 
 	//l2.Rotate(30);
-	//i = l1.GetIntersections(l2);
+	//i = l1.GetIntersects(l2);
 }
 
-TEST(Segment, Intersects)
+TEST(Segment, Overlaps)
 {
 	Segment l1(Vector2(0, 0), Vector2(5, 5));
 	Segment l2(Vector2(4, 4), Vector2(4, -4));
 
-	EXPECT_TRUE(l1.Intersects(l2));
-	EXPECT_TRUE(l2.Intersects(l1));
+	EXPECT_TRUE(l1.Overlaps(l2));
+	EXPECT_TRUE(l2.Overlaps(l1));
 
 	Segment l3(Vector2(0, 0), Vector2(5, 5));
 	Segment l4(Vector2(5, 5), Vector2(10, 10));
 
-	EXPECT_TRUE(l3.Intersects(l4));
-	EXPECT_TRUE(l4.Intersects(l3));
+	EXPECT_TRUE(l3.Overlaps(l4));
+	EXPECT_TRUE(l4.Overlaps(l3));
 }
 
 TEST(Segment, GetAxis)
@@ -208,22 +208,22 @@ TEST(Segment, GetAxis)
 	EXPECT_EQ(1 / std::sqrt(2), a.y);
 }
 
-TEST(Segment, GetTranslation)
+TEST(Segment, GetDisplacement)
 {
 	Segment l1(Vector2(0, 0), Vector2(5, 5));
 	Segment l2(Vector2(4, 4), Vector2(4, -4));
 
-	EXPECT_TRUE(l1.Intersects(l2));
+	EXPECT_TRUE(l1.Overlaps(l2));
 
-	Vector2 v = l1.GetTranslation(l2);
+	Vector2 v = l1.GetDisplacement(l2);
 	l2.Move(v);
 
-	EXPECT_FALSE(l1.Intersects(l2));
+	EXPECT_FALSE(l1.Overlaps(l2));
 
 	l2.Move(-v);
 
-	v = l2.GetTranslation(l1);
+	v = l2.GetDisplacement(l1);
 	l1.Move(v);
 
-	EXPECT_FALSE(l1.Intersects(l2));
+	EXPECT_FALSE(l1.Overlaps(l2));
 }

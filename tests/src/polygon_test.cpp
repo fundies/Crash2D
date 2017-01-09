@@ -94,31 +94,31 @@ TEST(Polygon, CollisionPolygon)
 	pB.ReCalc();
 
 	Collision c = pA.GetCollision(pB);
-	EXPECT_TRUE(c.Intersects());
-	EXPECT_FLOAT_EQ(0.707107, c.GetTranslation().x);
-	EXPECT_FLOAT_EQ(-0.707107, c.GetTranslation().y);
+	EXPECT_TRUE(c.Overlaps());
+	EXPECT_FLOAT_EQ(0.707107, c.GetDisplacement().x);
+	EXPECT_FLOAT_EQ(-0.707107, c.GetDisplacement().y);
 
 	// MOVE
 	pB.Move(Vector2(1, 0));
 	c = pA.GetCollision(pB);
-	EXPECT_FALSE(c.Intersects());
+	EXPECT_FALSE(c.Overlaps());
 
 	// ROTATE
 	pB.Move(Vector2(-1, 0));
 	pB.Rotate(180);
 	c = pA.GetCollision(pB);
-	EXPECT_FALSE(c.Intersects());
+	EXPECT_FALSE(c.Overlaps());
 
 	pB.Move(Vector2(-10, 0));
 	c = pA.GetCollision(pB);
-	EXPECT_TRUE(c.Intersects());
-	EXPECT_FLOAT_EQ(0.707107, c.GetTranslation().x);
-	EXPECT_FLOAT_EQ(-0.707107, c.GetTranslation().y);
+	EXPECT_TRUE(c.Overlaps());
+	EXPECT_FLOAT_EQ(0.707107, c.GetDisplacement().x);
+	EXPECT_FLOAT_EQ(-0.707107, c.GetDisplacement().y);
 
-	// Move Translation
-	pB.Move(c.GetTranslation());
+	// Move Displacement
+	pB.Move(c.GetDisplacement());
 	c = pA.GetCollision(pB);
-	EXPECT_FALSE(c.Intersects());
+	EXPECT_FALSE(c.Overlaps());
 
 	//Contains
 	Polygon pC;
@@ -143,9 +143,9 @@ TEST(Polygon, CollisionPolygon)
 	c = pC.GetCollision(pD);
 	EXPECT_TRUE(c.AcontainsB());
 
-	pD.Move(c.GetTranslation());
+	pD.Move(c.GetDisplacement());
 	c = pD.GetCollision(pC);
-	EXPECT_FALSE(c.Intersects());
+	EXPECT_FALSE(c.Overlaps());
 }
 
 TEST(Polygon, CollisionCircle)
@@ -160,18 +160,18 @@ TEST(Polygon, CollisionCircle)
 	Circle cir(5);
 
 	Collision c = pA.GetCollision(cir);
-	EXPECT_FALSE(c.Intersects());
+	EXPECT_FALSE(c.Overlaps());
 
 	// Move
 	cir.SetPos(Vector2(30, 20));
 	c = pA.GetCollision(cir);
-	EXPECT_TRUE(c.Intersects());
+	EXPECT_TRUE(c.Overlaps());
 
-	// Move Translation
-	cir.Move(-c.GetTranslation());
+	// Move Displacement
+	cir.Move(-c.GetDisplacement());
 	c = pA.GetCollision(cir);
 
-	EXPECT_FALSE(c.Intersects());
+	EXPECT_FALSE(c.Overlaps());
 	EXPECT_FALSE(c.AcontainsB());
 
 	// Contains
@@ -180,12 +180,12 @@ TEST(Polygon, CollisionCircle)
 
 	EXPECT_TRUE(c.AcontainsB());
 
-	cir.Move(-c.GetTranslation());
+	cir.Move(-c.GetDisplacement());
 	c = pA.GetCollision(cir);
 
-	EXPECT_FALSE(c.Intersects());
+	EXPECT_FALSE(c.Overlaps());
 
-	// Need further testing here. Seems to take two translations sometimes?
+	// Need further testing here. Seems to take two displacements sometimes?
 }
 
 TEST(Polygon, ContainsPoint)

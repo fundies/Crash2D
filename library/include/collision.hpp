@@ -12,13 +12,13 @@ public:
 	*/
 	Collision();
 
-	//! Constructs a collision with the given translation.
+	//! Constructs a collision with the given displacement.
 	/*!
 		\param dI Whether the two shapes intersect.
 		\param i Intersection points of the two shapes.
 		\param aCb Whether shape A contains shape B.
 		\param bCa Whether shape B contains shape A.
-		\param t The minimum translation vector, returns 0,0 if there is no collision.
+		\param t The minimum displacement vector, returns 0,0 if there is no collision.
 	*/
 	Collision(bool dI, const std::vector<Vector2> i, bool aCb, bool bCa, const Vector2 t);
 
@@ -26,7 +26,7 @@ public:
 	/*!
 		\return Whether the two shapes intersect.
 	*/
-	const bool Intersects() const;
+	const bool Overlaps() const;
 
 	//! Gets the intersection points of the two shapes.
 	/*!
@@ -46,23 +46,23 @@ public:
 	*/
 	const bool BcontainsA() const;
 
-	//! Gets the translation of this collision.
+	//! Gets the displacement of this collision.
 	/*!
-		\return The translation of this collision.
+		\return The displacement of this collision.
 	*/
-	const Vector2& GetTranslation() const;
+	const Vector2& GetDisplacement() const;
 
 	inline const Collision operator - (void) const
 	{
-		return Collision(_doesIntersect, _intersects, _bContainsa, _aContainsb, -_translation);
+		return Collision(_doesOverlap, _intersects, _bContainsa, _aContainsb, -_displacement);
 	}
 
 private:
-	bool _doesIntersect; /*!< Whether the two shapes intersect. */
+	bool _doesOverlap; /*!< Whether the two shapes intersect. */
 	std::vector<Vector2> _intersects; /*!< Intersection points of the two shapes. */
 	bool _aContainsb; /*!< Whether shape A contains shape B */
 	bool _bContainsa; /*!< Whether shape B contains shape A */
-	Vector2 _translation; /*!< The minimum translation vector of this collision. */
+	Vector2 _displacement; /*!< The minimum displacement vector of this collision. */
 
 };
 

@@ -1,8 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Session Name="/home/greg/CollisionLib/Collision.workspace">
+<Session Name="/home/greg/Crash2D/Collision.workspace">
   <int Value="0" Name="m_selectedTab"/>
-  <wxString Value="/home/greg/CollisionLib/Collision.workspace" Name="m_workspaceName"/>
-  <TabInfoArray Name="TabInfoArray"/>
+  <wxString Value="/home/greg/Crash2D/Collision.workspace" Name="m_workspaceName"/>
+  <TabInfoArray Name="TabInfoArray">
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/demo/src/main.cpp" Name="FileName"/>
+      <int Value="25" Name="FirstVisibleLine"/>
+      <int Value="51" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/src/segment.cpp" Name="FileName"/>
+      <int Value="397" Name="FirstVisibleLine"/>
+      <int Value="201" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/src/polygon.cpp" Name="FileName"/>
+      <int Value="399" Name="FirstVisibleLine"/>
+      <int Value="416" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/src/projection.cpp" Name="FileName"/>
+      <int Value="16" Name="FirstVisibleLine"/>
+      <int Value="14" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/include/projection.hpp" Name="FileName"/>
+      <int Value="21" Name="FirstVisibleLine"/>
+      <int Value="19" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/src/shape_impl.cpp" Name="FileName"/>
+      <int Value="111" Name="FirstVisibleLine"/>
+      <int Value="117" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/include/shape_impl.hpp" Name="FileName"/>
+      <int Value="100" Name="FirstVisibleLine"/>
+      <int Value="107" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/include/shape.hpp" Name="FileName"/>
+      <int Value="199" Name="FirstVisibleLine"/>
+      <int Value="197" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/src/circle.cpp" Name="FileName"/>
+      <int Value="74" Name="FirstVisibleLine"/>
+      <int Value="106" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/include/circle.hpp" Name="FileName"/>
+      <int Value="166" Name="FirstVisibleLine"/>
+      <int Value="182" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/include/polygon.hpp" Name="FileName"/>
+      <int Value="194" Name="FirstVisibleLine"/>
+      <int Value="194" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/include/segment.hpp" Name="FileName"/>
+      <int Value="247" Name="FirstVisibleLine"/>
+      <int Value="248" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/include/collision.hpp" Name="FileName"/>
+      <int Value="0" Name="FirstVisibleLine"/>
+      <int Value="34" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/greg/Crash2D/library/src/collision.cpp" Name="FileName"/>
+      <int Value="0" Name="FirstVisibleLine"/>
+      <int Value="0" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+  </TabInfoArray>
   <SerializedObject Name="m_breakpoints">
     <long Value="0" Name="Count"/>
   </SerializedObject>

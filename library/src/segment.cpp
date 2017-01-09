@@ -5,9 +5,7 @@
 #include "collision.hpp"
 
 #include <limits>
-#include <iostream>
 #include <cmath>
-#include <algorithm>
 
 Segment::Segment() : ShapeImpl(), _slope(0), _length(0), _axis(Vector2())
 {
@@ -36,8 +34,13 @@ Segment::Segment(const Vector2 &a, const Vector2 &b) : ShapeImpl()
 	_center = Vector2(GetPoint(0) + GetPoint(1)) / 2;
 
 	const Vector2 edge = GetPoint(0) - GetPoint(1);
-	const Axis normal = edge.Perpendicular().Normal();
+	const Axis normal = edge.Perpendicular().Normalize();
 	_axis = normal;
+}
+
+const Projection Segment::Project(const Shape &s, const Axis &a) const
+{
+	return s.Project(a);
 }
 
 const Precision_t& Segment::GetLength() const
@@ -121,9 +124,9 @@ const Vector2 Segment::NearestVertex(const Vector2 &p) const
 	return v;
 }
 
-const bool Segment::IsPerpendicular(const Segment &l) const
+const bool Segment::IsPerpendicular(const Segment &s) const
 {
-	const Precision_t s1 = l.GetSlope();
+	const Precision_t s1 = s.GetSlope();
 	const Precision_t s2 = GetSlope();
 	const Precision_t max = std::numeric_limits<Precision_t>::infinity();
 
@@ -132,13 +135,13 @@ const bool Segment::IsPerpendicular(const Segment &l) const
 
 	else
 	{
-		return AreEqual(l.GetSlope() * GetSlope(), -1);
+		return AreEqual(s.GetSlope() * GetSlope(), -1);
 	}
 }
 
-const bool Segment::IsParallel(const Segment &l) const
+const bool Segment::IsParallel(const Segment &s) const
 {
-	return AreEqual(l.GetSlope(), GetSlope());
+	return AreEqual(s.GetSlope(), GetSlope());
 }
 
 const Projection Segment::Project(const Axis &a) const
@@ -179,51 +182,33 @@ const bool Segment::Contains(const Polygon &p) const
 	return false;
 }
 
-const bool Segment::Intersects(const Segment &l) const
+const bool Segment::Overlaps(const Segment &s) const
 {
-	if (IsParallel(l))
-		return (Contains(l.GetTransformedPoint(0)) || Contains(l.GetTransformedPoint(1)));
+	if (IsParallel(s))
+		return (Contains(s.GetTransformedPoint(0)) || Contains(s.GetTransformedPoint(1)));
 
 	else
-		return (GetIntersections(l).size() > 0);
+		return (GetIntersects(s).size() > 0);
 }
 
-const bool Segment::Intersects(const Circle &c) const
+const bool Segment::Overlaps(const Circle &c) const
 {
 	AxesVec axes(2);
 	axes[0] = GetAxis();
-	axes[1] = (NearestVertex(c.GetCenter() + c.GetPos()) - c.GetCenter() + c.GetPos()).Normal();
+	axes[1] = (NearestVertex(c.GetCenter() + c.GetPos()) - c.GetCenter() + c.GetPos()).Normalize();
 
-	for (auto && axis : axes)
-	{
-		const Projection pA = c.Project(axis);
-		const Projection pB = Project(axis);
-
-		if (!pA.IsOverlap(pB))
-			return false;
-	}
-
-	return true;
+	return (CalcDisplacement(axes, *this, c) != Vector2(0, 0));
 }
 
-const bool Segment::Intersects(const Polygon &p) const
+const bool Segment::Overlaps(const Polygon &p) const
 {
-	AxesVec axes(p.GetAxes());
+	auto axes = p.GetAxes();
 	axes.push_back(GetAxis());
 
-	for (auto && axis : axes)
-	{
-		const Projection pA = p.Project(axis);
-		const Projection pB = Project(axis);
-
-		if (!pA.IsOverlap(pB))
-			return false;
-	}
-
-	return true;
+	return (CalcDisplacement(axes, *this, p) != Vector2(0, 0));
 }
 
-const std::vector<Vector2> Segment::GetIntersections(const Segment &l) const
+const std::vector<Vector2> Segment::GetIntersects(const Segment &s) const
 {
 	const Precision_t x1 = GetTransformedPoint(0).x;
 	const Precision_t y1 = GetTransformedPoint(0).y;
@@ -231,11 +216,11 @@ const std::vector<Vector2> Segment::GetIntersections(const Segment &l) const
 	const Precision_t x2 = GetTransformedPoint(1).x;
 	const Precision_t y2 = GetTransformedPoint(1).y;
 
-	const Precision_t x3 = l.GetTransformedPoint(0).x;
-	const Precision_t y3 = l.GetTransformedPoint(0).y;
+	const Precision_t x3 = s.GetTransformedPoint(0).x;
+	const Precision_t y3 = s.GetTransformedPoint(0).y;
 
-	const Precision_t x4 = l.GetTransformedPoint(1).x;
-	const Precision_t y4 = l.GetTransformedPoint(1).y;
+	const Precision_t x4 = s.GetTransformedPoint(1).x;
+	const Precision_t y4 = s.GetTransformedPoint(1).y;
 
 	const Precision_t Bottom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
@@ -249,13 +234,13 @@ const std::vector<Vector2> Segment::GetIntersections(const Segment &l) const
 
 	const Vector2 i = Vector2(x, y);
 
-	if (Contains(i) && l.Contains(i))
+	if (Contains(i) && s.Contains(i))
 		intersects.push_back(i);
 
 	return intersects;
 }
 
-const std::vector<Vector2> Segment::GetIntersections(const Circle &c) const
+const std::vector<Vector2> Segment::GetIntersects(const Circle &c) const
 {
 	std::vector<Vector2> intersections(0);
 
@@ -292,7 +277,7 @@ const std::vector<Vector2> Segment::GetIntersections(const Circle &c) const
 	else
 		disIntercept = std::sqrt(r2 - distCenterSq);
 
-	ba = ba.Normal() * disIntercept;
+	ba = ba.Normalize() * disIntercept;
 
 	Vector2 sol1 = midpt + ba;
 	Vector2 sol2 = midpt - ba;
@@ -306,114 +291,35 @@ const std::vector<Vector2> Segment::GetIntersections(const Circle &c) const
 	return intersections;
 }
 
-const std::vector<Vector2> Segment::GetIntersections(const Polygon &p) const
+const std::vector<Vector2> Segment::GetIntersects(const Polygon &p) const
 {
-	return std::vector<Vector2>(0);
+	return p.GetIntersects(*this);
 }
 
-const Vector2 Segment::GetTranslation(const Segment &s) const
+const Vector2 Segment::GetDisplacement(const Segment &s) const
 {
-	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
-	Axis smallest;
-	Vector2 translation;
-
 	AxesVec axes(2);
 	axes[0] = GetAxis();
 	axes[1] = s.GetAxis();
 
-	for (auto && axis : axes)
-	{
-		const Projection pA = s.Project(axis);
-		const Projection pB = Project(axis);
-
-		if (pA.IsOverlap(pB))
-		{
-			const Precision_t o = pA.GetOverlap(pB);
-
-			if (o < Overlap)
-			{
-				Overlap = o;
-				smallest = axis;
-			}
-		}
-	}
-
-	translation = smallest * (Overlap + 1);
-
-	const Vector2 distance = (s.GetCenter() + s.GetPos()) - (GetCenter() + GetPos());
-
-	//if (translation.Dot(distance) < 0)
-	translation = -translation;
-
-	return translation;
+	return CalcDisplacement(axes, *this, s);
 }
 
-const Vector2 Segment::GetTranslation(const Circle &c) const
+const Vector2 Segment::GetDisplacement(const Circle &c) const
 {
-	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
-	Axis smallest;
-	Vector2 translation;
-
 	AxesVec axes(2);
 	axes[0] = GetAxis();
-	axes[1] = (NearestVertex(c.GetCenter() + c.GetPos()) - c.GetCenter() + c.GetPos()).Normal();
+	axes[1] = (NearestVertex(c.GetCenter() + c.GetPos()) - c.GetCenter() + c.GetPos()).Normalize();
 
-	for (auto && axis : axes)
-	{
-		const Projection pA = c.Project(axis);
-		const Projection pB = Project(axis);
-
-		if (pA.IsOverlap(pB))
-		{
-			const Precision_t o = pA.GetOverlap(pB);
-
-			if (o < Overlap)
-			{
-				Overlap = o;
-				smallest = axis;
-			}
-		}
-	}
-
-	translation = smallest * (Overlap + 1);
-
-	const Vector2 distance = (c.GetCenter() + c.GetPos()) - (GetCenter() + GetPos());
-
-	if (translation.Dot(distance) < 0)
-		translation = -translation;
-
-	return translation;
+	return CalcDisplacement(axes, *this, c);
 }
 
-const Vector2 Segment::GetTranslation(const Polygon &p) const
+const Vector2 Segment::GetDisplacement(const Polygon &p) const
 {
-	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
-	Axis smallest;
-	Vector2 translation;
-
-	AxesVec axes(p.GetAxes());
+	auto axes = p.GetAxes();
 	axes.push_back(GetAxis());
 
-	for (auto && axis : axes)
-	{
-		const Projection pA = p.Project(axis);
-		const Projection pB = Project(axis);
-
-		if (pA.IsOverlap(pB))
-		{
-			const Precision_t o = pA.GetOverlap(pB);
-
-			if (o < Overlap)
-			{
-				Overlap = o;
-				smallest = axis;
-			}
-		}
-	}
-
-	translation = smallest * (Overlap + 1);
-
-	return translation;
+	return CalcDisplacement(axes, *this, p);
 }
 
 const Collision Segment::GetCollision(const Shape &s) const
@@ -423,126 +329,65 @@ const Collision Segment::GetCollision(const Shape &s) const
 
 const Collision Segment::GetCollision(const Segment &s) const
 {
-	return Collision(Intersects(s), GetIntersections(s), Contains(s), s.Contains(*this), GetTranslation(s));
+	const Vector2 displacement = GetDisplacement(s);
+
+	return Collision((displacement != Vector2(0, 0)), GetIntersects(s), Contains(s), s.Contains(*this), displacement);
 }
 
 const Collision Segment::GetCollision(const Circle &c) const
 {
-	bool doesIntersect = false;
+	bool doesOverlap = false;
 
-	// Determine if the circle contains
-	// the segment "s"
+	// Segments cannot contain circles
 	bool contains = false;
 
-	// The segment "s" cannot
-	// contain this circle
+	// Check if circle contains segment
 	bool contained = c.Contains(*this);
 
 	// Intersection points
 	std::vector<Vector2> intersects(0);
 
-	// Translation is the vector to be applied to segment "s"
-	// in order to seperate it from the circle
-	Vector2 translation(0, 0);
-	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
-	Axis smallest;
-
 	AxesVec axes(2);
 	axes[0] = GetAxis();
-	axes[1] = (NearestVertex(c.GetCenter() + c.GetPos()) - (c.GetCenter() + c.GetPos())).Normal();
+	axes[1] = (NearestVertex(c.GetCenter() + c.GetPos()) - (c.GetCenter() + c.GetPos())).Normalize();
 
-	for (auto && axis : axes)
-	{
-		const Projection pA = c.Project(axis);
-		const Projection pB = Project(axis);
+	// Displacement is the vector to be applied to segment "s"
+	// in order to seperate it from the circle
+	Vector2 displacement = CalcDisplacement(axes, *this, c);
 
-		// No Collision
-		if (!pA.IsOverlap(pB))
-			return Collision(doesIntersect, intersects, contains, contained, translation);
-
-		else
-		{
-			const Precision_t o = pA.GetOverlap(pB);
-
-			if (o < Overlap)
-			{
-				Overlap = o;
-				smallest = axis;
-			}
-		}
-	}
-
-	doesIntersect = true;
-
-	translation = smallest * (Overlap + 1);
-
-	const Vector2 distance = NearestVertex(c.GetCenter() + c.GetPos()) - (c.GetCenter() + c.GetPos());
-
-	if (translation.Dot(distance) > 0)
-		translation = -translation;
+	doesOverlap = (displacement != Vector2(0, 0));
 
 	if (!contains)
-		intersects = GetIntersections(c);
+		intersects = GetIntersects(c);
 
-	return Collision(doesIntersect, intersects, contains, contained, translation);
+	return Collision(doesOverlap, intersects, contains, contained, displacement);
 }
 
 const Collision Segment::GetCollision(const Polygon &p) const
 {
-	bool doesIntersect = false;
-
-	// Determine if this polygon contains
-	// the segment "s"
-	bool contains = false;//Contains(s);
-
-	// The segment "s" cannot
-	// contain this polygon
+	// Check if segment contained inside polygon
 	bool contained = false;
+
+	//A segment cannot contain a polygon
+	bool contains = false;
 
 	// Intersection points
 	std::vector<Vector2> intersects(0);
 
-	// Translation is the vector to be applied to segment "s"
-	// in order to seperate it from the circle
-	Vector2 translation(0, 0);
-	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
-	Axis smallest;
-
-	AxesVec axes(p.GetAxes());
+	auto axes = p.GetAxes();
 	axes.push_back(GetAxis());
 
-	for (auto && axis : axes)
+	const Vector2 displacement = CalcDisplacement(axes, *this, p);
+
+	bool doesOverlap = (displacement != Vector2(0, 0));
+
+	if (doesOverlap)
 	{
-		const Projection pA = p.Project(axis);
-		const Projection pB = Project(axis);
-
-		// No Collision
-		if (!pA.IsOverlap(pB))
-			return Collision(doesIntersect, intersects, contains, contained, translation);
-
-		else
-		{
-			const Precision_t o = pA.GetOverlap(pB);
-
-			if (o < Overlap)
-			{
-				Overlap = o;
-				smallest = axis;
-			}
-		}
+		contained = p.Contains(*this);
+		intersects = GetIntersects(p);
 	}
 
-	translation = smallest * (Overlap + 1);
-
-	Vector2 distance = (GetCenter() + GetPos()) - (p.GetCenter() + p.GetPos());
-
-	if (translation.Dot(distance) > 0)
-		translation = -translation;
-
-	doesIntersect = true;
-	contained = p.Contains(*this);
-
-	return Collision(doesIntersect, intersects, contains, contained, translation);
+	return Collision(doesOverlap, intersects, contains, contained, displacement);
 }
 
 void Segment::ReCalc()
@@ -559,5 +404,5 @@ void Segment::ReCalc()
 	_center = Vector2(GetPoint(0) + GetPoint(1)) / 2;
 
 	const Vector2 edge = GetPoint(0) - GetPoint(1);
-	_axis = edge.Perpendicular().Normal();
+	_axis = edge.Perpendicular().Normalize();
 }

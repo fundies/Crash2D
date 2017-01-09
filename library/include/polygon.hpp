@@ -81,7 +81,7 @@ public:
 		\return Whether this polygon intersects the given segment.
 		\sa GetCollision()
 	*/
-	virtual const bool Intersects(const Segment &s) const override;
+	virtual const bool Overlaps(const Segment &s) const override;
 
 	//! Checks if this polygon intersects the given circle and returns the result.
 	/*!
@@ -89,7 +89,7 @@ public:
 		\return Whether this polygon intersects the given circle.
 		\sa GetCollision()
 	*/
-	virtual const bool Intersects(const Circle &c) const override;
+	virtual const bool Overlaps(const Circle &c) const override;
 
 	//! Checks if this polygon intersects the given polygon and returns the result.
 	/*!
@@ -97,7 +97,7 @@ public:
 		\return Whether this polygon intersects the given polygon.
 		\sa GetCollision()
 	*/
-	virtual const bool Intersects(const Polygon &p) const override;
+	virtual const bool Overlaps(const Polygon &p) const override;
 
 	//! Gets the intersection points of this polygon and the given segment.
 	/*!
@@ -105,7 +105,7 @@ public:
 		\return list of intersections between this polygon and the given segment.
 		\sa GetCollision()
 	*/
-	virtual const std::vector<Vector2> GetIntersections(const Segment &s) const override;
+	virtual const std::vector<Vector2> GetIntersects(const Segment &s) const override;
 
 	//! Gets the intersection points of this polygon and the given circle.
 	/*!
@@ -113,7 +113,7 @@ public:
 		\return list of intersections between this polygon and the given circle.
 		\sa GetCollision()
 	*/
-	virtual const std::vector<Vector2> GetIntersections(const Circle &c) const override;
+	virtual const std::vector<Vector2> GetIntersects(const Circle &c) const override;
 
 	//! Gets the intersection points of this polygon and the given polygon.
 	/*!
@@ -121,39 +121,39 @@ public:
 		\return list of intersections between this polygon and the given polygon.
 		\sa GetCollision()
 	*/
-	virtual const std::vector<Vector2> GetIntersections(const Polygon &p) const override;
+	virtual const std::vector<Vector2> GetIntersects(const Polygon &p) const override;
 
 	//! Gets the minimum vector to be applied to the given segment's position
 	//! in order to seperate it from this polygon.
 	/*!
 		\param c A segment intersecting this polygon.
-		\return the minimum translation vector.
+		\return the minimum displacement vector.
 		\sa GetCollision()
 	*/
-	virtual const Vector2 GetTranslation(const Segment &s) const override;
+	virtual const Vector2 GetDisplacement(const Segment &s) const override;
 
 	//! Gets the minimum vector to be applied to the given circle's position
 	//! in order to seperate it from this polygon.
 	/*!
 		\param c A circle intersecting this polygon.
-		\return the minimum translation vector.
+		\return the minimum displacement vector.
 		\sa GetCollision()
 	*/
-	virtual const Vector2 GetTranslation(const Circle &c) const override;
+	virtual const Vector2 GetDisplacement(const Circle &c) const override;
 
 	//! Gets the minimum vector to be applied to the given polygon's position
 	//! in order to seperate it from this polygon.
 	/*!
 		\param p A polygon intersecting this polygon.
-		\return the minimum translation vector.
+		\return the minimum displacement vector.
 		\sa GetCollision()
 	*/
-	virtual const Vector2 GetTranslation(const Polygon &p) const override;
+	virtual const Vector2 GetDisplacement(const Polygon &p) const override;
 
 	//! Gets the collision of this circle with the given shape and returns the result.
 	/*!
 		\param s The shape to check for collision with this segment.
-		\return The collision result including the minimum translation vector.
+		\return The collision result including the minimum displacement vector.
 		\sa Contains()
 	*/
 	virtual const Collision GetCollision(const Shape &s) const override;
@@ -161,7 +161,7 @@ public:
 	//! Gets the collision of this polygon with the given segment and returns the result.
 	/*!
 		\param s The segment to check for collision with this polygon.
-		\return The collision result including the minimum translation vector.
+		\return The collision result including the minimum displacement vector.
 		\sa Contains()
 	*/
 	virtual const Collision GetCollision(const Segment &s) const override;
@@ -170,7 +170,7 @@ public:
 	//! Unlike the Contains() function, this function will also check if the given circle contains this polygon.
 	/*!
 		\param c The circle to check for collision with this polygon.
-		\return The collision result including the minimum translation vector.
+		\return The collision result including the minimum displacement vector.
 		\sa Contains()
 	*/
 	virtual const Collision GetCollision(const Circle &c) const override;
@@ -179,7 +179,7 @@ public:
 	/*!
 		Unlike the Contains() function, this function will also check if the given polygon contains this polygon.
 		\param p The polygon to check for collision with this polygon.
-		\return The collision result including the minimum translation vector.
+		\return The collision result including the minimum displacement vector.
 		\sa Contains()
 	*/
 	virtual const Collision GetCollision(const Polygon &p) const override;
@@ -188,6 +188,8 @@ public:
 	/*!
 	*/
 	virtual void ReCalc() override;
+
+	virtual const Projection Project(const Shape &s, const Axis &a) const override;
 
 protected:
 	//! Checks if triangle "abc" contains the point "p".

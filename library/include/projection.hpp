@@ -4,7 +4,7 @@
 #include "vector2.hpp"
 
 //!  A class representing a two-dimensional projection. */
-class Projection : public Vector2
+class Projection// : public Vector2
 {
 public:
 	//! Constructs a default projection.
@@ -17,7 +17,7 @@ public:
 		\param min projection mininmum
 		\param max projection maximum
 	*/
-	Projection(const Precision_t &min, const Precision_t &max);
+	Projection(const Precision_t min, const Precision_t max);
 
 	//! Checks for overlap between this projection and the given projection.
 	/*!
@@ -30,6 +30,11 @@ public:
 		\param p The projection used in calculating the overlap.
 	*/
 	const Precision_t GetOverlap(const Projection &p) const;
+
+private:
+	Precision_t min;
+	Precision_t max;
+
 };
 
 #endif
