@@ -23,10 +23,11 @@
     <File Name="src/main.cpp"/>
     <File Name="src/polygon_test.cpp"/>
     <File Name="src/projection_test.cpp"/>
-    <File Name="src/shape_test.cpp"/>
     <File Name="src/vector2_test.cpp"/>
     <File Name="src/circle_test.cpp"/>
     <File Name="src/segment_test.cpp"/>
+    <File Name="src/helper_func.cpp"/>
+    <File Name="src/collision_test.cpp"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
@@ -118,4 +119,7 @@
       </Completion>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="include">
+    <File Name="include/helper_func.hpp"/>
+  </VirtualDirectory>
 </CodeLite_Project>

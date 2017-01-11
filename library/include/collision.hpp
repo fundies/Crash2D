@@ -3,6 +3,8 @@
 
 #include "vector2.hpp"
 
+#include <algorithm>
+
 //!  A class representing a collision between two shapes. */
 class Collision
 {
@@ -52,10 +54,10 @@ public:
 	*/
 	const Vector2& GetDisplacement() const;
 
-	inline const Collision operator - (void) const
-	{
-		return Collision(_doesOverlap, _intersects, _bContainsa, _aContainsb, -_displacement);
-	}
+	//! Negate Operator override,
+	/*!
+	*/
+	const Collision operator - (void) const;
 
 private:
 	bool _doesOverlap; /*!< Whether the two shapes intersect. */

@@ -3,7 +3,7 @@ OS := $(shell uname -s)
 TARGET := ../$(BASE)_Test
 
 CXX := g++
-CXXFLAGS := -std=c++11 -Wall -g -O0 --coverage -I../library/include/
+CXXFLAGS := -std=c++11 -Wall -g -O0 --coverage -I../library/include/ -Iinclude/
 LDFLAGS := -L../ 
 LDLIBS := -lCrash2D -lgtest -lpthread -lgcov
 

@@ -5,15 +5,15 @@
 TEST(Projection, DefaultConstructor)
 {
 	Projection p;
-	EXPECT_EQ(0, p.x);
-	EXPECT_EQ(0, p.y);
+	EXPECT_EQ(0, p.min);
+	EXPECT_EQ(0, p.max);
 }
 
-TEST(Projection, ConstructFromXY)
+TEST(Projection, ConstructFromMinMax)
 {
 	Projection p(9, 87);
-	EXPECT_EQ(9, p.x);
-	EXPECT_EQ(87, p.y);
+	EXPECT_EQ(9, p.min);
+	EXPECT_EQ(87, p.max);
 }
 
 /*TEST(Projection, ConstructFromVector)

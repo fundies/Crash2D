@@ -95,6 +95,14 @@ public:
 	*/
 	virtual const Projection Project(const Axis &a) const;
 
+	//! Projects the shape onto the given axis and returns the projection.
+	/*!
+		\param s The shape to project.
+		\param a The axis to project the circle onto.
+		\return The projection of the circle onto the axis.
+	*/
+	virtual const Projection Project(const Shape &s, const Axis &a) const override;
+
 	//! Checks if this segment contains the given vector and returns the result.
 	/*!
 		\param v The vector to check for containment in this segment.
@@ -241,8 +249,6 @@ public:
 	/*!
 	*/
 	virtual void ReCalc() override;
-
-	virtual const Projection Project(const Shape &s, const Axis &a) const override;
 
 protected:
 

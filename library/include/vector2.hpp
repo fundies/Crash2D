@@ -86,7 +86,7 @@ public:
 	}
 	inline bool operator == (const Vector2 & v) const
 	{
-		return (x == v.x) && (y == v.y);
+		return (AreEqual(x, v.x) && AreEqual(y, v.y));
 	}
 	inline bool operator != (const Vector2 & v) const
 	{

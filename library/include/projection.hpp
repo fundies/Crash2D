@@ -31,9 +31,8 @@ public:
 	*/
 	const Precision_t GetOverlap(const Projection &p) const;
 
-private:
-	Precision_t min;
-	Precision_t max;
+	Precision_t min; /*!< The projection minimum */
+	Precision_t max; /*!< The projection maximum */
 
 };
 

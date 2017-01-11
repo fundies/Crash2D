@@ -1,8 +1,4 @@
-#include "polygon.hpp"
-#include "circle.hpp"
-#include "segment.hpp"
-#include "projection.hpp"
-#include "collision.hpp"
+#include "helper_func.hpp"
 
 #include <gtest/gtest.h>
 #include <cmath>
@@ -11,10 +7,7 @@ TEST(Polygon, DefaultConstructor)
 {
 	Polygon p;
 
-	EXPECT_EQ(0	, p.GetPos().x);
-	EXPECT_EQ(0, p.GetPos().y);
 	EXPECT_EQ(0	, p.GetPointCount());
-	EXPECT_EQ(0, p.GetRotation());
 }
 
 TEST(Polygon, GenerateAxis)
@@ -65,294 +58,532 @@ TEST(Polygon, Project)
 	AxesVec axes = p.GetAxes();
 
 	Projection pj = p.Project(axes[0]);
-	EXPECT_FLOAT_EQ(-1 / std::sqrt(2) * 3, pj.x);
-	EXPECT_FLOAT_EQ(1 / std::sqrt(2) * 6, pj.y);
+	EXPECT_FLOAT_EQ(-1 / std::sqrt(2) * 3, pj.min);
+	EXPECT_FLOAT_EQ(1 / std::sqrt(2) * 6, pj.max);
 
 	pj = p.Project(axes[1]);
-	EXPECT_FLOAT_EQ(-3, pj.x);
-	EXPECT_FLOAT_EQ(0, pj.y);
+	EXPECT_FLOAT_EQ(-3, pj.min);
+	EXPECT_FLOAT_EQ(0, pj.max);
 
 	pj = p.Project(axes[2]);
-	EXPECT_FLOAT_EQ(1 / std::sqrt(5) * 3, pj.x);
-	EXPECT_FLOAT_EQ(2 / std::sqrt(5) * 6, pj.y);
+	EXPECT_FLOAT_EQ(1 / std::sqrt(5) * 3, pj.min);
+	EXPECT_FLOAT_EQ(2 / std::sqrt(5) * 6, pj.max);
 }
 
-TEST(Polygon, CollisionPolygon)
+TEST(Polygon, ProjectShapeAxis)
 {
-	Polygon pA;
-	pA.SetPointCount(3);
-	pA.SetPoint(0, Vector2(60, 0));
-	pA.SetPoint(1, Vector2(90, 30));
-	pA.SetPoint(2, Vector2(0, 30));
-	pA.ReCalc();
+	Polygon p;
+	p.SetPointCount(3);
+	p.SetPoint(0, Vector2(3, 0));
+	p.SetPoint(1, Vector2(6, 3));
+	p.SetPoint(2, Vector2(-3, 3));
+	p.ReCalc();
 
-	Polygon pB;
-	pB.SetPointCount(3);
-	pB.SetPoint(0, Vector2(120, 0));
-	pB.SetPoint(1, Vector2(180, 30));
-	pB.SetPoint(2, Vector2(90, 30));
-	pB.ReCalc();
-
-	Collision c = pA.GetCollision(pB);
-	EXPECT_TRUE(c.Overlaps());
-	EXPECT_FLOAT_EQ(0.707107, c.GetDisplacement().x);
-	EXPECT_FLOAT_EQ(-0.707107, c.GetDisplacement().y);
-
-	// MOVE
-	pB.Move(Vector2(1, 0));
-	c = pA.GetCollision(pB);
-	EXPECT_FALSE(c.Overlaps());
-
-	// ROTATE
-	pB.Move(Vector2(-1, 0));
-	pB.Rotate(180);
-	c = pA.GetCollision(pB);
-	EXPECT_FALSE(c.Overlaps());
-
-	pB.Move(Vector2(-10, 0));
-	c = pA.GetCollision(pB);
-	EXPECT_TRUE(c.Overlaps());
-	EXPECT_FLOAT_EQ(0.707107, c.GetDisplacement().x);
-	EXPECT_FLOAT_EQ(-0.707107, c.GetDisplacement().y);
-
-	// Move Displacement
-	pB.Move(c.GetDisplacement());
-	c = pA.GetCollision(pB);
-	EXPECT_FALSE(c.Overlaps());
-
-	//Contains
-	Polygon pC;
-	pC.SetPointCount(4);
-	pC.SetPoint(0, Vector2(0, 0));
-	pC.SetPoint(1, Vector2(50, 0));
-	pC.SetPoint(2, Vector2(50, 50));
-	pC.SetPoint(3, Vector2(0, 50));
-	pC.ReCalc();
-
-	Polygon pD;
-	pD.SetPointCount(4);
-	pD.SetPoint(0, Vector2(1, 1));
-	pD.SetPoint(1, Vector2(25, 1));
-	pD.SetPoint(2, Vector2(25, 25));
-	pD.SetPoint(3, Vector2(1, 25));
-	pD.ReCalc();
-
-	c = pD.GetCollision(pC);
-	EXPECT_FALSE(c.AcontainsB());
-
-	c = pC.GetCollision(pD);
-	EXPECT_TRUE(c.AcontainsB());
-
-	pD.Move(c.GetDisplacement());
-	c = pD.GetCollision(pC);
-	EXPECT_FALSE(c.Overlaps());
-}
-
-TEST(Polygon, CollisionCircle)
-{
-	Polygon pA;
-	pA.SetPointCount(3);
-	pA.SetPoint(0, Vector2(60, 0));
-	pA.SetPoint(1, Vector2(90, 30));
-	pA.SetPoint(2, Vector2(0, 30));
-	pA.ReCalc();
-
-	Circle cir(5);
-
-	Collision c = pA.GetCollision(cir);
-	EXPECT_FALSE(c.Overlaps());
-
-	// Move
-	cir.SetPos(Vector2(30, 20));
-	c = pA.GetCollision(cir);
-	EXPECT_TRUE(c.Overlaps());
-
-	// Move Displacement
-	cir.Move(-c.GetDisplacement());
-	c = pA.GetCollision(cir);
-
-	EXPECT_FALSE(c.Overlaps());
-	EXPECT_FALSE(c.AcontainsB());
-
-	// Contains
-	cir.SetPos(Vector2(60, 24));
-	c = pA.GetCollision(cir);
-
-	EXPECT_TRUE(c.AcontainsB());
-
-	cir.Move(-c.GetDisplacement());
-	c = pA.GetCollision(cir);
-
-	EXPECT_FALSE(c.Overlaps());
-
-	// Need further testing here. Seems to take two displacements sometimes?
+	AxesVec axes = p.GetAxes();
+	Projection pj = p.Project(p, axes[0]);
+	EXPECT_FLOAT_EQ(-1 / std::sqrt(2) * 3, pj.min);
+	EXPECT_FLOAT_EQ(1 / std::sqrt(2) * 6, pj.max);
 }
 
 TEST(Polygon, ContainsPoint)
 {
-	Polygon p;
-	p.SetPointCount(3);
-	p.SetPoint(0, Vector2(3, 0));
-	p.SetPoint(1, Vector2(6, 3));
-	p.SetPoint(2, Vector2(-3, 3));
-	p.ReCalc();
+	Polygon a;
+	a.SetPointCount(3);
+	a.SetPoint(0, Vector2(-50, 0));
+	a.SetPoint(1, Vector2(50, 0));
+	a.SetPoint(2, Vector2(25, 50));
+	a.ReCalc();
 
-	// Edge
-	EXPECT_TRUE(p.Contains(Vector2(3, 0)));
-	EXPECT_TRUE(p.Contains(Vector2(6, 3)));
-	EXPECT_TRUE(p.Contains(Vector2(-3, 3)));
+	EXPECT_TRUE(a.Contains(Vector2(-50, 0)));
+	EXPECT_TRUE(a.Contains(Vector2(25, 25)));
+	EXPECT_FALSE(a.Contains(Vector2(25, 51)));
 
-	// Inside
-	EXPECT_TRUE(p.Contains(Vector2(3, 2)));
+	Polygon b;
+	b.SetPointCount(4);
+	b.SetPoint(0, Vector2(-50, 0));
+	b.SetPoint(1, Vector2(50, 0));
+	b.SetPoint(2, Vector2(50, 50));
+	b.SetPoint(3, Vector2(0, 50));
+	b.ReCalc();
 
-	// Outside
-	EXPECT_FALSE(p.Contains(Vector2(7, 3)));
-
-	// Square
-	Polygon s;
-	s.SetPointCount(4);
-	s.SetPoint(0, Vector2(0, 0));
-	s.SetPoint(1, Vector2(3, 0));
-	s.SetPoint(2, Vector2(3, 3));
-	s.SetPoint(3, Vector2(0, 3));
-	s.ReCalc();
-
-	// Edge
-	EXPECT_TRUE(s.Contains(Vector2(0, 0)));
-
-	// Inside
-	EXPECT_TRUE(s.Contains(Vector2(.5, .5)));
-	EXPECT_TRUE(s.Contains(Vector2(2.5, 2.5)));
-
-	// Outside
-	EXPECT_FALSE(s.Contains(Vector2(3, 4)));
-
-	// Move
-	s.Move(Vector2(30, 30));
-
-	// Edge
-	EXPECT_TRUE(s.Contains(Vector2(30, 30)));
-
-	// Inside
-	EXPECT_TRUE(s.Contains(Vector2(30.5, 30.5)));
-	EXPECT_TRUE(s.Contains(Vector2(32.5, 32.5)));
-
-	// Outside
-	EXPECT_FALSE(s.Contains(Vector2(33, 34)));
-
-	// Rotate
-	s.Rotate(45);
-
-	// Edge
-	EXPECT_TRUE(s.Contains(Vector2(29.3787, 31.5)));
-	EXPECT_FALSE(s.Contains(Vector2(30, 30)));
-
-	// Inside
-	EXPECT_TRUE(s.Contains(Vector2(30.5, 30.5)));
-	EXPECT_TRUE(s.Contains(Vector2(32.5, 32.5)));
-
-	// Outside
-	EXPECT_FALSE(s.Contains(Vector2(33, 34)));
-
+	EXPECT_TRUE(b.Contains(Vector2(25, 25)));
+	EXPECT_FALSE(b.Contains(Vector2(51, 51)));
 }
 
-TEST(Polygon, ContainsPolygon)
-{
-	Polygon pA;
-	pA.SetPointCount(3);
-	pA.SetPoint(0, Vector2(0, 0));
-	pA.SetPoint(1, Vector2(300, 300));
-	pA.SetPoint(2, Vector2(600, 300));
-	pA.ReCalc();
-
-	Polygon pB;
-	pB.SetPointCount(3);
-	pB.SetPoint(0, Vector2(28, 20));
-	pB.SetPoint(1, Vector2(320, 260));
-	pB.SetPoint(2, Vector2(500, 260));
-	pB.ReCalc();
-
-	EXPECT_TRUE(pA.Contains(pB));
-	EXPECT_FALSE(pB.Contains(pA));
-
-	// Move Overlap
-	pB.Move(Vector2(40, 0));
-	EXPECT_FALSE(pA.Contains(pB));
-	EXPECT_FALSE(pB.Contains(pA));
-}
-
-TEST(Polygon, Rotate)
+TEST(Polygon, ContainsSegment)
 {
 	Polygon p;
 	p.SetPointCount(3);
-	p.SetPoint(0, Vector2(3, 0));
-	p.SetPoint(1, Vector2(6, 3));
-	p.SetPoint(2, Vector2(-3, 3));
+	p.SetPoint(0, Vector2(-50, 0));
+	p.SetPoint(1, Vector2(50, 0));
+	p.SetPoint(2, Vector2(25, 50));
 	p.ReCalc();
 
-	p.Rotate(45);
-	EXPECT_EQ(45, p.GetRotation());
+	Segment s(Vector2(-50, 0), Vector2(50, 0));
 
-	EXPECT_FLOAT_EQ(3 / std::sqrt(2) - 2 * (-1 + std::sqrt(2)), p.GetPoint(0).x);
-	EXPECT_FLOAT_EQ(2 - 3 / std::sqrt(2), p.GetPoint(0).y);
+	EXPECT_TRUE(p.Contains(s));
 
-	EXPECT_FLOAT_EQ(3 / std::sqrt(2) + 3 * std::sqrt(2) - 2 * (-1 + std::sqrt(2)), p.GetPoint(1).x);
-	EXPECT_FLOAT_EQ(2 + 3 / std::sqrt(2) - 3 * std::sqrt(2), p.GetPoint(1).y);
+	s.SetPoint(1, Vector2(51, 0));
 
-	EXPECT_FLOAT_EQ(-2 * (-1 + std::sqrt(2)), p.GetPoint(2).x);
-	EXPECT_FLOAT_EQ(2 + 3 * std::sqrt(2), p.GetPoint(2).y);
+	EXPECT_FALSE(p.Contains(s));
 }
 
 TEST(Polygon, ContainsCircle)
 {
 	Polygon p;
 	p.SetPointCount(3);
-	p.SetPoint(0, Vector2(30, 0));
-	p.SetPoint(1, Vector2(60, 30));
-	p.SetPoint(2, Vector2(-30, 30));
+	p.SetPoint(0, Vector2(-50, 0));
+	p.SetPoint(1, Vector2(50, 0));
+	p.SetPoint(2, Vector2(25, 50));
 	p.ReCalc();
 
-	Circle c(5);
+	Circle c1(Vector2(25, 25), 5);
+	Circle c2(Vector2(51, 51), 5);
 
-	EXPECT_FALSE(p.Contains(c));
-
-	c.Move(Vector2(30, 20));
-	EXPECT_TRUE(p.Contains(c));
-
-	p.Move(Vector2(-5, -5));
-	EXPECT_FALSE(p.Contains(c));
+	EXPECT_TRUE(p.Contains(c1));
+	EXPECT_FALSE(p.Contains(c2));
 }
 
-TEST(Polygon, SetRotation)
+TEST(Polygon, ContainsPolygon)
+{
+	Polygon a;
+	a.SetPointCount(3);
+	a.SetPoint(0, Vector2(-50, 0));
+	a.SetPoint(1, Vector2(50, 0));
+	a.SetPoint(2, Vector2(25, 50));
+	a.ReCalc();
+
+	Polygon b;
+	b.SetPointCount(3);
+	b.SetPoint(0, Vector2(-25, 5));
+	b.SetPoint(1, Vector2(25, 5));
+	b.SetPoint(2, Vector2(12.5, 25));
+	b.ReCalc();
+
+	EXPECT_TRUE(a.Contains(b));
+	EXPECT_FALSE(b.Contains(a));
+}
+
+TEST(Polygon, OverlapsSegment)
 {
 	Polygon p;
 	p.SetPointCount(3);
-	p.SetPoint(0, Vector2(3, 0));
-	p.SetPoint(1, Vector2(6, 3));
-	p.SetPoint(2, Vector2(-3, 3));
+	p.SetPoint(0, Vector2(-50, 0));
+	p.SetPoint(1, Vector2(50, 0));
+	p.SetPoint(2, Vector2(25, 50));
 	p.ReCalc();
 
-	p.SetRotation(45);
-	EXPECT_EQ(45, p.GetRotation());
+	Segment s(Vector2(50, 0), Vector2(100, 0));
 
-	EXPECT_FLOAT_EQ(3 / std::sqrt(2) - 2 * (-1 + std::sqrt(2)), p.GetPoint(0).x);
-	EXPECT_FLOAT_EQ(2 - 3 / std::sqrt(2), p.GetPoint(0).y);
+	EXPECT_TRUE(p.Overlaps(s));
 
-	EXPECT_FLOAT_EQ(3 / std::sqrt(2) + 3 * std::sqrt(2) - 2 * (-1 + std::sqrt(2)), p.GetPoint(1).x);
-	EXPECT_FLOAT_EQ(2 + 3 / std::sqrt(2) - 3 * std::sqrt(2), p.GetPoint(1).y);
+	s.SetPoint(0, Vector2(51, 0));
+	s.ReCalc();
 
-	EXPECT_FLOAT_EQ(-2 * (-1 + std::sqrt(2)), p.GetPoint(2).x);
-	EXPECT_FLOAT_EQ(2 + 3 * std::sqrt(2), p.GetPoint(2).y);
+	EXPECT_FALSE(p.Overlaps(s));
+}
 
-	p.SetRotation(-45);
-	EXPECT_EQ(315, p.GetRotation());
+TEST(Polygon, OverlapsCircle)
+{
+	Polygon p;
+	p.SetPointCount(3);
+	p.SetPoint(0, Vector2(50, 0));
+	p.SetPoint(1, Vector2(100, -50));
+	p.SetPoint(2, Vector2(100, 50));
+	p.ReCalc();
 
-	EXPECT_FLOAT_EQ(2 + 3 / std::sqrt(2), p.GetPoint(0).x);
-	EXPECT_FLOAT_EQ(3 / std::sqrt(2) - 2 * (-1 + std::sqrt(2)), p.GetPoint(0).y);
+	Circle c(Vector2(0, 0), 50);
 
-	EXPECT_FLOAT_EQ(2 - 3 / std::sqrt(2) + 3 * std::sqrt(2), p.GetPoint(1).x);
-	EXPECT_FLOAT_EQ(3 / std::sqrt(2) + 3 * std::sqrt(2) - 2 * (-1 + std::sqrt(2)), p.GetPoint(1).y);
+	EXPECT_TRUE(p.Overlaps(c));
 
-	EXPECT_FLOAT_EQ(2 - 3 * std::sqrt(2), p.GetPoint(2).x);
-	EXPECT_FLOAT_EQ(-2 * (-1 + std::sqrt(2)), p.GetPoint(2).y);
+	p.SetPoint(0, Vector2(51, 0));
+	p.ReCalc();
+
+	EXPECT_FALSE(p.Overlaps(c));
+}
+
+TEST(Polygon, OverlapsPolygon)
+{
+	Polygon a;
+	a.SetPointCount(3);
+	a.SetPoint(0, Vector2(-50, 0));
+	a.SetPoint(1, Vector2(50, 0));
+	a.SetPoint(2, Vector2(25, 50));
+	a.ReCalc();
+
+	Polygon b;
+	b.SetPointCount(3);
+	b.SetPoint(0, Vector2(-25, 5));
+	b.SetPoint(1, Vector2(25, 5));
+	b.SetPoint(2, Vector2(12.5, 25));
+	b.ReCalc();
+
+	EXPECT_TRUE(a.Overlaps(b));
+	EXPECT_TRUE(b.Overlaps(a));
+
+	Polygon c;
+	c.SetPointCount(3);
+	c.SetPoint(0, Vector2(51, 0));
+	c.SetPoint(1, Vector2(101, 0));
+	c.SetPoint(2, Vector2(25, 51));
+	c.ReCalc();
+
+	EXPECT_FALSE(c.Overlaps(a));
+	EXPECT_FALSE(a.Overlaps(c));
+}
+
+TEST(Polygon, GetIntersectsSegment)
+{
+	Polygon p;
+	p.SetPointCount(3);
+	p.SetPoint(0, Vector2(-50, 0));
+	p.SetPoint(1, Vector2(50, 0));
+	p.SetPoint(2, Vector2(25, 50));
+	p.ReCalc();
+
+	Segment s(Vector2(-51, 0), Vector2(51, 0));
+
+	auto i = p.GetIntersects(s);
+
+	EXPECT_EQ(i.size(), 2);
+
+	EXPECT_EQ(50, i[0].x);
+	EXPECT_EQ(0, i[0].y);
+
+	EXPECT_EQ(-50, i[1].x);
+	EXPECT_EQ(0, i[1].y);
+
+	s = Segment(Vector2(-50, 0), Vector2(-50, 50));
+	i = p.GetIntersects(s);
+
+	EXPECT_EQ(i.size(), 1);
+	EXPECT_EQ(-50, i[0].x);
+	EXPECT_EQ(0, i[0].y);
+
+	s = Segment(Vector2(-50, 51), Vector2(50, 51));
+	i = p.GetIntersects(s);
+	EXPECT_EQ(i.size(), 0);
+}
+
+TEST(Polygon, GetIntersectsCircle)
+{
+	Circle c1(Vector2(0, 0), 50);
+
+	Polygon p1;
+	p1.SetPointCount(3);
+	p1.SetPoint(0, Vector2(-50, 0));
+	p1.SetPoint(1, Vector2(50, 0));
+	p1.SetPoint(2, Vector2(0, 50));
+	p1.ReCalc();
+
+	auto i = p1.GetIntersects(c1);
+
+	EXPECT_EQ(i.size(), 3);
+
+	EXPECT_EQ(50, i[0].x);
+	EXPECT_EQ(0, i[0].y);
+
+	EXPECT_EQ(-50, i[1].x);
+	EXPECT_EQ(0, i[1].y);
+
+	EXPECT_EQ(0, i[2].x);
+	EXPECT_EQ(50, i[2].y);
+
+	Circle c2(Vector2(0, 0), 150);
+	i = p1.GetIntersects(c2);
+	EXPECT_EQ(i.size(), 0);
+
+	Polygon p2;
+	p2.SetPointCount(3);
+	p2.SetPoint(0, Vector2(101, 0));
+	p2.SetPoint(1, Vector2(151, 0));
+	p2.SetPoint(2, Vector2(126, 50));
+	p2.ReCalc();
+
+	i = p2.GetIntersects(c1);
+	EXPECT_EQ(i.size(), 0);
+}
+
+TEST(Polygon, GetIntersectsPolygon)
+{
+	Polygon a;
+	a.SetPointCount(3);
+	a.SetPoint(0, Vector2(-50, 0));
+	a.SetPoint(1, Vector2(50, 0));
+	a.SetPoint(2, Vector2(0, 50));
+	a.ReCalc();
+
+	Polygon b;
+	b.SetPointCount(3);
+	b.SetPoint(0, Vector2(-50, 0));
+	b.SetPoint(1, Vector2(50, 0));
+	b.SetPoint(2, Vector2(25, 50));
+	b.ReCalc();
+
+	auto i = a.GetIntersects(b);
+
+	EXPECT_EQ(3, i.size());
+
+	EXPECT_FLOAT_EQ(50, i[0].x);
+	EXPECT_FLOAT_EQ(0, i[0].y);
+
+	EXPECT_FLOAT_EQ(-50, i[1].x);
+	EXPECT_FLOAT_EQ(0, i[1].y);
+
+	EXPECT_FLOAT_EQ(10, i[2].x);
+	EXPECT_FLOAT_EQ(40, i[2].y);
+
+	Polygon c;
+	c.SetPointCount(3);
+	c.SetPoint(0, Vector2(51, 0));
+	c.SetPoint(1, Vector2(101, 0));
+	c.SetPoint(2, Vector2(75, 50));
+	c.ReCalc();
+
+	i = a.GetIntersects(c);
+
+	EXPECT_EQ(0, i.size());
+}
+
+TEST(Polygon, GetDisplacementSegment)
+{
+	Polygon p;
+	p.SetPointCount(4);
+	p.SetPoint(0, Vector2(-50, -50));
+	p.SetPoint(1, Vector2(50, -50));
+	p.SetPoint(2, Vector2(50, 50));
+	p.SetPoint(3, Vector2(-50, 50));
+	p.ReCalc();
+
+	Segment s1(Vector2(0, 0), Vector2(0, 50));
+	auto d = p.GetDisplacement(s1);
+	EXPECT_FLOAT_EQ(51, d.Length());
+	EXPECT_FALSE(p.Overlaps(mSegment(s1, d)));
+
+	Segment s2(Vector2(25, 0), Vector2(25, 50));
+	d = p.GetDisplacement(s2);
+	EXPECT_FLOAT_EQ(26, d.Length());
+	EXPECT_FALSE(p.Overlaps(mSegment(s2, d)));
+
+	Segment s3(Vector2(51, 0), Vector2(51, 50));
+	d = p.GetDisplacement(s3);
+	EXPECT_FLOAT_EQ(0, d.Length());
+}
+
+TEST(Polygon, GetDisplacementCircle)
+{
+	Polygon p;
+	p.SetPointCount(4);
+	p.SetPoint(0, Vector2(-50, -50));
+	p.SetPoint(1, Vector2(50, -50));
+	p.SetPoint(2, Vector2(50, 50));
+	p.SetPoint(3, Vector2(-50, 50));
+	p.ReCalc();
+
+	Circle c2(Vector2(0, 0), 50);
+	auto d = p.GetDisplacement(c2);
+	EXPECT_FLOAT_EQ(101, d.Length());
+	EXPECT_FALSE(p.Overlaps(mCircle(c2, d)));
+
+	Circle c3(Vector2(25, 0), 50);
+	d = p.GetDisplacement(c3);
+	EXPECT_FLOAT_EQ(76, d.Length());
+	EXPECT_FALSE(p.Overlaps(mCircle(c3, d)));
+
+	Circle c4(Vector2(101, 0), 50);
+	d = p.GetDisplacement(c4);
+	EXPECT_FLOAT_EQ(0, d.Length());
+}
+
+TEST(Polygon, GetDisplacementPolygon)
+{
+	Polygon a;
+	a.SetPointCount(4);
+	a.SetPoint(0, Vector2(-50, -50));
+	a.SetPoint(1, Vector2(50, -50));
+	a.SetPoint(2, Vector2(50, 50));
+	a.SetPoint(3, Vector2(-50, 50));
+	a.ReCalc();
+
+	Polygon b;
+	b.SetPointCount(4);
+	b.SetPoint(0, Vector2(-25, -50));
+	b.SetPoint(1, Vector2(75, -50));
+	b.SetPoint(2, Vector2(75, 50));
+	b.SetPoint(3, Vector2(-25, 50));
+	b.ReCalc();
+
+	auto d = a.GetDisplacement(b);
+	EXPECT_FLOAT_EQ(76, d.Length());
+	EXPECT_FALSE(a.Overlaps(mPolygon(b, d)));
+
+	Polygon c;
+	c.SetPointCount(4);
+	c.SetPoint(0, Vector2(51, -50));
+	c.SetPoint(1, Vector2(102, -50));
+	c.SetPoint(2, Vector2(102, 50));
+	c.SetPoint(3, Vector2(51, 50));
+	c.ReCalc();
+
+	d = c.GetDisplacement(a);
+	EXPECT_FLOAT_EQ(0, d.Length());
+}
+
+// Collision is just above funcs rolled so just checking for consistency
+
+TEST(Polygon, GetGollisionSegment)
+{
+	Polygon p;
+	p.SetPointCount(3);
+	p.SetPoint(0, Vector2(-50, 0));
+	p.SetPoint(1, Vector2(50, 0));
+	p.SetPoint(2, Vector2(0, 50));
+	p.ReCalc();
+
+	Segment s(Vector2(-50, 0), Vector2(50, 0));
+
+	Collision col = p.GetCollision(s);
+	EXPECT_EQ(p.Overlaps(s), col.Overlaps());
+	EXPECT_EQ(p.Contains(s), col.AcontainsB());
+	EXPECT_EQ(s.Contains(p), col.BcontainsA());
+
+	auto iC = col.GetIntersects();
+	auto iF = p.GetIntersects(s);
+
+	EXPECT_EQ(iC.size(), iF.size());
+
+	for (unsigned i = 0; i < iC.size(); ++i)
+	{
+		EXPECT_FLOAT_EQ(iC[i].x, iF[i].x);
+		EXPECT_FLOAT_EQ(iC[i].y, iF[i].y);
+	}
+
+	auto dC = col.GetDisplacement();
+	auto dF = p.GetDisplacement(s);
+
+	EXPECT_FLOAT_EQ(dC.x, dF.x);
+	EXPECT_FLOAT_EQ(dC.y, dF.y);
+}
+
+TEST(Polygon, GetGollisionCircle)
+{
+	Polygon p;
+	p.SetPointCount(3);
+	p.SetPoint(0, Vector2(-50, 0));
+	p.SetPoint(1, Vector2(50, 0));
+	p.SetPoint(2, Vector2(0, 50));
+	p.ReCalc();
+
+	Circle c(Vector2(25, 25), 50);
+
+	Collision col = p.GetCollision(c);
+	EXPECT_EQ(p.Overlaps(c), col.Overlaps());
+	EXPECT_EQ(p.Contains(c), col.AcontainsB());
+	EXPECT_EQ(p.Contains(c), col.BcontainsA());
+
+	auto iC = col.GetIntersects();
+	auto iF = p.GetIntersects(c);
+
+	EXPECT_EQ(iC.size(), iF.size());
+
+	for (unsigned i = 0; i < iC.size(); ++i)
+	{
+		EXPECT_FLOAT_EQ(iC[i].x, iF[i].x);
+		EXPECT_FLOAT_EQ(iC[i].y, iF[i].y);
+	}
+
+	auto dC = col.GetDisplacement();
+	auto dF = p.GetDisplacement(c);
+
+	EXPECT_FLOAT_EQ(dC.x, dF.x);
+	EXPECT_FLOAT_EQ(dC.y, dF.y);
+}
+
+TEST(Polygon, GetGollisionPolygon)
+{
+	Polygon a;
+	a.SetPointCount(4);
+	a.SetPoint(0, Vector2(-50, -50));
+	a.SetPoint(1, Vector2(50, -50));
+	a.SetPoint(2, Vector2(50, 50));
+	a.SetPoint(3, Vector2(-50, 50));
+	a.ReCalc();
+
+	Polygon b;
+	b.SetPointCount(4);
+	b.SetPoint(0, Vector2(-25, -50));
+	b.SetPoint(1, Vector2(75, -50));
+	b.SetPoint(2, Vector2(75, 50));
+	b.SetPoint(3, Vector2(-25, 50));
+	b.ReCalc();
+
+	Collision col = a.GetCollision(b);
+	EXPECT_EQ(a.Overlaps(b), col.Overlaps());
+	EXPECT_EQ(a.Contains(b), col.AcontainsB());
+	EXPECT_EQ(b.Contains(a), col.BcontainsA());
+
+	auto iC = col.GetIntersects();
+	auto iF = a.GetIntersects(b);
+
+	EXPECT_EQ(iC.size(), iF.size());
+
+	for (unsigned i = 0; i < iC.size(); ++i)
+	{
+		EXPECT_FLOAT_EQ(iC[i].x, iF[i].x);
+		EXPECT_FLOAT_EQ(iC[i].y, iF[i].y);
+	}
+
+	auto dC = col.GetDisplacement();
+	auto dF = a.GetDisplacement(b);
+
+	EXPECT_FLOAT_EQ(dC.x, dF.x);
+	EXPECT_FLOAT_EQ(dC.y, dF.y);
+}
+
+// Double Disbatch test
+
+TEST(Polygon, GetGollisionShape)
+{
+	Shape *a = new Polygon();
+	a->SetPointCount(4);
+	a->SetPoint(0, Vector2(-50, -50));
+	a->SetPoint(1, Vector2(50, -50));
+	a->SetPoint(2, Vector2(50, 50));
+	a->SetPoint(3, Vector2(-50, 50));
+	a->ReCalc();
+
+	Shape *b = new Polygon();
+	b->SetPointCount(4);
+	b->SetPoint(0, Vector2(-25, -50));
+	b->SetPoint(1, Vector2(75, -50));
+	b->SetPoint(2, Vector2(75, 50));
+	b->SetPoint(3, Vector2(-25, 50));
+	b->ReCalc();
+
+	Collision colPtr = a->GetCollision(*b);
+
+	Polygon A = *dynamic_cast<Polygon*>(a);
+	Polygon B = *dynamic_cast<Polygon*>(b);
+
+	Collision colObj = A.GetCollision(B);
+
+	EXPECT_EQ(colPtr.Overlaps(), colObj.Overlaps());
+	EXPECT_EQ(colPtr.AcontainsB(), colObj.AcontainsB());
+	EXPECT_EQ(colPtr.BcontainsA(), colObj.BcontainsA());
+
+	auto iP = colPtr.GetIntersects();
+	auto iO = colObj.GetIntersects();
+
+	//std::reverse(std::begin(iP), std::end(iP));
+
+	EXPECT_EQ(iP.size(), iO.size());
+
+	for (unsigned i = 0; i < iP.size(); ++i)
+	{
+		auto it = std::find(std::begin(iP), std::end(iP), iO[i]);
+		EXPECT_TRUE(it != std::end(iP));
+	}
+
+	EXPECT_FLOAT_EQ(colPtr.GetDisplacement().x, colObj.GetDisplacement().x);
+	EXPECT_FLOAT_EQ(colPtr.GetDisplacement().y, colObj.GetDisplacement().y);
 }

@@ -5,6 +5,7 @@
 #include "collision.hpp"
 
 #include <cmath>
+#include <algorithm>
 
 Circle::Circle() : ShapeImpl(Vector2(0, 0)), _radius(0)
 {
@@ -31,23 +32,23 @@ const Precision_t& Circle::GetRadius() const
 
 const Projection Circle::Project(const Axis &a) const
 {
-	const Precision_t v = a.Dot(GetCenter() + GetPos());
+	const Precision_t v = a.Dot(GetCenter());
 	return Projection(v - GetRadius(), v + GetRadius());
 }
 
 const bool Circle::Contains(const Vector2 &p) const
 {
-	const Vector2 v = GetCenter() + GetPos() - p;
+	const Vector2 v = (GetCenter()) - p;
 	const Precision_t dist = v.Length();
 
-	return (dist < GetRadius());
+	return (dist <= GetRadius());
 }
 
 const bool Circle::Contains(const Polygon &p) const
 {
 	for (auto && pt : p.GetPoints())
 	{
-		if (!Contains(pt + p.GetPos()))
+		if (!Contains(pt))
 			return false;
 	}
 
@@ -61,10 +62,10 @@ const bool Circle::Contains(const Circle &c) const
 
 	else
 	{
-		Vector2 v = c.GetCenter() + c.GetPos() - GetCenter() + GetPos();
+		const Vector2 v = (c.GetCenter()) - (GetCenter());
 
-		Precision_t dist = v.Length();
-		Precision_t radiiDif = std::abs(GetRadius() - c.GetRadius());
+		const Precision_t dist = v.Length();
+		const Precision_t radiiDif = std::abs(GetRadius() - c.GetRadius());
 
 		return (dist <= radiiDif);
 	}
@@ -72,31 +73,31 @@ const bool Circle::Contains(const Circle &c) const
 
 const bool Circle::Contains(const Segment &s) const
 {
-	return (Contains(s.GetTransformedPoint(0)) && Contains(s.GetTransformedPoint(1)));
+	return (Contains(s.GetPoint(0)) && Contains(s.GetPoint(1)));
 }
 
 const bool Circle::Overlaps(const Segment &s) const
 {
 	AxesVec axes(2);
 	axes[0] = s.GetAxis();
-	axes[1] = (s.NearestVertex(GetCenter() + GetPos()) - GetCenter() + GetPos()).Normalize();
+	axes[1] = (s.NearestVertex(GetCenter()) - GetCenter()).Normalize();
 
 	return (CalcDisplacement(axes, *this, s) != Vector2(0, 0));
 }
 
 const bool Circle::Overlaps(const Circle &c) const
 {
-	const Vector2 v = (c.GetCenter() + c.GetPos()) - (GetCenter() + GetPos());
+	const Vector2 v = (c.GetCenter()) - (GetCenter());
 
 	const Precision_t radiiSum = GetRadius() + c.GetRadius();
 	const Precision_t dist = v.Length();
 
-	return (dist < radiiSum);
+	return (dist <= radiiSum);
 }
 
 const bool Circle::Overlaps(const Polygon &p) const
 {
-	const Axis ax = (p.NearestVertex(GetPos()) - GetPos()).Normalize();
+	const Axis ax = (p.NearestVertex(GetCenter()) - GetCenter()).Normalize();
 
 	AxesVec axes(p.GetAxes());
 	axes.push_back(ax);
@@ -104,20 +105,20 @@ const bool Circle::Overlaps(const Polygon &p) const
 	return (CalcDisplacement(axes, *this, p) != Vector2(0, 0));
 }
 
-const std::vector<Vector2> Circle::GetIntersects(const Segment & s) const
+const std::vector<Vector2> Circle::GetIntersects(const Segment &s) const
 {
 	std::vector<Vector2> intersections(0);
 
-	Vector2 circlePosition = GetCenter() + GetPos();
+	Vector2 circlePosition = GetCenter();
 	Precision_t r2 = GetRadius() * GetRadius();
 
-	Vector2 ba = s.GetTransformedPoint(1) - s.GetTransformedPoint(0);
-	Vector2 ca = (circlePosition) - s.GetTransformedPoint(0);
+	Vector2 ba = s.GetPoint(1) - s.GetPoint(0);
+	Vector2 ca = (circlePosition) - s.GetPoint(0);
 
 	Precision_t dot = ba.Dot(ca);
 	Vector2 proj1 = ba * (dot / ba.LengthSq());
 
-	Vector2 midpt = s.GetTransformedPoint(0) + proj1;
+	Vector2 midpt = s.GetPoint(0) + proj1;
 	Vector2 cm = midpt - circlePosition;
 
 	Precision_t distCenterSq = cm.LengthSq();
@@ -143,8 +144,8 @@ const std::vector<Vector2> Circle::GetIntersects(const Segment & s) const
 
 	ba = ba.Normalize() * disIntercept;
 
-	Vector2 sol1 = midpt + ba;
-	Vector2 sol2 = midpt - ba;
+	const Vector2 sol1 = midpt + ba;
+	const Vector2 sol2 = midpt - ba;
 
 	if (s.Contains(sol1))
 		intersections.push_back(sol1);
@@ -155,12 +156,15 @@ const std::vector<Vector2> Circle::GetIntersects(const Segment & s) const
 	return intersections;
 }
 
-const std::vector<Vector2> Circle::GetIntersects(const Circle & c) const
+const std::vector<Vector2> Circle::GetIntersects(const Circle &c) const
 {
 	std::vector<Vector2> intersections(0);
 
-	const Vector2 c1Pos = GetCenter() + GetPos();
-	const Vector2 c2Pos = c.GetCenter() + c.GetPos();
+	if (!Overlaps(c))
+		return intersections;
+
+	const Vector2 c1Pos = GetCenter();
+	const Vector2 c2Pos = c.GetCenter();
 
 	const Precision_t c1r2 = GetRadius() * GetRadius();
 	const Precision_t c2r2 = c.GetRadius() * c.GetRadius();
@@ -180,35 +184,32 @@ const std::vector<Vector2> Circle::GetIntersects(const Circle & c) const
 	const Vector2 i2(p.x - d.y, p.y + d.x);
 
 	intersections.push_back(i1);
-	intersections.push_back(i2);
+
+	if (i1 != i2)
+		intersections.push_back(i2);
 
 	return intersections;
 }
 
-const std::vector<Vector2> Circle::GetIntersects(const Polygon & p) const
+const std::vector<Vector2> Circle::GetIntersects(const Polygon &p) const
 {
 	std::vector<Vector2> intersections(0);
 
-	if (!Contains(p) && !p.Contains(*this))
+	std::vector<Segment> sides;
+
+	for (auto && side : p.GetSides())
 	{
-		std::vector<Segment> sides;
+		const Segment seg(side.GetPoint(0), side.GetPoint(1));
 
-		for (auto && side : p.GetSides())
+		const std::vector<Vector2> intercepts = GetIntersects(seg);
+
+		for (auto && pt : intercepts)
 		{
-			const Segment seg(side.GetPoint(0) + p.GetPos(), side.GetPoint(1) + p.GetPos());
+			auto it = std::find(std::begin(intersections), std::end(intersections), pt);
 
-			if (Overlaps(seg) && !Contains(seg))
-				sides.push_back(seg);
+			if (it == std::end(intersections))
+				intersections.push_back(pt);
 		}
-
-		for (auto && side : sides)
-		{
-			const std::vector<Vector2> intercepts = GetIntersects(side);
-
-			for (auto && p : intercepts)
-				intersections.push_back(p);
-		}
-
 	}
 
 	return intersections;
@@ -218,35 +219,32 @@ const Vector2 Circle::GetDisplacement(const Segment &s) const
 {
 	AxesVec axes(2);
 	axes[0] = s.GetAxis();
-	axes[1] = (s.NearestVertex(GetCenter() + GetPos()) - GetCenter() + GetPos()).Normalize();
+	axes[1] = (s.NearestVertex(GetCenter()) - (GetCenter())).Normalize();
 
 	return CalcDisplacement(axes, *this, s);
 }
 
 const Vector2 Circle::GetDisplacement(const Circle &c) const
 {
-	const Vector2 v = c.GetCenter() + c.GetPos() - GetCenter() + GetPos();
+	const Vector2 v = (c.GetCenter()) - (GetCenter());
 
 	const Precision_t theta = atan2(v.y, v.x);
 
 	const Precision_t radiiSum = GetRadius() + c.GetRadius();
 	const Precision_t dist = v.Length();
-	const Precision_t tDist = radiiSum - dist;
+	const Precision_t tDist = (radiiSum - dist) + 1;
 
 	const Precision_t x = tDist * std::cos(theta);
 	const Precision_t y = tDist * std::sin(theta);
 
-	Vector2 displacement(x, y);
-
-	if (displacement.Dot(v) < 0)
-		displacement = -displacement;
+	const Vector2 displacement(x, y);
 
 	return displacement;
 }
 
 const Vector2 Circle::GetDisplacement(const Polygon &p) const
 {
-	const Axis ax = (p.NearestVertex(GetCenter() + GetPos()) - (GetCenter() + GetPos())).Normalize();
+	const Axis ax = (p.NearestVertex(GetCenter()) - (GetCenter())).Normalize();
 
 	auto axes = p.GetAxes();
 	axes.push_back(ax);
@@ -261,8 +259,6 @@ const Collision Circle::GetCollision(const Shape &s) const
 
 const Collision Circle::GetCollision(const Segment &s) const
 {
-	bool doesOverlap = false;
-
 	// Check if circle contains segment
 	bool contains = false;
 
@@ -274,28 +270,32 @@ const Collision Circle::GetCollision(const Segment &s) const
 
 	AxesVec axes(2);
 	axes[0] = s.GetAxis();
-	axes[1] = (s.NearestVertex(GetPos()) - GetPos()).Normalize();
+	axes[1] = (s.NearestVertex(GetCenter()) - GetCenter()).Normalize();
 
 	const Vector2 displacement = CalcDisplacement(axes, *this, s);
 
-	if (!contains && (displacement != Vector2(0, 0)))
+	bool doesOverlap = (displacement != Vector2(0, 0));
+
+	if (doesOverlap)
+	{
+		contains = Contains(s);
 		intersects = GetIntersects(s);
+	}
 
 	return Collision(doesOverlap, intersects, contains, contained, displacement);
 }
 
 const Collision Circle::GetCollision(const Circle &c) const
 {
-	const Vector2 v = (c.GetCenter() + c.GetPos()) - (GetCenter() + GetPos());
+	const Vector2 v = (c.GetCenter()) - (GetCenter());
 
 	const Precision_t theta = atan2(v.y, v.x);
 
 	const Precision_t radiiSum = GetRadius() + c.GetRadius();
-	const Precision_t radiiDif = std::abs(GetRadius() - c.GetRadius());
 	const Precision_t dist = v.Length();
-	const Precision_t tDist = radiiSum - dist;
+	const Precision_t tDist = (radiiSum - dist) + 1;
 
-	bool doesOverlap = (dist < radiiSum);
+	bool doesOverlap = (dist <= radiiSum);
 
 	// Determine if this circle contains
 	// the circle "c"
@@ -310,20 +310,15 @@ const Collision Circle::GetCollision(const Circle &c) const
 
 	// Displacement is the vector to be applied to circle "c"
 	// in order to seperate it from the circle
-	Vector2 displacement(0, 0);
+	Vector2 displacement;
 
 	if (doesOverlap)
 	{
-		intersects = GetIntersects(c);
 
 		const Precision_t x = tDist * std::cos(theta);
 		const Precision_t y = tDist * std::sin(theta);
 
 		displacement = Vector2(x, y);
-
-		if (displacement.Dot(v) < 0)
-			displacement = -displacement;
-
 		intersects = GetIntersects(c);
 	}
 
@@ -342,7 +337,7 @@ const Collision Circle::GetCollision(const Polygon &p) const
 	std::vector<Vector2> intersects(0);
 
 	auto axes = p.GetAxes();
-	axes.push_back((p.NearestVertex(GetCenter() + GetPos()) - (GetCenter() + GetPos())).Normalize());
+	axes.push_back((p.NearestVertex(GetCenter()) - (GetCenter())).Normalize());
 
 	const Vector2 displacement = CalcDisplacement(axes, *this, p);
 
@@ -352,9 +347,7 @@ const Collision Circle::GetCollision(const Polygon &p) const
 	{
 		contains = Contains(p);
 		contained = p.Contains(*this);
-
-		if (!contains && !contained)
-			intersects = GetIntersects(p);
+		intersects = GetIntersects(p);
 	}
 
 	return Collision(doesOverlap, intersects, contains, contained, displacement);

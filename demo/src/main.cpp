@@ -25,37 +25,39 @@ using Shape_ptr = std::unique_ptr<shape>;
 int main(int argc, char **argv)
 {
 	std::vector<Shape_ptr> vecA(3);
-	vecA[0] = Shape_ptr(new circle(Vector2(100, 100), 30));
+	vecA[0] = Shape_ptr(new circle(Vector2(0, 0), 150));
 
 	vecA[1] = Shape_ptr(new polygon());
 	vecA[1]->SetPointCount(3);
-	vecA[1]->SetPoint(0, Vector2(0, 0));
-	vecA[1]->SetPoint(1, Vector2(180, 0));
-	vecA[1]->SetPoint(2, Vector2(150, 150));
+	vecA[1]->SetPoint(0, Vector2(-50, 0));
+	vecA[1]->SetPoint(1, Vector2(50, 0));
+	vecA[1]->SetPoint(2, Vector2(0, 50));
 	vecA[1]->ReCalc();
 
-	vecA[2] = Shape_ptr(new segment(Vector2(0, 0), Vector2(100, 300)));
+	vecA[2] = Shape_ptr(new segment(Vector2(400, 300), Vector2(500, 300)));
 
 	std::vector<Shape_ptr> vecB(3);
-	vecB[0] = Shape_ptr(new circle(Vector2(0, 0), 30));
+	vecB[0] = Shape_ptr(new circle(Vector2(0, 0), 50));
 
 	vecB[1] = Shape_ptr(new polygon());
 	vecB[1]->SetPointCount(3);
-	vecB[1]->SetPoint(0, Vector2(0, 0));
-	vecB[1]->SetPoint(1, Vector2(80, 0));
-	vecB[1]->SetPoint(2, Vector2(50, 50));
+	vecB[1]->SetPoint(0, Vector2(-50, 0));
+	vecB[1]->SetPoint(1, Vector2(50, 0));
+	vecB[1]->SetPoint(2, Vector2(25, 50));
 	vecB[1]->ReCalc();
 
-	vecB[2] = Shape_ptr(new segment(Vector2(0, 0), Vector2(100, 30)));
+	vecB[2] = Shape_ptr(new segment(Vector2(450, 250), Vector2(450, 350)));
 
-	int ShapeA = 1;
+	int ShapeA = 2;
 	int ShapeB = 2;
 
 	vecA[ShapeA]->SetColor(sf::Color::Green);
 	vecB[ShapeB]->SetColor(sf::Color::Red);
 
-	vecA[ShapeA]->Move(Vector2(rand(0, 600), rand(0, 600)));
-	vecB[ShapeB]->Move(Vector2((vecA[ShapeA]->GetPos().x + vecA[ShapeA]->GetCenter().x) + 2, (vecA[ShapeA]->GetPos().y + vecA[ShapeA]->GetCenter().y) - 2));
+	//vecA[ShapeA]->Move(Vector2(rand(0, 600), rand(0, 600)));
+	//vecB[ShapeB]->Move(Vector2(vecA[ShapeA]->GetPos().x, vecA[ShapeA]->GetPos().y));
+
+	//std::cout << vecB[ShapeB]->GetPos().x << "," << vecB[ShapeB]->GetPos().y << std::endl;
 
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Collision Test");
 	window.setFramerateLimit(60);
@@ -79,11 +81,11 @@ int main(int argc, char **argv)
 		int hdir = sf::Keyboard::isKeyPressed(sf::Keyboard::Right) - sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
 		int vdir = sf::Keyboard::isKeyPressed(sf::Keyboard::Down) - sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
 
-		vecB[ShapeB]->Move(Vector2(hdir * 4, vdir * 4));
+		//vecB[ShapeB]->Move(Vector2(hdir * 4, vdir * 4));
 
 		Collision collision = vecA[ShapeA]->GetCollision(*vecB[ShapeB]);
 		//polygon a = *(polygon*)vecA[ShapeA].get();
-		//segment b = *(segment*)vecB[ShapeB].get();
+		//polygon b = *(polygon*)vecB[ShapeB].get();
 		//Collision collision = a.GetCollision(b);
 
 		if (collision.AcontainsB())
@@ -103,38 +105,46 @@ int main(int argc, char **argv)
 		window.draw(*vecA[ShapeA]);
 		window.draw(*vecB[ShapeB]);
 
+		std::cout << collision.GetIntersects().size() << std::endl;
+
+		std::cout << "begin" << std::endl;
 
 		for (auto && p : collision.GetIntersects())
 		{
-			circle c(Vector2(0, 0), 3);
-			c.Circle::SetPos(p);
+
+			std::cout << "[" << p.x << "," << p.y << "]" << std::endl;
+
+			circle c(p,  3);
+			//c.Circle::SetPos(p);
 			c.SetColor(sf::Color::Red);
 
 			window.draw(c);
 		}
 
+		std::cout << "end" << std::endl;
+
 
 		if (collision.Overlaps() || collision.AcontainsB())
 		{
-			vecB[ShapeB]->Move(collision.GetDisplacement());
+			/*vecB[ShapeB]->Move(collision.GetDisplacement());
 			vecB[ShapeB]->SetColor(sf::Color(255, 0, 255, 50));
 
 			window.draw(*vecB[ShapeB]);
 
-			vecB[ShapeB]->Move(-collision.GetDisplacement());
+			vecB[ShapeB]->Move(-collision.GetDisplacement());*/
 		}
 
-		circle c1(Vector2(0, 0), 3);
-		c1.Circle::SetPos(vecA[ShapeA]->GetPos() + vecA[ShapeA]->GetCenter());
+		circle c1(vecA[ShapeA]->GetCenter(), 3);
+		//c1.Circle::SetPos(vecA[ShapeA]->GetPos() + vecA[ShapeA]->GetCenter());
 		c1.SetColor(sf::Color::Magenta);
 
-		window.draw(c1);
+		//window.draw(c1);
 
-		circle c(Vector2(0, 0), 3);
-		c.Circle::SetPos(vecB[ShapeB]->GetPos() + vecB[ShapeB]->GetCenter());
+		circle c(vecB[ShapeB]->GetCenter(), 3);
+		//c.Circle::SetPos(vecB[ShapeB]->GetPos() + vecB[ShapeB]->GetCenter());
 		c.SetColor(sf::Color::Magenta);
 
-		window.draw(c);
+		//window.draw(c);
 
 		window.display();
 	}

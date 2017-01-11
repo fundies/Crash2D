@@ -51,61 +51,24 @@ public:
 	*/
 	virtual const Vector2& GetPoint(const unsigned &i) const;
 
-	//! Gets the point of this shape at the given index using this shape's transformation.
-	/*!
-		\param i The index of the point.
-		\return The point of this shape at the given index using this shape's transformation.
-	*/
-	virtual const Vector2 GetTransformedPoint(const unsigned &i) const;
-
-	//! Sets the absolute position of this shape.
-	/*!
-		\param p The absolute position of this shape.
-	*/
-	virtual void SetPos(const Vector2& p);
-
-	//! Gets the absolute position of this shape.
-	/*!
-		\return The absolute position of this shape.
-	*/
-	virtual const Vector2& GetPos() const;
-
-	//! Moves this shape by the given offset relative to its current position.
-	/*!
-		\param o The offset to move this shape.
-	*/
-	virtual void Move(const Vector2 &o);
-
-	//! Rotates this shape by the given angle relative to its current rotation.
-	/*!
-		\param a The relative angle to rotate this shape.
-	*/
-	virtual void Rotate(const Precision_t &a);
-
-	//! Sets the absolute angle of rotation of this shape around its center.
-	/*!
-		\param a The absolute angle of rotation of this shape around its center.
-	*/
-	virtual void SetRotation(const Precision_t &a);
-
-	//! Gets the absolute angle of rotation of this shape around its center.
-	/*!
-		\return The absolute angle of rotation of this shape around its center.
-	*/
-	virtual const Precision_t& GetRotation() const;
-
 	//! Gets the points this shape is composed of.
 	/*!
 		\return The points this shape is composed of.
 	*/
 	virtual const std::vector<Vector2>& GetPoints() const;
 
+	//! Method used to caculate displacment of two shapes
+	/*!
+		\param axes Axes used in calculations.
+		\param a Shape a;
+		\param b Shape b;
+	*/
+	virtual const Vector2 CalcDisplacement(const AxesVec &axes, const Shape &a, const Shape &b) const;
+
 	//! Method required to be called after updating the geometry of a shape.
 	/*!
 	*/
-	virtual void ReCalc() override {}
-
-	virtual const Vector2 CalcDisplacement(const AxesVec &axes, const Shape &a, const Shape &b) const;
+	virtual void ReCalc() override;
 
 protected:
 

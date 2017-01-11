@@ -69,7 +69,7 @@ TEST(Vector2, Magnitude)
 {
 	Vector2 v(-6, -8);
 
-	EXPECT_EQ(10, v.Magnitude());
+	EXPECT_EQ(10, v.Length());
 }
 
 TEST(Vector2, Normalize)

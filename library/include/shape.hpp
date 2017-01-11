@@ -195,13 +195,18 @@ public:
 	*/
 	virtual const Collision GetCollision(const Polygon &p) const = 0;
 
-	//FIXME: Document / Remove these
+	//! Projects the shape onto the given axis and returns the projection.
+	/*!
+		\param s The shape to project.
+		\param a The axis to project the circle onto.
+		\return The projection of the circle onto the axis.
+	*/
 	virtual const Projection Project(const Shape &s, const Axis &a) const = 0;
+
+	//! Method required to be called after updating the geometry of a shape.
+	/*!
+	*/
 	virtual void ReCalc() = 0;
-	virtual void Move(const Vector2 &o) = 0;
-	virtual const Vector2& GetPos() const = 0;
-	//virtual const Vector2& GetCenter() const = 0;
-	//void SetPos(const Vector2& p) = 0;
 
 };
 

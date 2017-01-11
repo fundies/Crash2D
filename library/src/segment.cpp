@@ -55,8 +55,8 @@ const Precision_t Segment::DistancePoint(const Vector2 &p) const
 
 const Precision_t Segment::SignedDistancePoint(const Vector2 &p) const
 {
-	const Vector2 vec = GetTransformedPoint(1) - GetTransformedPoint(0);
-	const Vector2 pa = p - GetTransformedPoint(0);
+	const Vector2 vec = GetPoint(1) - GetPoint(0);
+	const Vector2 pa = p - GetPoint(0);
 
 	if (std::abs(vec.x) < EPS)
 	{
@@ -86,8 +86,8 @@ const Axis& Segment::GetAxis() const
 
 const Vector2 Segment::GetNearestPoint(const Vector2 &p) const
 {
-	const Vector2 s = GetTransformedPoint(1) - GetTransformedPoint(0);
-	const Vector2 ap = p - GetTransformedPoint(0);
+	const Vector2 s = GetPoint(1) - GetPoint(0);
+	const Vector2 ap = p - GetPoint(0);
 
 	const Precision_t vs = ap.Dot(s);
 	const Precision_t ss = s.Dot(s);
@@ -96,13 +96,13 @@ const Vector2 Segment::GetNearestPoint(const Vector2 &p) const
 
 
 	if (q < 0)
-		return GetTransformedPoint(0);
+		return GetPoint(0);
 
 	else if (q > 1)
-		return GetTransformedPoint(1);
+		return GetPoint(1);
 
 	else
-		return GetTransformedPoint(0) + (s * q);
+		return GetPoint(0) + (s * q);
 }
 
 const Vector2 Segment::NearestVertex(const Vector2 &p) const
@@ -112,12 +112,12 @@ const Vector2 Segment::NearestVertex(const Vector2 &p) const
 
 	for (unsigned i = 0; i < GetPointCount(); i++)
 	{
-		Precision_t temp = p.GetDistance(GetTransformedPoint(i));
+		Precision_t temp = p.GetDistance(GetPoint(i));
 
 		if (temp < dist)
 		{
 			dist = temp;
-			v = GetTransformedPoint(i);
+			v = GetPoint(i);
 		}
 	}
 
@@ -146,21 +146,21 @@ const bool Segment::IsParallel(const Segment &s) const
 
 const Projection Segment::Project(const Axis &a) const
 {
-	const Precision_t dot0 = a.Dot(GetTransformedPoint(0));
-	const Precision_t dot1 = a.Dot(GetTransformedPoint(1));
+	const Precision_t dot0 = a.Dot(GetPoint(0));
+	const Precision_t dot1 = a.Dot(GetPoint(1));
 
 	return Projection(std::min(dot0, dot1), std::max(dot0, dot1));
 }
 
 const bool Segment::Contains(const Vector2 &p) const
 {
-	const Vector2 ba = (GetTransformedPoint(1) - GetTransformedPoint(0));
-	const Vector2 ca = p - GetTransformedPoint(0);
+	const Vector2 ba = (GetPoint(1) - GetPoint(0));
+	const Vector2 ca = p - GetPoint(0);
 
 	const Precision_t cross = ba.Cross(ca);
 	const Precision_t dot = ba.Dot(ca);
 
-	return (AreEqual(cross, 0) && dot >= 0 && dot < GetLength() * GetLength());
+	return (AreEqual(cross, 0) && dot >= 0 && dot <= (GetLength() * GetLength()));
 }
 
 const bool Segment::Contains(const Segment &s) const
@@ -169,7 +169,7 @@ const bool Segment::Contains(const Segment &s) const
 		return false;
 
 	else
-		return (Contains(s.GetTransformedPoint(0)) && Contains(s.GetTransformedPoint(1)));
+		return (Contains(s.GetPoint(0)) && Contains(s.GetPoint(1)));
 }
 
 const bool Segment::Contains(const Circle &c) const
@@ -184,8 +184,9 @@ const bool Segment::Contains(const Polygon &p) const
 
 const bool Segment::Overlaps(const Segment &s) const
 {
+
 	if (IsParallel(s))
-		return (Contains(s.GetTransformedPoint(0)) || Contains(s.GetTransformedPoint(1)));
+		return (Contains(s.GetPoint(0)) || Contains(s.GetPoint(1)));
 
 	else
 		return (GetIntersects(s).size() > 0);
@@ -195,7 +196,7 @@ const bool Segment::Overlaps(const Circle &c) const
 {
 	AxesVec axes(2);
 	axes[0] = GetAxis();
-	axes[1] = (NearestVertex(c.GetCenter() + c.GetPos()) - c.GetCenter() + c.GetPos()).Normalize();
+	axes[1] = (NearestVertex(c.GetCenter()) - c.GetCenter()).Normalize();
 
 	return (CalcDisplacement(axes, *this, c) != Vector2(0, 0));
 }
@@ -210,17 +211,17 @@ const bool Segment::Overlaps(const Polygon &p) const
 
 const std::vector<Vector2> Segment::GetIntersects(const Segment &s) const
 {
-	const Precision_t x1 = GetTransformedPoint(0).x;
-	const Precision_t y1 = GetTransformedPoint(0).y;
+	const Precision_t x1 = GetPoint(0).x;
+	const Precision_t y1 = GetPoint(0).y;
 
-	const Precision_t x2 = GetTransformedPoint(1).x;
-	const Precision_t y2 = GetTransformedPoint(1).y;
+	const Precision_t x2 = GetPoint(1).x;
+	const Precision_t y2 = GetPoint(1).y;
 
-	const Precision_t x3 = s.GetTransformedPoint(0).x;
-	const Precision_t y3 = s.GetTransformedPoint(0).y;
+	const Precision_t x3 = s.GetPoint(0).x;
+	const Precision_t y3 = s.GetPoint(0).y;
 
-	const Precision_t x4 = s.GetTransformedPoint(1).x;
-	const Precision_t y4 = s.GetTransformedPoint(1).y;
+	const Precision_t x4 = s.GetPoint(1).x;
+	const Precision_t y4 = s.GetPoint(1).y;
 
 	const Precision_t Bottom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
@@ -244,16 +245,16 @@ const std::vector<Vector2> Segment::GetIntersects(const Circle &c) const
 {
 	std::vector<Vector2> intersections(0);
 
-	Vector2 circlePosition = c.GetCenter() + c.GetPos();
+	Vector2 circlePosition = c.GetCenter();
 	Precision_t r2 = c.GetRadius() * c.GetRadius();
 
-	Vector2 ba = GetTransformedPoint(1) - GetTransformedPoint(0);
-	Vector2 ca = (circlePosition) - GetTransformedPoint(0);
+	Vector2 ba = GetPoint(1) - GetPoint(0);
+	Vector2 ca = (circlePosition) - GetPoint(0);
 
 	Precision_t dot = ba.Dot(ca);
 	Vector2 proj1 = ba * (dot / ba.LengthSq());
 
-	Vector2 midpt = GetTransformedPoint(0) + proj1;
+	Vector2 midpt = GetPoint(0) + proj1;
 	Vector2 cm = midpt - circlePosition;
 
 	Precision_t distCenterSq = cm.LengthSq();
@@ -298,18 +299,24 @@ const std::vector<Vector2> Segment::GetIntersects(const Polygon &p) const
 
 const Vector2 Segment::GetDisplacement(const Segment &s) const
 {
-	AxesVec axes(2);
-	axes[0] = GetAxis();
-	axes[1] = s.GetAxis();
+	if (!Overlaps(s))
+		return Vector2(0, 0);
 
-	return CalcDisplacement(axes, *this, s);
+	else
+	{
+		AxesVec axes(2);
+		axes[0] = GetAxis();
+		axes[1] = s.GetAxis();
+
+		return CalcDisplacement(axes, *this, s);
+	}
 }
 
 const Vector2 Segment::GetDisplacement(const Circle &c) const
 {
 	AxesVec axes(2);
 	axes[0] = GetAxis();
-	axes[1] = (NearestVertex(c.GetCenter() + c.GetPos()) - c.GetCenter() + c.GetPos()).Normalize();
+	axes[1] = (NearestVertex(c.GetCenter()) - c.GetCenter()).Normalize();
 
 	return CalcDisplacement(axes, *this, c);
 }
@@ -329,9 +336,7 @@ const Collision Segment::GetCollision(const Shape &s) const
 
 const Collision Segment::GetCollision(const Segment &s) const
 {
-	const Vector2 displacement = GetDisplacement(s);
-
-	return Collision((displacement != Vector2(0, 0)), GetIntersects(s), Contains(s), s.Contains(*this), displacement);
+	return Collision(Overlaps(s), GetIntersects(s), Contains(s), s.Contains(*this), GetDisplacement(s));
 }
 
 const Collision Segment::GetCollision(const Circle &c) const
@@ -349,7 +354,7 @@ const Collision Segment::GetCollision(const Circle &c) const
 
 	AxesVec axes(2);
 	axes[0] = GetAxis();
-	axes[1] = (NearestVertex(c.GetCenter() + c.GetPos()) - (c.GetCenter() + c.GetPos())).Normalize();
+	axes[1] = (NearestVertex(c.GetCenter()) - (c.GetCenter())).Normalize();
 
 	// Displacement is the vector to be applied to segment "s"
 	// in order to seperate it from the circle
