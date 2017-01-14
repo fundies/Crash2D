@@ -13,7 +13,7 @@ Documentation is located here: https://crash2d.github.io/
 ## Compiling from Source
 To build the library: make library
 
-To build the library: make demo
+To build the demo: make demo
 
 To build the test cases: make tests
 
