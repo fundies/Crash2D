@@ -1,6 +1,4 @@
-#include "collision.hpp"
-
-#include <gtest/gtest.h>
+#include "helper_func.hpp"
 
 TEST(Collision, DefaultConstructor)
 {
@@ -9,9 +7,9 @@ TEST(Collision, DefaultConstructor)
 	EXPECT_FALSE(c.Overlaps());
 	EXPECT_FALSE(c.AcontainsB());
 	EXPECT_FALSE(c.BcontainsA());
-	EXPECT_EQ(0, c.GetIntersects().size());
-	EXPECT_FLOAT_EQ(0, c.GetDisplacement().x);
-	EXPECT_FLOAT_EQ(0, c.GetDisplacement().y);
+	ARE_EQ(0, c.GetIntersects().size());
+	ARE_EQ(0, c.GetDisplacement().x);
+	ARE_EQ(0, c.GetDisplacement().y);
 }
 
 TEST(Collision, FullConstructor)
@@ -21,9 +19,9 @@ TEST(Collision, FullConstructor)
 	EXPECT_TRUE(c.Overlaps());
 	EXPECT_TRUE(c.AcontainsB());
 	EXPECT_TRUE(c.BcontainsA());
-	EXPECT_EQ(1, c.GetIntersects().size());
-	EXPECT_FLOAT_EQ(-5, c.GetDisplacement().x);
-	EXPECT_FLOAT_EQ(-7, c.GetDisplacement().y);
+	ARE_EQ(1, c.GetIntersects().size());
+	ARE_EQ(-5, c.GetDisplacement().x);
+	ARE_EQ(-7, c.GetDisplacement().y);
 }
 
 TEST(Collision, Negate)
@@ -41,11 +39,11 @@ TEST(Collision, Negate)
 	EXPECT_TRUE(c.Overlaps());
 	EXPECT_TRUE(c.AcontainsB());
 	EXPECT_FALSE(c.BcontainsA());
-	EXPECT_EQ(2, c.GetIntersects().size());
-	EXPECT_FLOAT_EQ(-10, i[0].x);
-	EXPECT_FLOAT_EQ(-10, i[0].y);
-	EXPECT_FLOAT_EQ(5, i[1].x);
-	EXPECT_FLOAT_EQ(5, i[1].y);
-	EXPECT_FLOAT_EQ(5, c.GetDisplacement().x);
-	EXPECT_FLOAT_EQ(7, c.GetDisplacement().y);
+	ARE_EQ(2, c.GetIntersects().size());
+	ARE_EQ(5, i[0].x);
+	ARE_EQ(5, i[0].y);
+	ARE_EQ(-10, i[1].x);
+	ARE_EQ(-10, i[1].y);
+	ARE_EQ(5, c.GetDisplacement().x);
+	ARE_EQ(7, c.GetDisplacement().y);
 }

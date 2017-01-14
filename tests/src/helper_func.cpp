@@ -1,5 +1,7 @@
 #include "helper_func.hpp"
 
+#include <gtest/gtest.h>
+
 Segment mSegment(Segment s, Vector2 displacement)
 {
 	return Segment(s.GetPoint(0) + displacement, s.GetPoint(1) + displacement);
@@ -25,4 +27,24 @@ Polygon mPolygon(Polygon p, Vector2 displacement)
 	pD.ReCalc();
 
 	return pD;
+}
+
+bool vectorContains(std::vector<Vector2> &coords, Vector2 pt)
+{
+	auto it = std::find(std::begin(coords), std::end(coords), pt);
+	return (it != std::end(coords));
+}
+
+bool vectorEQ(std::vector<Vector2> &a, std::vector<Vector2> &b)
+{
+	if (a.size() != b.size())
+		return false;
+
+	for (auto i : a)
+	{
+		if (!vectorContains(b, i))
+			return false;
+	}
+
+	return true;
 }

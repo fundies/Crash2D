@@ -27,6 +27,7 @@
     <File Name="src/segment.cpp"/>
     <File Name="src/circle.cpp"/>
     <File Name="src/shape_impl.cpp"/>
+    <File Name="src/transform.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
     <File Name="include/circle.hpp"/>
@@ -37,6 +38,7 @@
     <File Name="include/segment.hpp"/>
     <File Name="include/vector2.hpp"/>
     <File Name="include/shape_impl.hpp"/>
+    <File Name="include/transform.hpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

@@ -39,7 +39,7 @@ const Vector2& Collision::GetDisplacement() const
 const Collision Collision::operator - (void) const
 {
 	auto i = _intersects;
-	std::reverse(std::begin(i), std::end(i));
+	//std::reverse(std::begin(i), std::end(i));
 
 	return Collision(_doesOverlap, i, _bContainsa, _aContainsb, -_displacement);
 }

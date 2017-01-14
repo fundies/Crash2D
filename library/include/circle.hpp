@@ -52,6 +52,13 @@ public:
 	*/
 	virtual const bool Contains(const Vector2 &v) const override;
 
+	//! Checks if this shape contains the given shape and returns the result.
+	/*!
+		\param s The shape to check for containment in this shape.
+		\return Whether this shape contains the given vector.
+	*/
+	virtual const bool Contains(const Shape &s) const override;
+
 	//! Checks if this circle contains the given segment and returns the result.
 	/*!
 		This function will not check if the given circle contains this segment, GetCollision() can be used for that.
@@ -79,6 +86,42 @@ public:
 	*/
 	virtual const bool Contains(const Polygon &p) const override;
 
+	//! Checks if this shape is contained inside the given segment and returns the result.
+	/*!
+		\param s The shape to check if this shape is contained inside.
+		\return Whether this shape contains the given segment.
+	*/
+	virtual const bool IsInside(const Shape &s) const override;
+
+	//! Checks if this shape is contained inside the given segment and returns the result.
+	/*!
+		\param s The segment to check if this shape is contained inside.
+		\return Whether this shape contains the given segment.
+	*/
+	virtual const bool IsInside(const Segment &s) const override;
+
+	//! Checks if this shape is contained inside the given segment and returns the result.
+	/*!
+		\param c The circle to check if this shape is contained inside.
+		\return Whether this shape contains the given segment.
+	*/
+	virtual const bool IsInside(const Circle &c) const override;
+
+	//! Checks if this shape is contained inside the given segment and returns the result.
+	/*!
+		\param p The polygon to check if this shape is contained inside.
+		\return Whether this shape contains the given segment.
+	*/
+	virtual const bool IsInside(const Polygon &p) const override;
+
+	//! Checks if this shape intersects the given shape and returns the result.
+	/*!
+		\param s The shape to check for intersection with this shape.
+		\return Whether this shape intersects the given segment.
+		\sa GetCollision()
+	*/
+	virtual const bool Overlaps(const Shape &s) const override;
+
 	//! Checks if this circle intersects the given segment and returns the result.
 	/*!
 		\param s The segment to check for intersection with this circle.
@@ -103,6 +146,14 @@ public:
 	*/
 	virtual const bool Overlaps(const Polygon &p) const override;
 
+	//! Gets the intersection points of this shape and the given shape.
+	/*!
+		\param s A segment intersecting this shape.
+		\return list of intersections between this shape and the given segment.
+		\sa GetCollision()
+	*/
+	virtual const std::vector<Vector2> GetIntersects(const Shape &s) const override;
+
 	//! Gets the intersection points of this circle and the given segment.
 	/*!
 		\param s A segment intersecting this circle.
@@ -126,6 +177,15 @@ public:
 		\sa GetCollision()
 	*/
 	virtual const std::vector<Vector2> GetIntersects(const Polygon &p) const override;
+
+	//! Gets the minimum vector to be applied to the given shape's position
+	//! in order to seperate it from this shape.
+	/*!
+		\param c A segment intersecting this shape.
+		\return the minimum displacement vector.
+		\sa GetCollision()
+	*/
+	virtual const Vector2 GetDisplacement(const Shape &s) const override;
 
 	//! Gets the minimum vector to be applied to the given segment's position
 	//! in order to seperate it from this circle.

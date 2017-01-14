@@ -3,8 +3,8 @@ OS := $(shell uname -s)
 TARGET := ../lib$(BASE).a
 
 CXX := g++
-CXXFLAGS += -std=c++11 -Wall -g -O0 --coverage -Iinclude/
-LDFLAGS += -static
+CXXFLAGS += -std=c++11 -Wall -g -O0 -fprofile-arcs -ftest-coverage -Iinclude/
+LDFLAGS += -static 
 
 SOURCES := $(shell find src/ -name "*.cpp")
 OBJECTS := $(addprefix build/,$(SOURCES:.cpp=.o))

@@ -23,39 +23,39 @@ public:
 	/*!
 		\return The center of this shape.
 	*/
-	virtual const Vector2& GetCenter() const;
+	virtual const Vector2& GetCenter() const override;
 
 	//! Sets the number of points in this shape.
 	/*!
 		\param c The number of points in this shape.
 	*/
-	virtual void SetPointCount(const unsigned &c);
+	virtual void SetPointCount(const unsigned &c) override;
 
 	//! Sets the point of this shape at the given index to the new point.
 	/*!
 		\param i The index of the point.
 		\param p The new point to replace the old point with.
 	*/
-	virtual void SetPoint(const unsigned &i, const Vector2 &p);
+	virtual void SetPoint(const unsigned &i, const Vector2 &p) override;
 
 	//! Gets the number of points in this shape.
 	/*!
 		\return The number of points in this shape.
 	*/
-	virtual const unsigned GetPointCount() const;
+	virtual const unsigned GetPointCount() const override;
 
 	//! Gets the point of this shape at the given index.
 	/*!
 		\param i The index of the point.
 		\return The point of this shape at the given index.
 	*/
-	virtual const Vector2& GetPoint(const unsigned &i) const;
+	virtual const Vector2& GetPoint(const unsigned &i) const override;
 
 	//! Gets the points this shape is composed of.
 	/*!
 		\return The points this shape is composed of.
 	*/
-	virtual const std::vector<Vector2>& GetPoints() const;
+	virtual const std::vector<Vector2>& GetPoints() const override;
 
 	//! Method used to caculate displacment of two shapes
 	/*!
@@ -73,8 +73,6 @@ public:
 protected:
 
 	std::vector<Vector2> _points; /*!< The points this shape is composed of. */
-	Precision_t _rotation; /*!< The rotation of this shape. */
-	Vector2 _pos; /*!< The position of this shape. */
 	Vector2 _center; /*!< The center of this shape. */
 };
 

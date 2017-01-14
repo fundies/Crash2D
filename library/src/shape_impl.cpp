@@ -12,7 +12,7 @@
 #define M_PI 3.14159265359
 #endif
 
-ShapeImpl::ShapeImpl() :  _rotation(0)
+ShapeImpl::ShapeImpl()
 {
 }
 

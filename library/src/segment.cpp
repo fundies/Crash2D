@@ -163,6 +163,11 @@ const bool Segment::Contains(const Vector2 &p) const
 	return (AreEqual(cross, 0) && dot >= 0 && dot <= (GetLength() * GetLength()));
 }
 
+const bool Segment::Contains(const Shape &s) const
+{
+	return s.IsInside(*this);
+}
+
 const bool Segment::Contains(const Segment &s) const
 {
 	if (s.GetLength() > GetLength())
@@ -182,6 +187,31 @@ const bool Segment::Contains(const Polygon &p) const
 	return false;
 }
 
+const bool Segment::IsInside(const Shape &s) const
+{
+	return s.Contains(*this);
+}
+
+const bool Segment::IsInside(const Segment &s) const
+{
+	return s.Contains(*this);
+}
+
+const bool Segment::IsInside(const Circle &c) const
+{
+	return c.Contains(*this);
+}
+
+const bool Segment::IsInside(const Polygon &p) const
+{
+	return p.Contains(*this);
+}
+
+const bool Segment::Overlaps(const Shape &s) const
+{
+	return s.Overlaps(*this);
+}
+
 const bool Segment::Overlaps(const Segment &s) const
 {
 
@@ -194,19 +224,17 @@ const bool Segment::Overlaps(const Segment &s) const
 
 const bool Segment::Overlaps(const Circle &c) const
 {
-	AxesVec axes(2);
-	axes[0] = GetAxis();
-	axes[1] = (NearestVertex(c.GetCenter()) - c.GetCenter()).Normalize();
-
-	return (CalcDisplacement(axes, *this, c) != Vector2(0, 0));
+	return c.Overlaps(*this);
 }
 
 const bool Segment::Overlaps(const Polygon &p) const
 {
-	auto axes = p.GetAxes();
-	axes.push_back(GetAxis());
+	return p.Overlaps(*this);
+}
 
-	return (CalcDisplacement(axes, *this, p) != Vector2(0, 0));
+const std::vector<Vector2> Segment::GetIntersects(const Shape &s) const
+{
+	return s.GetIntersects(*this);
 }
 
 const std::vector<Vector2> Segment::GetIntersects(const Segment &s) const
@@ -243,58 +271,17 @@ const std::vector<Vector2> Segment::GetIntersects(const Segment &s) const
 
 const std::vector<Vector2> Segment::GetIntersects(const Circle &c) const
 {
-	std::vector<Vector2> intersections(0);
-
-	Vector2 circlePosition = c.GetCenter();
-	Precision_t r2 = c.GetRadius() * c.GetRadius();
-
-	Vector2 ba = GetPoint(1) - GetPoint(0);
-	Vector2 ca = (circlePosition) - GetPoint(0);
-
-	Precision_t dot = ba.Dot(ca);
-	Vector2 proj1 = ba * (dot / ba.LengthSq());
-
-	Vector2 midpt = GetPoint(0) + proj1;
-	Vector2 cm = midpt - circlePosition;
-
-	Precision_t distCenterSq = cm.LengthSq();
-
-	if (distCenterSq > r2)
-		return intersections;
-
-	if (distCenterSq == r2)
-	{
-		if (Contains(midpt))
-			intersections.push_back(midpt);
-
-		return intersections;
-	}
-
-	Precision_t disIntercept;
-
-	if (distCenterSq == 0)
-		disIntercept = c.GetRadius();
-
-	else
-		disIntercept = std::sqrt(r2 - distCenterSq);
-
-	ba = ba.Normalize() * disIntercept;
-
-	Vector2 sol1 = midpt + ba;
-	Vector2 sol2 = midpt - ba;
-
-	if (Contains(sol1))
-		intersections.push_back(sol1);
-
-	if (Contains(sol2))
-		intersections.push_back(sol2);
-
-	return intersections;
+	return c.GetIntersects(*this);
 }
 
 const std::vector<Vector2> Segment::GetIntersects(const Polygon &p) const
 {
 	return p.GetIntersects(*this);
+}
+
+const Vector2 Segment::GetDisplacement(const Shape &s) const
+{
+	return -s.GetDisplacement(*this);
 }
 
 const Vector2 Segment::GetDisplacement(const Segment &s) const
@@ -314,19 +301,12 @@ const Vector2 Segment::GetDisplacement(const Segment &s) const
 
 const Vector2 Segment::GetDisplacement(const Circle &c) const
 {
-	AxesVec axes(2);
-	axes[0] = GetAxis();
-	axes[1] = (NearestVertex(c.GetCenter()) - c.GetCenter()).Normalize();
-
-	return CalcDisplacement(axes, *this, c);
+	return -c.GetDisplacement(*this);
 }
 
 const Vector2 Segment::GetDisplacement(const Polygon &p) const
 {
-	auto axes = p.GetAxes();
-	axes.push_back(GetAxis());
-
-	return CalcDisplacement(axes, *this, p);
+	return -p.GetDisplacement(*this);
 }
 
 const Collision Segment::GetCollision(const Shape &s) const
@@ -341,58 +321,12 @@ const Collision Segment::GetCollision(const Segment &s) const
 
 const Collision Segment::GetCollision(const Circle &c) const
 {
-	bool doesOverlap = false;
-
-	// Segments cannot contain circles
-	bool contains = false;
-
-	// Check if circle contains segment
-	bool contained = c.Contains(*this);
-
-	// Intersection points
-	std::vector<Vector2> intersects(0);
-
-	AxesVec axes(2);
-	axes[0] = GetAxis();
-	axes[1] = (NearestVertex(c.GetCenter()) - (c.GetCenter())).Normalize();
-
-	// Displacement is the vector to be applied to segment "s"
-	// in order to seperate it from the circle
-	Vector2 displacement = CalcDisplacement(axes, *this, c);
-
-	doesOverlap = (displacement != Vector2(0, 0));
-
-	if (!contains)
-		intersects = GetIntersects(c);
-
-	return Collision(doesOverlap, intersects, contains, contained, displacement);
+	return -c.GetCollision(*this);
 }
 
 const Collision Segment::GetCollision(const Polygon &p) const
 {
-	// Check if segment contained inside polygon
-	bool contained = false;
-
-	//A segment cannot contain a polygon
-	bool contains = false;
-
-	// Intersection points
-	std::vector<Vector2> intersects(0);
-
-	auto axes = p.GetAxes();
-	axes.push_back(GetAxis());
-
-	const Vector2 displacement = CalcDisplacement(axes, *this, p);
-
-	bool doesOverlap = (displacement != Vector2(0, 0));
-
-	if (doesOverlap)
-	{
-		contained = p.Contains(*this);
-		intersects = GetIntersects(p);
-	}
-
-	return Collision(doesOverlap, intersects, contains, contained, displacement);
+	return -p.GetCollision(*this);
 }
 
 void Segment::ReCalc()

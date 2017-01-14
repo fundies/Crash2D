@@ -25,13 +25,14 @@ using Shape_ptr = std::unique_ptr<shape>;
 int main(int argc, char **argv)
 {
 	std::vector<Shape_ptr> vecA(3);
-	vecA[0] = Shape_ptr(new circle(Vector2(0, 0), 150));
+	vecA[0] = Shape_ptr(new circle(Vector2(300, 400), 150));
 
 	vecA[1] = Shape_ptr(new polygon());
-	vecA[1]->SetPointCount(3);
-	vecA[1]->SetPoint(0, Vector2(-50, 0));
-	vecA[1]->SetPoint(1, Vector2(50, 0));
-	vecA[1]->SetPoint(2, Vector2(0, 50));
+	vecA[1]->SetPointCount(4);
+	vecA[1]->SetPoint(0, Vector2(-50, -50));
+	vecA[1]->SetPoint(1, Vector2(50, -50));
+	vecA[1]->SetPoint(2, Vector2(50, 50));
+	vecA[1]->SetPoint(3, Vector2(-50, 50));
 	vecA[1]->ReCalc();
 
 	vecA[2] = Shape_ptr(new segment(Vector2(400, 300), Vector2(500, 300)));
@@ -48,8 +49,8 @@ int main(int argc, char **argv)
 
 	vecB[2] = Shape_ptr(new segment(Vector2(450, 250), Vector2(450, 350)));
 
-	int ShapeA = 2;
-	int ShapeB = 2;
+	int ShapeA = 1;
+	int ShapeB = 0;
 
 	vecA[ShapeA]->SetColor(sf::Color::Green);
 	vecB[ShapeB]->SetColor(sf::Color::Red);
@@ -88,7 +89,7 @@ int main(int argc, char **argv)
 		//polygon b = *(polygon*)vecB[ShapeB].get();
 		//Collision collision = a.GetCollision(b);
 
-		if (collision.AcontainsB())
+		if (vecA[ShapeA]->Contains(*vecB[ShapeB]))
 		{
 			vecB[ShapeB]->SetColor(sf::Color::Blue);
 		}
@@ -105,24 +106,16 @@ int main(int argc, char **argv)
 		window.draw(*vecA[ShapeA]);
 		window.draw(*vecB[ShapeB]);
 
-		std::cout << collision.GetIntersects().size() << std::endl;
-
-		std::cout << "begin" << std::endl;
+		vecA[ShapeA]->Contains(*vecB[ShapeB]);
 
 		for (auto && p : collision.GetIntersects())
 		{
-
-			std::cout << "[" << p.x << "," << p.y << "]" << std::endl;
-
 			circle c(p,  3);
 			//c.Circle::SetPos(p);
 			c.SetColor(sf::Color::Red);
 
 			window.draw(c);
 		}
-
-		std::cout << "end" << std::endl;
-
 
 		if (collision.Overlaps() || collision.AcontainsB())
 		{

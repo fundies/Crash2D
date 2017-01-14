@@ -28,6 +28,7 @@
     <File Name="src/segment_test.cpp"/>
     <File Name="src/helper_func.cpp"/>
     <File Name="src/collision_test.cpp"/>
+    <File Name="src/transform_test.cpp"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>

@@ -157,6 +157,11 @@ const bool Polygon::Contains(const Vector2 &v) const
 	return false;
 }
 
+const bool Polygon::Contains(const Shape &s) const
+{
+	return s.IsInside(*this);
+}
+
 const bool Polygon::Contains(const Segment &s) const
 {
 	return (Contains(s.GetPoint(0)) && Contains(s.GetPoint(1)));
@@ -171,14 +176,14 @@ const bool Polygon::Contains(const Circle &c) const
 
 	for(auto && s : GetSides())
 	{
-		const Segment l(s.GetPoint(0), s.GetPoint(1));
-		const Precision_t dist = l.DistancePoint(center);
+		const Precision_t dist = s.DistancePoint(center);
 
-		if (dist <= c.GetRadius())
+		if (c.GetRadius() > dist)
 			return false;
 	}
 
 	return true;
+
 }
 
 const bool Polygon::Contains(const Polygon &p) const
@@ -190,6 +195,31 @@ const bool Polygon::Contains(const Polygon &p) const
 	}
 
 	return true;
+}
+
+const bool Polygon::IsInside(const Shape &s) const
+{
+	return s.Contains(*this);
+}
+
+const bool Polygon::IsInside(const Segment &s) const
+{
+	return false;
+}
+
+const bool Polygon::IsInside(const Circle &c) const
+{
+	return c.Contains(*this);
+}
+
+const bool Polygon::IsInside(const Polygon &p) const
+{
+	return p.Contains(*this);
+}
+
+const bool Polygon::Overlaps(const Shape &s) const
+{
+	return s.Overlaps(*this);
 }
 
 const bool Polygon::Overlaps(const Segment &s) const
@@ -222,7 +252,10 @@ const bool Polygon::Overlaps(const Polygon &p) const
 	return (CalcDisplacement(axes, *this, p) != Vector2(0, 0));
 }
 
-#include <iostream>
+const std::vector<Vector2> Polygon::GetIntersects(const Shape &s) const
+{
+	return s.GetIntersects(*this);
+}
 
 const std::vector<Vector2> Polygon::GetIntersects(const Segment &s) const
 {
@@ -230,10 +263,7 @@ const std::vector<Vector2> Polygon::GetIntersects(const Segment &s) const
 
 	for (auto && side : GetSides())
 	{
-		// Absolute position of the side
-		const Segment sideT(side.GetPoint(0), side.GetPoint(1));
-
-		auto vec = s.GetIntersects(sideT);
+		auto vec = s.GetIntersects(side);
 
 		if (vec.size() > 0)
 		{
@@ -307,6 +337,11 @@ const std::vector<Vector2> Polygon::GetIntersects(const Polygon &p) const
 	}
 
 	return intersects;
+}
+
+const Vector2 Polygon::GetDisplacement(const Shape &s) const
+{
+	return -s.GetDisplacement(*this);
 }
 
 const Vector2 Polygon::GetDisplacement(const Segment &s) const

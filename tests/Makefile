@@ -3,9 +3,9 @@ OS := $(shell uname -s)
 TARGET := ../$(BASE)_Test
 
 CXX := g++
-CXXFLAGS := -std=c++11 -Wall -g -O0 --coverage -I../library/include/ -Iinclude/
+CXXFLAGS := -std=c++11 -Wall -g -O0 -fprofile-arcs -ftest-coverage -I../library/include/ -Iinclude/
 LDFLAGS := -L../ 
-LDLIBS := -lCrash2D -lgtest -lpthread -lgcov
+LDLIBS := -lCrash2D -lgtest -lpthread -lgcov --coverage
 
 SOURCES := $(shell find src/ -name "*.cpp")
 OBJECTS := $(addprefix build/,$(SOURCES:.cpp=.o))
