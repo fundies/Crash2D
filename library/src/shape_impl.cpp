@@ -91,6 +91,36 @@ const Vector2 ShapeImpl::CalcDisplacement(const AxesVec &axes, const Shape &a, c
 	return displacement;
 }
 
+void ShapeImpl::Transform(const Transformation &t)
+{
+	for (unsigned i = 0; i < GetPointCount(); ++i)
+	{
+		Vector2 pt = GetPoint(i);
+
+		// Scale
+		pt -= GetCenter();
+		pt *= t.GetScale();
+		pt += GetCenter();
+
+		// Rotate
+		const Precision_t radians = (t.GetRotation() * M_PI ) / 180;
+		const Precision_t s = std::sin(radians);
+		const Precision_t c = std::cos(radians);
+
+		Vector2 p = pt - t.GetPivot();
+
+		const Precision_t nx = (p.x * c) - (p.y * s);
+		const Precision_t ny = (p.x * s) + (p.y * c);
+
+		p = Vector2(nx, ny) + t.GetPivot();
+
+		// Translate
+		p += t.GetTranslation();
+
+		SetPoint(i, p);
+	}
+}
+
 void ShapeImpl::ReCalc()
 {
 }

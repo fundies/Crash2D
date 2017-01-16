@@ -248,6 +248,12 @@ public:
 	*/
 	virtual const Collision GetCollision(const Polygon &p) const override;
 
+	//! Applies a transformation to this shape..
+	/*!
+		\param t The transformation to be applied.
+	*/
+	virtual void Transform(const Transformation &t) override;
+
 protected:
 
 	Precision_t _radius; /*!< The radius of this circle. */

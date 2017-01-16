@@ -65,6 +65,12 @@ public:
 	*/
 	virtual const Vector2 CalcDisplacement(const AxesVec &axes, const Shape &a, const Shape &b) const;
 
+	//! Applies a transformation to this shape..
+	/*!
+		\param t The transformation to be applied.
+	*/
+	virtual void Transform(const Transformation &t) override;
+
 	//! Method required to be called after updating the geometry of a shape.
 	/*!
 	*/

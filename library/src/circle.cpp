@@ -338,3 +338,26 @@ const Collision Circle::GetCollision(const Polygon &p) const
 {
 	return -p.GetCollision(*this);
 }
+
+void Circle::Transform(const Transformation &t)
+{
+	// Scale
+	const Precision_t radius =  GetRadius() * t.GetScale();
+
+	// Rotate
+	const Precision_t s = std::sin(t.GetRotation());
+	const Precision_t c = std::cos(t.GetRotation());
+
+	Vector2 p = GetCenter() - t.GetPivot();
+
+	const Precision_t nx = (p.x * c) - (p.y * s);
+	const Precision_t ny = (p.x * s) + (p.y * c);
+
+	p = Vector2(nx, ny) + t.GetPivot();
+
+	// Translate
+	p += t.GetTranslation();
+
+	_center = p;
+	_radius = radius;
+}

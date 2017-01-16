@@ -345,3 +345,9 @@ void Segment::ReCalc()
 	const Vector2 edge = GetPoint(0) - GetPoint(1);
 	_axis = edge.Perpendicular().Normalize();
 }
+
+void Segment::Transform(const Transformation &t)
+{
+	ShapeImpl::Transform(t);
+	ReCalc();
+}

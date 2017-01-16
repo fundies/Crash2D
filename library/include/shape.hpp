@@ -2,6 +2,7 @@
 #define SHAPE_HPP
 
 #include "vector2.hpp"
+#include "transformation.hpp"
 
 class Projection;
 class Collision;
@@ -269,7 +270,12 @@ public:
 	*/
 	virtual const Projection Project(const Shape &s, const Axis &a) const = 0;
 
-	//virtual const Shape Transform(const Shape &s, const Transform &t) = 0;
+	//! Applies a transformation to this shape and returns a copy.
+	/*!
+		\param t The transformation to be applied.
+		\return This shape with the transformation applied.
+	*/
+	virtual void Transform(const Transformation &t) = 0;
 
 	//! Method required to be called after updating the geometry of a shape.
 	/*!

@@ -252,6 +252,12 @@ public:
 	*/
 	virtual const Collision GetCollision(const Polygon &p) const override;
 
+	//! Applies a transformation to this shape..
+	/*!
+		\param t The transformation to be applied.
+	*/
+	virtual void Transform(const Transformation &t) override;
+
 	//! Method required to be called after updating the geometry of a shape.
 	/*!
 	*/

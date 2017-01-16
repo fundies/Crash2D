@@ -84,9 +84,7 @@ void Polygon::ReCalc()
 		}
 	}
 
-	// FIXME: HAX FiX this //
-	if (_center == Vector2(0, 0))
-		_center = Vector2(x / GetPointCount(), y / GetPointCount());
+	_center = Vector2(x / GetPointCount(), y / GetPointCount());
 }
 
 const Projection Polygon::Project(const Axis &a) const
@@ -474,4 +472,10 @@ const Collision Polygon::GetCollision(const Polygon &p) const
 	}
 
 	return Collision(doesOverlap, intersects, contains, contained, displacement);
+}
+
+void Polygon::Transform(const Transformation &t)
+{
+	ShapeImpl::Transform(t);
+	ReCalc();
 }
