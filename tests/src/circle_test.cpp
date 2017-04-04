@@ -1,5 +1,4 @@
-#include "helper_func.hpp"
-
+#include "helper.hpp"
 
 TEST(Circle, DefaultConstructor)
 {
@@ -151,11 +150,11 @@ TEST(Circle, IsInsidePolygon)
 TEST(Circle, OverlapsSegment)
 {
 	Circle c(Vector2(0, 0), 50);
-	Segment s(Vector2(50, 0), Vector2(100, 0));
+	Segment s(Vector2(49, 0), Vector2(100, 0));
 
 	EXPECT_TRUE(c.Overlaps(s));
 
-	s.SetPoint(0, Vector2(51, 0));
+	s.SetPoint(0, Vector2(50, 0));
 
 	EXPECT_FALSE(c.Overlaps(s));
 }
@@ -176,14 +175,14 @@ TEST(Circle, OverlapsPolygon)
 
 	Polygon p;
 	p.SetPointCount(3);
-	p.SetPoint(0, Vector2(50, 0));
+	p.SetPoint(0, Vector2(49, 0));
 	p.SetPoint(1, Vector2(100, -50));
 	p.SetPoint(2, Vector2(100, 50));
 	p.ReCalc();
 
 	EXPECT_TRUE(c.Overlaps(p));
 
-	p.SetPoint(0, Vector2(51, 0));
+	p.SetPoint(0, Vector2(50, 0));
 	p.ReCalc();
 
 	EXPECT_FALSE(c.Overlaps(p));
@@ -289,12 +288,12 @@ TEST(Circle, GetDisplacementSegment)
 
 	Segment s1(Vector2(0, 0), Vector2(0, 50));
 	auto d = c.GetDisplacement(s1);
-	ARE_EQ(51, d.Length());
+	ARE_EQ(50, d.Length());
 	EXPECT_FALSE(c.Overlaps(mSegment(s1, d)));
 
 	Segment s2(Vector2(25, 0), Vector2(25, 50));
 	d = c.GetDisplacement(s2);
-	ARE_EQ(26, d.Length());
+	ARE_EQ(25, d.Length());
 	EXPECT_FALSE(c.Overlaps(mSegment(s2, d)));
 
 	Segment s3(Vector2(51, 0), Vector2(51, 50));
@@ -333,7 +332,7 @@ TEST(Circle, GetDisplacementPolygon)
 	p1.ReCalc();
 
 	auto d = c.GetDisplacement(p1);
-	ARE_EQ(51, d.Length());
+	ARE_EQ(50, d.Length());
 	EXPECT_FALSE(c.Overlaps(mPolygon(p1, d)));
 
 	Polygon p2;
@@ -344,7 +343,7 @@ TEST(Circle, GetDisplacementPolygon)
 	p2.ReCalc();
 
 	d = c.GetDisplacement(p2);
-	ARE_EQ(26, d.Length());
+	ARE_EQ(25, d.Length());
 	EXPECT_FALSE(c.Overlaps(mPolygon(p2, d)));
 
 	Polygon p3;

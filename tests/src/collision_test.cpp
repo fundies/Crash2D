@@ -1,4 +1,4 @@
-#include "helper_func.hpp"
+#include "helper.hpp"
 
 TEST(Collision, DefaultConstructor)
 {

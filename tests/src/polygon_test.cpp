@@ -1,6 +1,4 @@
-#include "helper_func.hpp"
-
-#include <cmath>
+#include "helper.hpp"
 
 TEST(Polygon, DefaultConstructor)
 {
@@ -222,11 +220,11 @@ TEST(Polygon, OverlapsSegment)
 	p.SetPoint(2, Vector2(25, 50));
 	p.ReCalc();
 
-	Segment s(Vector2(50, 0), Vector2(100, 0));
+	Segment s(Vector2(49, 1), Vector2(100, 1));
 
 	EXPECT_TRUE(p.Overlaps(s));
 
-	s.SetPoint(0, Vector2(51, 0));
+	s.SetPoint(0, Vector2(50, 0));
 	s.ReCalc();
 
 	EXPECT_FALSE(p.Overlaps(s));
@@ -241,7 +239,7 @@ TEST(Polygon, OverlapsCircle)
 	p.SetPoint(2, Vector2(100, 50));
 	p.ReCalc();
 
-	Circle c(Vector2(0, 0), 50);
+	Circle c(Vector2(0, 0), 51);
 
 	EXPECT_TRUE(p.Overlaps(c));
 
@@ -406,12 +404,12 @@ TEST(Polygon, GetDisplacementSegment)
 
 	Segment s1(Vector2(0, 0), Vector2(0, 50));
 	auto d = p.GetDisplacement(s1);
-	ARE_EQ(51, d.Length());
+	ARE_EQ(50, d.Length());
 	EXPECT_FALSE(p.Overlaps(mSegment(s1, d)));
 
 	Segment s2(Vector2(25, 0), Vector2(25, 50));
 	d = p.GetDisplacement(s2);
-	ARE_EQ(26, d.Length());
+	ARE_EQ(25, d.Length());
 	EXPECT_FALSE(p.Overlaps(mSegment(s2, d)));
 
 	Segment s3(Vector2(51, 0), Vector2(51, 50));
@@ -431,15 +429,15 @@ TEST(Polygon, GetDisplacementCircle)
 
 	Circle c2(Vector2(0, 0), 50);
 	auto d = p.GetDisplacement(c2);
-	ARE_EQ(101, d.Length());
+	ARE_EQ(100, d.Length());
 	EXPECT_FALSE(p.Overlaps(mCircle(c2, d)));
 
 	Circle c3(Vector2(25, 0), 50);
 	d = p.GetDisplacement(c3);
-	ARE_EQ(76, d.Length());
+	ARE_EQ(75, d.Length());
 	EXPECT_FALSE(p.Overlaps(mCircle(c3, d)));
 
-	Circle c4(Vector2(101, 0), 50);
+	Circle c4(Vector2(100, 0), 50);
 	d = p.GetDisplacement(c4);
 	ARE_EQ(0, d.Length());
 }
@@ -463,7 +461,7 @@ TEST(Polygon, GetDisplacementPolygon)
 	b.ReCalc();
 
 	auto d = a.GetDisplacement(b);
-	ARE_EQ(76, d.Length());
+	ARE_EQ(75, d.Length());
 	EXPECT_FALSE(a.Overlaps(mPolygon(b, d)));
 
 	Polygon c;
@@ -489,7 +487,7 @@ TEST(Polygon, GetGollisionSegment)
 	p.SetPoint(2, Vector2(0, 50));
 	p.ReCalc();
 
-	Segment s(Vector2(-50, 0), Vector2(50, 0));
+	Segment s(Vector2(-49, 1), Vector2(50, 0));
 
 	Collision col = p.GetCollision(s);
 	ARE_EQ(p.Overlaps(s), col.Overlaps());
@@ -711,7 +709,7 @@ TEST(Polygon, GetDisplacementShape)
 
 	EXPECT_EQ(dP, dO);
 
-	ARE_EQ(76, dP.Length());
+	ARE_EQ(75, dP.Length());
 }
 
 TEST(Polygon, GetGollisionShape)

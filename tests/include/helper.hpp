@@ -1,5 +1,5 @@
-#ifndef HELPER_FUNC_HPP
-#define HELPER_FUNC_HPP
+#ifndef HELPER_HPP
+#define HELPER_HPP
 
 #include "circle.hpp"
 #include "polygon.hpp"
@@ -10,6 +10,7 @@
 
 #include <gtest/gtest.h>
 #include <memory>
+#include <cmath>
 
 using ShapePtr = std::unique_ptr<Shape>;
 const double ULP = 0.0001;

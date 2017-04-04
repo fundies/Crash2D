@@ -1,6 +1,5 @@
-#include "helper_func.hpp"
-
-#include <cmath>
+#include "helper.hpp"
+#include "vector2.hpp"
 
 TEST(Vector2, DefaultConstructor)
 {

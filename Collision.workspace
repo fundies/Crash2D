@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Workspace Name="Collision" Database="">
+<CodeLite_Workspace Name="Collision" Database="" Version="10.0.0">
   <Project Name="library" Path="library/library.project" Active="No"/>
-  <Project Name="tests" Path="tests/tests.project" Active="No"/>
-  <Project Name="demo" Path="demo/demo.project" Active="Yes"/>
+  <Project Name="tests" Path="tests/tests.project" Active="Yes"/>
+  <Project Name="demo" Path="demo/demo.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>
