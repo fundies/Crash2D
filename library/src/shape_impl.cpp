@@ -80,11 +80,11 @@ const Vector2 ShapeImpl::CalcDisplacement(const AxesVec &axes, const Shape &a, c
 
 	}
 
-	if (Overlap > 0)
+	/*if (Overlap > 0)
 		Overlap++;
 
 	else
-		Overlap--;
+		Overlap--;*/
 
 	displacement = smallest * Overlap;
 

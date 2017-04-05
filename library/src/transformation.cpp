@@ -76,3 +76,8 @@ void Transformation::Translate(const Vector2 &t)
 {
 	_translation += t;
 }
+
+const Transformation Transformation::operator - (void) const
+{
+	return Transformation(-_scale, -_rotation, -_translation);
+}

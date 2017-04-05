@@ -86,6 +86,11 @@ public:
 		\param t The value to apply to the translation of the transformation.
 	*/
 	void Translate(const Vector2 &t);
+	
+	//! Negate Operator override,
+	/*!
+	*/
+	const Transformation operator - (void) const;
 
 
 protected:

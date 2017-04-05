@@ -30,8 +30,6 @@
     <File Name="src/collision_test.cpp"/>
     <File Name="src/transformation_test.cpp"/>
   </VirtualDirectory>
-  <Dependencies Name="Debug"/>
-  <Dependencies Name="Release"/>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -123,4 +121,6 @@
   <VirtualDirectory Name="include">
     <File Name="include/helper_func.hpp"/>
   </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
 </CodeLite_Project>
