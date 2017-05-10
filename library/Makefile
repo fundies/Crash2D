@@ -3,7 +3,7 @@ OS := $(shell uname -s)
 TARGET := ../lib$(BASE).a
 
 CXX := g++
-CXXFLAGS += -std=c++11 -Wall -02 -Iinclude/
+CXXFLAGS += -std=c++11 -Wall -O2 -Iinclude/
 LDFLAGS += -static 
 
 SOURCES := $(shell find src/ -name "*.cpp")
