@@ -1,3 +1,6 @@
+#ifndef DRAWABLES_HPP
+#define DRAWABLES_HPP
+
 #include "segment.hpp"
 #include "circle.hpp"
 #include "polygon.hpp"
@@ -54,3 +57,5 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 };
+
+#endif // DRAWABLES_HPP
