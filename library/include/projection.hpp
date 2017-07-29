@@ -1,7 +1,8 @@
-#ifndef PROJECTION_HPP
-#define PROJECTION_HPP
+#ifndef CRASH2D_PROJECTION_HPP
+#define CRASH2D_PROJECTION_HPP
 
-#include "vector2.hpp"
+#include <Crash2D/vector2.hpp>
+
 namespace Crash2D
 {
 //!  A class representing a two-dimensional projection. */

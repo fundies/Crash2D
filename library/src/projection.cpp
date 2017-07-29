@@ -1,6 +1,4 @@
-#include "projection.hpp"
-
-#include <iostream>
+#include <Crash2D/projection.hpp>
 
 namespace Crash2D
 {

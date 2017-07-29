@@ -1,4 +1,4 @@
-#include "vector2.hpp"
+#include <Crash2D/vector2.hpp>
 
 #include <cmath>
 #include <iostream>

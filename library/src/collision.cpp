@@ -1,5 +1,5 @@
-#include "collision.hpp"
-#include "vector2.hpp"
+#include <Crash2D/collision.hpp>
+#include <Crash2D/vector2.hpp>
 
 namespace Crash2D
 {

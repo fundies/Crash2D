@@ -1,5 +1,5 @@
-#ifndef VECTOR2_HPP
-#define VECTOR2_HPP
+#ifndef CRASH2D_VECTOR2_HPP
+#define CRASH2D_VECTOR2_HPP
 
 #include <vector>
 

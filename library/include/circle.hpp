@@ -1,7 +1,7 @@
-#ifndef CIRCLE_HPP
-#define CIRCLE_HPP
+#ifndef CRASH2D_CIRCLE_HPP
+#define CRASH2D_CIRCLE_HPP
 
-#include "shape_impl.hpp"
+#include <Crash2D/shape_impl.hpp>
 
 namespace Crash2D
 {

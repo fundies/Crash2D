@@ -1,9 +1,10 @@
-#ifndef COLLISION_HPP
-#define COLLISION_HPP
+#ifndef CRASH2D_COLLISION_HPP
+#define CRASH2D_COLLISION_HPP
 
-#include "vector2.hpp"
+#include <Crash2D/vector2.hpp>
 
 #include <algorithm>
+
 namespace Crash2D
 {
 //!  A class representing a collision between two shapes. */

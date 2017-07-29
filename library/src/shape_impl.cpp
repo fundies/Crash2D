@@ -1,9 +1,9 @@
-#include "shape_impl.hpp"
-#include "projection.hpp"
-#include "collision.hpp"
-#include "segment.hpp"
-#include "circle.hpp"
-#include "polygon.hpp"
+#include <Crash2D/shape_impl.hpp>
+#include <Crash2D/projection.hpp>
+#include <Crash2D/collision.hpp>
+#include <Crash2D/segment.hpp>
+#include <Crash2D/circle.hpp>
+#include <Crash2D/polygon.hpp>
 
 #include <cmath>
 #include <limits>

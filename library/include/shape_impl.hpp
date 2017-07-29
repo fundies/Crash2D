@@ -1,7 +1,7 @@
-#ifndef SHAPE_IMPL_HPP
-#define SHAPE_IMPL_HPP
+#ifndef CRASH2D_SHAPE_IMPL_HPP
+#define CRASH2D_SHAPE_IMPL_HPP
 
-#include "shape.hpp"
+#include <Crash2D/shape.hpp>
 
 namespace Crash2D
 {

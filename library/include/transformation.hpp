@@ -1,7 +1,7 @@
-#ifndef TRANSFORMATION_HPP
-#define TRANSFORMATION_HPP
+#ifndef CRASH2D_TRANSFORMATION_HPP
+#define CRASH2D_TRANSFORMATION_HPP
 
-#include "vector2.hpp"
+#include <Crash2D/vector2.hpp>
 
 namespace Crash2D
 {

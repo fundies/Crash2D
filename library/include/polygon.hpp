@@ -1,7 +1,8 @@
-#ifndef POLYGON_HPP
-#define POLYGON_HPP
+#ifndef CRASH2D_POLYGON_HPP
+#define CRASH2D_POLYGON_HPP
 
-#include "shape_impl.hpp"
+#include <Crash2D/shape_impl.hpp>
+
 namespace Crash2D
 {
 //!  A class representing an n-sided polygon shape. */
