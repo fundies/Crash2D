@@ -7,6 +7,8 @@
 #include <limits>
 #include <algorithm>
 
+namespace Crash2D
+{
 Polygon::Polygon() : ShapeImpl(), _side(0)
 {
 }
@@ -478,4 +480,5 @@ void Polygon::Transform(const Transformation &t)
 {
 	ShapeImpl::Transform(t);
 	ReCalc();
+}
 }

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+namespace Crash2D
+{
 Projection::Projection() : min(0), max(0)
 {
 }
@@ -24,4 +26,5 @@ const Precision_t Projection::GetOverlap(const Projection &p) const
 		sign = 1;
 
 	return sign * std::min(max - p.min, p.max - min);
+}
 }

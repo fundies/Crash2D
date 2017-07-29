@@ -4,6 +4,9 @@
 #include "vector2.hpp"
 #include "transformation.hpp"
 
+namespace Crash2D
+{
+
 class Projection;
 class Collision;
 class Circle;
@@ -283,5 +286,6 @@ public:
 	virtual void ReCalc() = 0;
 
 };
+}
 
 #endif

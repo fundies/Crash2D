@@ -2,7 +2,8 @@
 #define POLYGON_HPP
 
 #include "shape_impl.hpp"
-
+namespace Crash2D
+{
 //!  A class representing an n-sided polygon shape. */
 class Polygon : public ShapeImpl
 {
@@ -276,5 +277,6 @@ protected:
 	AxesVec _axes; /*!< The axes of this polygon. */
 	std::vector<Segment> _side; /*!< The sides of this polygon. */
 };
+}
 
 #endif

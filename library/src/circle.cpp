@@ -7,6 +7,8 @@
 #include <cmath>
 #include <algorithm>
 
+namespace Crash2D
+{
 Circle::Circle() : ShapeImpl(Vector2(0, 0)), _radius(0)
 {
 }
@@ -360,4 +362,5 @@ void Circle::Transform(const Transformation &t)
 
 	_center = p;
 	_radius = radius;
+}
 }

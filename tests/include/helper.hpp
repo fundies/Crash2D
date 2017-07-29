@@ -12,6 +12,8 @@
 #include <memory>
 #include <cmath>
 
+using namespace Crash2D;
+
 using ShapePtr = std::unique_ptr<Shape>;
 const double ULP = 0.0001;
 

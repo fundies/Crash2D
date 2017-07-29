@@ -1,6 +1,8 @@
 #include "collision.hpp"
 #include "vector2.hpp"
 
+namespace Crash2D
+{
 Collision::Collision() :
 	_doesOverlap(0), _intersects(std::vector<Vector2>(0)), _aContainsb(0), _bContainsa(0), _displacement(Vector2(0, 0))
 {
@@ -39,4 +41,5 @@ const Vector2& Collision::GetDisplacement() const
 const Collision Collision::operator - (void) const
 {
 	return Collision(_doesOverlap, _intersects, _bContainsa, _aContainsb, -_displacement);
+}
 }

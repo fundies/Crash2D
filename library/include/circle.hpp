@@ -3,6 +3,9 @@
 
 #include "shape_impl.hpp"
 
+namespace Crash2D
+{
+
 //!  A class representing a circle shape. */
 class Circle : public ShapeImpl
 {
@@ -258,5 +261,5 @@ protected:
 
 	Precision_t _radius; /*!< The radius of this circle. */
 };
-
+}
 #endif

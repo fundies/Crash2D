@@ -3,6 +3,8 @@
 
 #include "vector2.hpp"
 
+namespace Crash2D
+{
 //!  A class representing a 2D Transformation */
 class Transformation
 {
@@ -86,7 +88,7 @@ public:
 		\param t The value to apply to the translation of the transformation.
 	*/
 	void Translate(const Vector2 &t);
-	
+
 	//! Negate Operator override,
 	/*!
 	*/
@@ -99,6 +101,6 @@ protected:
 	Vector2 _translation; /*!< The translation of the transformation. */
 	Vector2 _pivot; /*!< The pivot point used for rotation of the transformation. */
 };
+}
 
 #endif
-

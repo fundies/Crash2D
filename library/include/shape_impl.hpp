@@ -3,6 +3,8 @@
 
 #include "shape.hpp"
 
+namespace Crash2D
+{
 class ShapeImpl : virtual public Shape
 {
 public:
@@ -81,5 +83,6 @@ protected:
 	std::vector<Vector2> _points; /*!< The points this shape is composed of. */
 	Vector2 _center; /*!< The center of this shape. */
 };
+}
 
 #endif

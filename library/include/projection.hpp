@@ -2,7 +2,8 @@
 #define PROJECTION_HPP
 
 #include "vector2.hpp"
-
+namespace Crash2D
+{
 //!  A class representing a two-dimensional projection. */
 class Projection// : public Vector2
 {
@@ -35,5 +36,6 @@ public:
 	Precision_t max; /*!< The projection maximum */
 
 };
+}
 
 #endif

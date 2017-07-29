@@ -12,6 +12,8 @@
 #define M_PI 3.14159265359
 #endif
 
+namespace Crash2D
+{
 ShapeImpl::ShapeImpl()
 {
 }
@@ -123,4 +125,5 @@ void ShapeImpl::Transform(const Transformation &t)
 
 void ShapeImpl::ReCalc()
 {
+}
 }

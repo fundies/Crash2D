@@ -4,7 +4,8 @@
 #include "vector2.hpp"
 
 #include <algorithm>
-
+namespace Crash2D
+{
 //!  A class representing a collision between two shapes. */
 class Collision
 {
@@ -67,5 +68,6 @@ private:
 	Vector2 _displacement; /*!< The minimum displacement vector of this collision. */
 
 };
+}
 
 #endif

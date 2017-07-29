@@ -19,27 +19,27 @@ class MTVDemo : public Demo {
 
 public:
 	MTVDemo(sf::RenderWindow &window) : Demo(window), vecA(3), vecB(3) {
-		vecA[0] = Shape_ptr(new circle(Vector2(300, 400), 150));
+		vecA[0] = Shape_ptr(new circle(Crash2D::Vector2(300, 400), 150));
 		vecA[1] = Shape_ptr(new polygon());
 		vecA[1]->SetPointCount(4);
-		vecA[1]->SetPoint(0, Vector2(250, 250));
-		vecA[1]->SetPoint(1, Vector2(350, 250));
-		vecA[1]->SetPoint(2, Vector2(350, 350));
-		vecA[1]->SetPoint(3, Vector2(250, 350));
+		vecA[1]->SetPoint(0, Crash2D::Vector2(250, 250));
+		vecA[1]->SetPoint(1, Crash2D::Vector2(350, 250));
+		vecA[1]->SetPoint(2, Crash2D::Vector2(350, 350));
+		vecA[1]->SetPoint(3, Crash2D::Vector2(250, 350));
 		vecA[1]->ReCalc();
 
-		vecA[2] = Shape_ptr(new segment(Vector2(400, 300), Vector2(500, 300)));
+		vecA[2] = Shape_ptr(new segment(Crash2D::Vector2(400, 300), Crash2D::Vector2(500, 300)));
 
-		vecB[0] = Shape_ptr(new circle(Vector2(400, 300), 50));
+		vecB[0] = Shape_ptr(new circle(Crash2D::Vector2(400, 300), 50));
 
 		vecB[1] = Shape_ptr(new polygon());
 		vecB[1]->SetPointCount(3);
-		vecB[1]->SetPoint(0, Vector2(350, 300));
-		vecB[1]->SetPoint(1, Vector2(400, 300));
-		vecB[1]->SetPoint(2, Vector2(325, 350));
+		vecB[1]->SetPoint(0, Crash2D::Vector2(350, 300));
+		vecB[1]->SetPoint(1, Crash2D::Vector2(400, 300));
+		vecB[1]->SetPoint(2, Crash2D::Vector2(325, 350));
 		vecB[1]->ReCalc();
 
-		vecB[2] = Shape_ptr(new segment(Vector2(450, 250), Vector2(450, 350)));
+		vecB[2] = Shape_ptr(new segment(Crash2D::Vector2(450, 250), Crash2D::Vector2(450, 350)));
 
 		vecA[ShapeA]->SetColor(sf::Color::Green);
 		vecB[ShapeB]->SetColor(sf::Color::Red);
@@ -59,15 +59,15 @@ public:
 		// Rot
 		int rot = sf::Keyboard::isKeyPressed(sf::Keyboard::X) - sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
 
-		Transformation t;
-		t.Translate(Vector2(hdir * 4, vdir * 4));
+		Crash2D::Transformation t;
+		t.Translate(Crash2D::Vector2(hdir * 4, vdir * 4));
 		t.SetPivot(vecB[ShapeB]->GetCenter());
 		t.Rotate(rot);
 		t.Scale(scl * 0.1);
 
 		vecB[ShapeB]->Transform(t);
 
-		Collision collision = vecA[ShapeA]->GetCollision(*vecB[ShapeB]);
+		Crash2D::Collision collision = vecA[ShapeA]->GetCollision(*vecB[ShapeB]);
 
 		if (vecA[ShapeA]->Contains(*vecB[ShapeB]))
 		{
@@ -92,7 +92,7 @@ public:
 
 		if (collision.Overlaps() || collision.AcontainsB())
 		{
-			Transformation t;
+			Crash2D::Transformation t;
 
 			t.Translate(collision.GetDisplacement());
 			vecB[ShapeB]->Transform(t);

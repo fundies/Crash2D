@@ -3,6 +3,8 @@
 
 #include <vector>
 
+namespace Crash2D
+{
 using Precision_t = double;
 const Precision_t EPS = 1e-12;
 
@@ -184,5 +186,6 @@ public:
 
 using Axis = Vector2; /**< An alias representing the axis of a line. */
 using AxesVec = std::vector<Axis>; /**< An alias representing a structure that can hold a shape's axes. */
+}
 
 #endif

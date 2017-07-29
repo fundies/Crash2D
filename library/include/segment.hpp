@@ -3,6 +3,8 @@
 
 #include "shape_impl.hpp"
 
+namespace Crash2D
+{
 //!  A class representing a segment shape. */
 class Segment : public ShapeImpl
 {
@@ -322,5 +324,6 @@ protected:
 	Precision_t _length; /*!< The length of this segment. */
 	Axis _axis; /*!< The axis of this circle. */
 };
+}
 
 #endif // LINE_HPP

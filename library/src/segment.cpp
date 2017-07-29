@@ -7,6 +7,8 @@
 #include <limits>
 #include <cmath>
 
+namespace Crash2D
+{
 Segment::Segment() : ShapeImpl(), _slope(0), _length(0), _axis(Vector2())
 {
 	SetPointCount(2);
@@ -350,4 +352,5 @@ void Segment::Transform(const Transformation &t)
 {
 	ShapeImpl::Transform(t);
 	ReCalc();
+}
 }

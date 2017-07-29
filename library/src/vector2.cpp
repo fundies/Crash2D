@@ -3,6 +3,8 @@
 #include <cmath>
 #include <iostream>
 
+namespace Crash2D
+{
 const Vector2 Vector2::Perpendicular() const
 {
 	return Vector2(y, -x);
@@ -43,4 +45,5 @@ bool AreEqual(Precision_t a, Precision_t b)
 {
 	//change 0.1 to real precision
 	return (a == b || std::fabs(a - b) <= 0.1);
+}
 }

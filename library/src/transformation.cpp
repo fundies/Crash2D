@@ -2,6 +2,8 @@
 
 #include <cmath> //std::fmod
 
+namespace Crash2D
+{
 Transformation::Transformation()
 	: _scale(1), _rotation(0), _translation(Vector2(0, 0))
 {
@@ -80,4 +82,5 @@ void Transformation::Translate(const Vector2 &t)
 const Transformation Transformation::operator - (void) const
 {
 	return Transformation(-_scale, -_rotation, -_translation);
+}
 }
