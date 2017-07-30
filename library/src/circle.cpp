@@ -344,7 +344,7 @@ const Collision Circle::GetCollision(const Polygon &p) const
 void Circle::Transform(const Transformation &t)
 {
 	// Scale
-	const Precision_t radius =  GetRadius() * t.GetScale();
+	const Precision_t radius =  GetRadius() * t.GetScale().x;
 
 	// Rotate
 	const Precision_t s = std::sin(t.GetRotation());

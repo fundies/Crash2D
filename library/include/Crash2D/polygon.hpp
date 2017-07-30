@@ -15,6 +15,11 @@ public:
 		\sa Shape
 	*/
 	Polygon();
+	
+	//! Destructor.
+	/*!
+	*/
+	virtual ~Polygon() = default;
 
 	//! Gets the axes of this polygon's sides.
 	/*!

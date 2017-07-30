@@ -63,7 +63,11 @@ public:
 		t.Translate(Crash2D::Vector2(hdir * 4, vdir * 4));
 		t.SetPivot(vecB[ShapeB]->GetCenter());
 		t.Rotate(rot);
-		t.Scale(scl * 0.1);
+		
+		if (scl == 1)
+			t.SetScale(Crash2D::Vector2(1.1, 1.1));
+		else if (scl == -1)
+			t.SetScale(Crash2D::Vector2(0.9, 0.9));
 
 		vecB[ShapeB]->Transform(t);
 

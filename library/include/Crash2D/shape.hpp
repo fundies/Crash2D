@@ -17,6 +17,12 @@ class Segment;
 class Shape
 {
 public:
+	
+	//! Destructor.
+	/*!
+	*/
+	virtual ~Shape() = default;
+	
 	//! Gets the center of this shape.
 	/*!
 		\return The center of this shape.

@@ -15,6 +15,11 @@ public:
 		\sa Shape
 	*/
 	Segment();
+	
+	//! Destructor.
+	/*!
+	*/
+	virtual ~Segment() = default;
 
 	//! Constructs a segment between the two points.
 	/*!

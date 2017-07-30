@@ -5,26 +5,26 @@
 namespace Crash2D
 {
 Transformation::Transformation()
-	: _scale(1), _rotation(0), _translation(Vector2(0, 0))
+	: _scale(Vector2(1,1)), _rotation(0), _translation(Vector2(0, 0))
 {
 }
 
-Transformation::Transformation(const Precision_t &s, const Precision_t &r, const Vector2 &t)
+Transformation::Transformation(const Vector2 &s, const Precision_t &r, const Vector2 &t)
 	: _scale(s), _rotation(r), _translation(t)
 {
 }
 
-const Precision_t& Transformation::GetScale() const
+const Vector2& Transformation::GetScale() const
 {
 	return _scale;
 }
 
-void Transformation::SetScale(const Precision_t &s)
+void Transformation::SetScale(const Vector2 &s)
 {
 	_scale = s;
 }
 
-void Transformation::Scale(const Precision_t &s)
+void Transformation::Scale(const Vector2 &s)
 {
 	_scale += s;
 }

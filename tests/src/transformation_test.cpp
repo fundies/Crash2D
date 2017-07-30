@@ -4,7 +4,8 @@ TEST(Transformation, DefaultConstructor)
 {
 	Transformation t;
 
-	ARE_EQ(1, t.GetScale());
+	ARE_EQ(1, t.GetScale().x);
+	ARE_EQ(1, t.GetScale().y);
 	ARE_EQ(0, t.GetRotation());
 
 	ARE_EQ(0, t.GetTranslation().x);
@@ -13,9 +14,10 @@ TEST(Transformation, DefaultConstructor)
 
 TEST(Transformation, ConstructFromValues)
 {
-	Transformation t(2, 45, Vector2(8, 3));
+	Transformation t(Vector2(2,2), 45, Vector2(8, 3));
 
-	ARE_EQ(2, t.GetScale());
+	ARE_EQ(2, t.GetScale().x);
+	ARE_EQ(2, t.GetScale().y);
 	ARE_EQ(45, t.GetRotation());
 
 	ARE_EQ(8, t.GetTranslation().x);
@@ -25,17 +27,19 @@ TEST(Transformation, ConstructFromValues)
 TEST(Transformation, SetScale)
 {
 	Transformation t;
-	t.SetScale(5);
+	t.SetScale(Vector2(5, 5));
 
-	ARE_EQ(5, t.GetScale());
+	ARE_EQ(5, t.GetScale().x);
+	ARE_EQ(5, t.GetScale().y);
 }
 
 TEST(Transformation, Scale)
 {
 	Transformation t;
-	t.Scale(4);
+	t.Scale(Vector2(4,4));
 
-	ARE_EQ(5, t.GetScale());
+	ARE_EQ(4, t.GetScale().x);
+	ARE_EQ(4, t.GetScale().y);
 }
 
 TEST(Transformation, SetRotation)

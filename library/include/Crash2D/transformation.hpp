@@ -21,25 +21,25 @@ public:
 		\param r The tranformation's rotation.
 		\param t The tranformation's translation.
 	*/
-	Transformation(const Precision_t &s, const Precision_t &r, const Vector2 &t);
+	Transformation(const Vector2 &s, const Precision_t &r, const Vector2 &t);
 
 	//! Gets the scale of this transformation.
 	/*!
 		\return The scale of this transformation.
 	*/
-	const Precision_t& GetScale() const;
+	const Vector2& GetScale() const;
 
 	//! Sets the scale of this transformation.
 	/*!
 		\param s The new scale of the transformation.
 	*/
-	void SetScale(const Precision_t &s);
+	void SetScale(const Vector2 &s);
 
 	//! Applies a value to the current scale of this transformation.
 	/*!
 		\param s The value to apply to the scale of the transformation.
 	*/
-	void Scale(const Precision_t &s);
+	void Scale(const Vector2 &s);
 
 	//! Gets the pivot point used for rotation.
 	/*!
@@ -96,7 +96,7 @@ public:
 
 
 protected:
-	Precision_t _scale; /*!< The scale of the transformation. */
+	Vector2 _scale; /*!< The scale of the transformation. */
 	Precision_t _rotation; /*!< The rotation of the transformation. */
 	Vector2 _translation; /*!< The translation of the transformation. */
 	Vector2 _pivot; /*!< The pivot point used for rotation of the transformation. */

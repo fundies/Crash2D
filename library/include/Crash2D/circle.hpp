@@ -14,6 +14,11 @@ public:
 	/*!
 	*/
 	Circle();
+	
+	//! Destructor.
+	/*!
+	*/
+	virtual ~Circle() = default;
 
 	//! Constructs a circle with the given radius.
 	/*!
