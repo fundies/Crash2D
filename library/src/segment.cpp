@@ -353,4 +353,10 @@ void Segment::Transform(const Transformation &t)
 	ShapeImpl::Transform(t);
 	ReCalc();
 }
+
+Shape* Segment::Clone()
+{
+	return new Segment(*this);
+}
+
 }

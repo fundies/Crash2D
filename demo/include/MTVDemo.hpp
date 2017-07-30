@@ -4,7 +4,7 @@
 #include "Demo.hpp"
 #include "drawables.hpp"
 
-#include "collision.hpp"
+#include <Crash2D/collision.hpp>
 
 #include <memory>
 

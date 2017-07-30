@@ -5,8 +5,8 @@
 #include "drawables.hpp"
 #include "mathutility.hpp"
 
-#include "collision.hpp"
-#include "SparseSpatialBroadphase.hpp"
+#include <Crash2D/collision.hpp>
+#include <Crash2D/SparseSpatialBroadphase.hpp>
 
 #include <vector>
 

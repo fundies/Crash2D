@@ -257,6 +257,11 @@ public:
 	*/
 	virtual void Transform(const Transformation &t) override;
 
+	//! Clone Method.
+	/*!
+	*/
+	virtual Shape* Clone() override;
+
 protected:
 
 	Precision_t _radius; /*!< The radius of this circle. */

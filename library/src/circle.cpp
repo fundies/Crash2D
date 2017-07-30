@@ -363,4 +363,10 @@ void Circle::Transform(const Transformation &t)
 	_center = p;
 	_radius = radius;
 }
+
+Shape* Circle::Clone()
+{
+	return new Circle(*this);
+}
+
 }

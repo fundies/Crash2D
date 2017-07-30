@@ -318,6 +318,11 @@ public:
 	*/
 	virtual void ReCalc() override;
 
+	//! Clone Method.
+	/*!
+	*/
+	virtual Shape* Clone() override;
+
 protected:
 
 	Precision_t _slope; /*!< The slope of this segment, that is, its rise over run. */

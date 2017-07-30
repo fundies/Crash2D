@@ -481,4 +481,10 @@ void Polygon::Transform(const Transformation &t)
 	ShapeImpl::Transform(t);
 	ReCalc();
 }
+
+Shape* Polygon::Clone()
+{
+	return new Polygon(*this);
+}
+
 }

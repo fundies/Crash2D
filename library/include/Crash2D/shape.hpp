@@ -285,6 +285,11 @@ public:
 	*/
 	virtual void ReCalc() = 0;
 
+	//! Clone Method.
+	/*!
+	*/
+	virtual Shape* Clone() = 0;
+
 };
 }
 

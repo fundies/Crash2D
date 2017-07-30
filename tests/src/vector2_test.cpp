@@ -1,5 +1,4 @@
 #include "helper.hpp"
-#include "vector2.hpp"
 
 TEST(Vector2, DefaultConstructor)
 {

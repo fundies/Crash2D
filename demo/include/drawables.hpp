@@ -1,9 +1,9 @@
 #ifndef DRAWABLES_HPP
 #define DRAWABLES_HPP
 
-#include "segment.hpp"
-#include "circle.hpp"
-#include "polygon.hpp"
+#include <Crash2D/segment.hpp>
+#include <Crash2D/circle.hpp>
+#include <Crash2D/polygon.hpp>
 
 #include <SFML/Graphics.hpp>
 

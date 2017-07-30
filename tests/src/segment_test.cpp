@@ -1,5 +1,4 @@
 #include "helper.hpp"
-#include "segment.hpp"
 
 TEST(Segment, DefaultConstructor)
 {

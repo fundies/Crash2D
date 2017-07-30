@@ -265,6 +265,11 @@ public:
 	*/
 	virtual void ReCalc() override;
 
+	//! Clone Method.
+	/*!
+	*/
+	virtual Shape* Clone() override;
+
 protected:
 	//! Checks if triangle "abc" contains the point "p".
 	/*!
