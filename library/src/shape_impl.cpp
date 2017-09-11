@@ -54,6 +54,39 @@ const std::vector<Vector2>& ShapeImpl::GetPoints() const
 	return _points;
 }
 
+const Precision_t ShapeImpl::GetOverlap(const AxesVec &axes, const Shape &a, const Shape &b) const
+{
+	Vector2 displacement;
+	Precision_t Overlap = std::numeric_limits<Precision_t>::infinity();
+	Axis smallest;
+
+	for (auto && axis : axes)
+	{
+		const Projection pA = b.Project(axis);
+		const Projection pB = a.Project(axis);
+
+		// No Collision
+		if (!pA.IsOverlap(pB))
+			return 0;
+
+		else
+		{
+			const Precision_t o = pA.GetOverlap(pB);
+
+			if (std::abs(o) < std::abs(Overlap))
+			{
+				Overlap = o;
+				//smallest = axis;
+			}
+		}
+
+	}
+
+	//displacement = smallest * Overlap;
+
+	return Overlap;
+}
+
 const Vector2 ShapeImpl::CalcDisplacement(const AxesVec &axes, const Shape &a, const Shape &b) const
 {
 	Vector2 displacement;
@@ -82,17 +115,10 @@ const Vector2 ShapeImpl::CalcDisplacement(const AxesVec &axes, const Shape &a, c
 
 	}
 
-	/*if (Overlap > 0)
-		Overlap++;
-
-	else
-		Overlap--;*/
-
 	displacement = smallest * Overlap;
 
 	return displacement;
 }
-
 void ShapeImpl::Transform(const Transformation &t)
 {
 	for (unsigned i = 0; i < GetPointCount(); ++i)
@@ -100,9 +126,9 @@ void ShapeImpl::Transform(const Transformation &t)
 		Vector2 pt = GetPoint(i);
 
 		// Scale
-		pt -= GetCenter();
+		pt -= t.GetPivot();
 		pt *= t.GetScale();
-		pt += GetCenter();
+		pt += t.GetPivot();
 
 		// Rotate
 		const Precision_t radians = (t.GetRotation() * M_PI ) / 180;

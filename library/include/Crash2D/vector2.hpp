@@ -5,7 +5,7 @@
 
 namespace Crash2D
 {
-using Precision_t = double;
+using Precision_t = float;
 const Precision_t EPS = 1e-12;
 
 bool AreEqual(Precision_t a, Precision_t b);

@@ -168,6 +168,14 @@ public:
 		\sa GetCollision()
 	*/
 	virtual const bool Overlaps(const Polygon &p) const = 0;
+	
+		//! Method used to caculate the overlap of two shapes
+	/*!
+		\param axes Axes used in calculations.
+		\param a Shape a;
+		\param b Shape b;
+	*/
+	virtual const Precision_t GetOverlap(const AxesVec &axes, const Shape &a, const Shape &b) const = 0;
 
 	//! Gets the intersection points of this shape and the given shape.
 	/*!

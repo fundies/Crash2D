@@ -15,7 +15,7 @@ set(BUILD_VERSION "${PROJECT_VERSION}")
 include_directories(include/)
 
 set(SOURCES "src/circle.cpp" "src/polygon.cpp" "src/segment.cpp" "src/transformation.cpp" "src/collision.cpp" "src/projection.cpp" "src/shape_impl.cpp" "src/vector2.cpp")
-set(HEADERS "include/Crash2D.hpp" "include/collision.hpp" "include/projection.hpp" "include/shape.hpp" "include/transformation.hpp" "include/circle.hpp" "include/polygon.hpp" "include/segment.hpp" "include/shape_impl.hpp" "include/vector2.hpp")
+set(HEADERS "include/Crash2D/Crash2D.hpp" "include/Crash2D/collision.hpp" "include/Crash2D/projection.hpp" "include/Crash2D/shape.hpp" "include/Crash2D/transformation.hpp" "include/Crash2D/circle.hpp" "include/Crash2D/polygon.hpp" "include/Crash2D/segment.hpp" "include/Crash2D/shape_impl.hpp" "include/Crash2D/vector2.hpp")
 
 configure_file("Crash2DConfig.cmake.in" "Crash2DConfig.cmake" @ONLY)
 include(CMakePackageConfigHelpers)

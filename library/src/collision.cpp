@@ -8,14 +8,19 @@ Collision::Collision() :
 {
 }
 
-Collision::Collision(bool dI, const std::vector<Vector2> i, bool aCb, bool bCa, const Vector2 t)
-	: _doesOverlap(dI), _intersects(i), _aContainsb(aCb), _bContainsa(bCa), _displacement(t)
+Collision::Collision(bool dI, const std::vector<Vector2> i, bool aCb, bool bCa, const Precision_t o, const Vector2 t)
+	: _doesOverlap(dI), _intersects(i), _aContainsb(aCb), _bContainsa(bCa), _overlap(o), _displacement(t)
 {
 }
 
 const bool Collision::Overlaps() const
 {
 	return _doesOverlap;
+}
+
+const Precision_t Collision::GetOverlap() const
+{
+	return _overlap;
 }
 
 const std::vector<Vector2>& Collision::GetIntersects() const
@@ -40,6 +45,6 @@ const Vector2& Collision::GetDisplacement() const
 
 const Collision Collision::operator - (void) const
 {
-	return Collision(_doesOverlap, _intersects, _bContainsa, _aContainsb, -_displacement);
+	return Collision(_doesOverlap, _intersects, _bContainsa, _aContainsb, _overlap, -_displacement);
 }
 }

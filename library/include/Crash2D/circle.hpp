@@ -222,35 +222,35 @@ public:
 	*/
 	virtual const Vector2 GetDisplacement(const Polygon &p) const override;
 
-	//! Gets the collision of this circle with the given shape and returns the result.
+	//! Gets the collision of this shape with the given shape and returns the result.
 	/*!
-		\param s The shape to check for collision with this segment.
+		\param s The shape to check for collision with this shape.
 		\return The collision result including the minimum displacement vector.
 		\sa Contains()
 	*/
 	virtual const Collision GetCollision(const Shape &s) const override;
 
-	//! Gets the collision of this circle with the given segment and returns the result.
+	//! Gets the collision of this shape with the given segment and returns the result.
 	/*!
-		\param s The segment to check for collision with this circle.
+		\param s The segment to check for collision with this shape.
 		\return The collision result including the minimum displacement vector.
 		\sa Contains()
 	*/
 	virtual const Collision GetCollision(const Segment &s) const override;
 
-	//! Gets the collision of this circle with the given circle and returns the result.
-	//! Unlike the Contains() function, this function will also check if the given circle contains this circle.
+	//! Gets the collision of this shape with the given circle and returns the result.
+	//! Unlike the Contains() function, this function will also check if the given circle contains this shape.
 	/*!
-		\param c The circle to check for collision with this circle.
+		\param c The circle to check for collision with this shape.
 		\return The collision result including the minimum displacement vector.
 		\sa Contains()
 	*/
 	virtual const Collision GetCollision(const Circle &c) const override;
 
-	//! Gets the collision of this circle with the given polygon and returns the result.
+	//! Gets the collision of this shape with the given polygon and returns the result.
 	/*!
-		Unlike the Contains() function, this function will also check if the given polygon contains this circle.
-		\param p The polygon to check for collision with this circle.
+		Unlike the Contains() function, this function will also check if the given polygon contains this shape.
+		\param p The polygon to check for collision with this shape.
 		\return The collision result including the minimum displacement vector.
 		\sa Contains()
 	*/

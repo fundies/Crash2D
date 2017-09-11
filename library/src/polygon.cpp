@@ -395,6 +395,7 @@ const Collision Polygon::GetCollision(const Segment &s) const
 	// Displacement is the vector to be applied to segment "s"
 	// in order to seperate it from the circle
 	const Vector2 displacement = CalcDisplacement(axes, *this, s);
+	const Precision_t overlap = GetOverlap(axes, *this, s);
 
 	bool doesOverlap = (displacement != Vector2(0, 0));
 
@@ -404,7 +405,7 @@ const Collision Polygon::GetCollision(const Segment &s) const
 		intersects = GetIntersects(s);
 	}
 
-	return Collision(doesOverlap, intersects, contains, contained, displacement);
+	return Collision(doesOverlap, intersects, contains, contained, overlap, displacement);
 }
 
 const Collision Polygon::GetCollision(const Circle &c) const
@@ -428,6 +429,7 @@ const Collision Polygon::GetCollision(const Circle &c) const
 	// Displacement is the vector to be applied to segment "s"
 	// in order to seperate it from the circle
 	const Vector2 displacement = CalcDisplacement(axes, *this, c);
+	const Precision_t overlap = GetOverlap(axes, *this, c);
 
 	bool doesOverlap = (displacement != Vector2(0, 0));
 
@@ -438,7 +440,7 @@ const Collision Polygon::GetCollision(const Circle &c) const
 		intersects = GetIntersects(c);
 	}
 
-	return Collision(doesOverlap, intersects, contains, contained, displacement);
+	return Collision(doesOverlap, intersects, contains, contained, overlap, displacement);
 }
 
 const Collision Polygon::GetCollision(const Polygon &p) const
@@ -463,6 +465,7 @@ const Collision Polygon::GetCollision(const Polygon &p) const
 	// Displacement is the vector to be applied to polygo "p"
 	// in order to seperate it from this
 	const Vector2 displacement = CalcDisplacement(axes, *this, p);
+	const Precision_t overlap = GetOverlap(axes, *this, p);
 
 	bool doesOverlap = (displacement != Vector2(0, 0));
 
@@ -473,7 +476,7 @@ const Collision Polygon::GetCollision(const Polygon &p) const
 		intersects = GetIntersects(p);
 	}
 
-	return Collision(doesOverlap, intersects, contains, contained, displacement);
+	return Collision(doesOverlap, intersects, contains, contained, overlap, displacement);
 }
 
 void Polygon::Transform(const Transformation &t)

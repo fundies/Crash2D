@@ -318,7 +318,7 @@ const Collision Segment::GetCollision(const Shape &s) const
 
 const Collision Segment::GetCollision(const Segment &s) const
 {
-	return Collision(Overlaps(s), GetIntersects(s), Contains(s), s.Contains(*this), GetDisplacement(s));
+	return Collision(Overlaps(s), GetIntersects(s), Contains(s), s.Contains(*this), 1, GetDisplacement(s));
 }
 
 const Collision Segment::GetCollision(const Circle &c) const

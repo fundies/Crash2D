@@ -284,6 +284,8 @@ const Collision Circle::GetCollision(const Segment &s) const
 	axes[1] = (s.NearestVertex(GetCenter()) - GetCenter()).Normalize();
 
 	const Vector2 displacement = CalcDisplacement(axes, *this, s);
+	const Precision_t overlap = GetOverlap(axes, *this, s);
+
 
 	bool doesOverlap = (displacement != Vector2(0, 0));
 
@@ -293,7 +295,7 @@ const Collision Circle::GetCollision(const Segment &s) const
 		intersects = GetIntersects(s);
 	}
 
-	return Collision(doesOverlap, intersects, contains, contained, displacement);
+	return Collision(doesOverlap, intersects, contains, contained, overlap, displacement);
 }
 
 const Collision Circle::GetCollision(const Circle &c) const
@@ -333,7 +335,7 @@ const Collision Circle::GetCollision(const Circle &c) const
 		intersects = GetIntersects(c);
 	}
 
-	return Collision(doesOverlap, intersects, contains, contained, displacement);
+	return Collision(doesOverlap, intersects, contains, contained, dist, displacement);
 }
 
 const Collision Circle::GetCollision(const Polygon &p) const

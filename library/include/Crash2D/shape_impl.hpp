@@ -59,6 +59,14 @@ public:
 	*/
 	virtual const std::vector<Vector2>& GetPoints() const override;
 
+	//! Method used to caculate the overlap of two shapes
+	/*!
+		\param axes Axes used in calculations.
+		\param a Shape a;
+		\param b Shape b;
+	*/
+	virtual const Precision_t GetOverlap(const AxesVec &axes, const Shape &a, const Shape &b) const override;
+	
 	//! Method used to caculate displacment of two shapes
 	/*!
 		\param axes Axes used in calculations.
@@ -66,6 +74,7 @@ public:
 		\param b Shape b;
 	*/
 	virtual const Vector2 CalcDisplacement(const AxesVec &axes, const Shape &a, const Shape &b) const;
+	
 
 	//! Applies a transformation to this shape..
 	/*!

@@ -22,15 +22,22 @@ public:
 		\param i Intersection points of the two shapes.
 		\param aCb Whether shape A contains shape B.
 		\param bCa Whether shape B contains shape A.
+		\param o Overlap of the two shapes
 		\param t The minimum displacement vector, returns 0,0 if there is no collision.
 	*/
-	Collision(bool dI, const std::vector<Vector2> i, bool aCb, bool bCa, const Vector2 t);
+	Collision(bool dI, const std::vector<Vector2> i, bool aCb, bool bCa, const Precision_t o, const Vector2 t);
 
 	//! Gets whether the two shapes intersect.
 	/*!
 		\return Whether the two shapes intersect.
 	*/
 	const bool Overlaps() const;
+	
+	//! Gets the ammount of overlap between the two shapes.
+	/*!
+		\return Whether the two shapes intersect.
+	*/
+	const Precision_t GetOverlap() const;
 
 	//! Gets the intersection points of the two shapes.
 	/*!
@@ -66,6 +73,7 @@ private:
 	std::vector<Vector2> _intersects; /*!< Intersection points of the two shapes. */
 	bool _aContainsb; /*!< Whether shape A contains shape B */
 	bool _bContainsa; /*!< Whether shape B contains shape A */
+	Precision_t _overlap; /*!<Ammount of overlap between shape A and B. */
 	Vector2 _displacement; /*!< The minimum displacement vector of this collision. */
 
 };
