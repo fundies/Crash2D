@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/fundies/Crash2D.svg?branch=master)](https://travis-ci.org/fundies/Crash2D) [![Coverage Status](https://coveralls.io/repos/github/fundies/Crash2D/badge.svg?branch=master)](https://coveralls.io/github/fundies/Crash2D?branch=master)
 
 ## About
-Crash2D is a simple 2D collision detection library that doesnt include other bloat such as a physics engine.
+Crash2D is a simple 2D collision detection library that doesn't include other bloat such as a physics engine.
 
 ## Using the Library
 You can obtain a binary of the latest version from the [releases](https://github.com/fundies/SAT/releases) page. There is a demo included which uses SFML for rendering.
